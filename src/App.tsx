@@ -1,17 +1,36 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { FaceExpression, FaceConfig, HardwareMessage } from './types/robot';
+import { AppScreen, FaceExpression, FaceConfig, HardwareMessage, SystemStatus } from './types/robot';
 import { DEFAULT_CONFIG } from './utils/expressionPresets';
-import { RobotFace } from './components/RobotFace';
-import { FaceAnimationController } from './components/FaceAnimationController';
+import { TopBar } from './components/navigation/TopBar';
+import { NavigationBar } from './components/navigation/NavigationBar';
+import { FaceAnimationController } from './components/face/FaceAnimationController';
 import { SettingsModal } from './components/SettingsModal';
 import { HardwareBridgeModal } from './components/HardwareBridgeModal';
+
+// Screens
+import { FaceScreen } from './screens/FaceScreen';
+import { SSUWelcomeScreen } from './screens/SSUWelcomeScreen';
+import { AssistantScreen } from './screens/AssistantScreen';
+import { UniversityInfoScreen } from './screens/UniversityInfoScreen';
+import { CampusFacilitiesScreen } from './screens/CampusFacilitiesScreen';
+import { CameraScreen } from './screens/CameraScreen';
+import { ControlScreen } from './screens/ControlScreen';
+import { MappingScreen } from './screens/MappingScreen';
+import { NavScreen } from './screens/NavScreen';
+import { MonitorScreen } from './screens/MonitorScreen';
+import { VoiceDiagnosticsScreen } from './screens/VoiceDiagnosticsScreen';
+import { SettingsScreen } from './screens/SettingsScreen';
+
+// Hooks
+import { useVoiceAssistant } from './hooks/useVoiceAssistant';
 import { useAudioReactive } from './hooks/useAudioReactive';
-import { useSpeechSynthesis } from './hooks/useSpeechSynthesis';
-import { useSpeechRecognition } from './hooks/useSpeechRecognition';
 import { useHardwareBridge } from './hooks/useHardwareBridge';
-import { robotAudio } from './utils/soundEffects';
 
 export const App: React.FC = () => {
+  // Navigation Screen State
+  const [currentScreen, setCurrentScreen] = useState<AppScreen>('face');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   // Configuration with local storage cache
   const [config, setConfig] = useState<FaceConfig>(() => {
     try {
@@ -34,51 +53,61 @@ export const App: React.FC = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isHardwareOpen, setIsHardwareOpen] = useState(false);
-  const [isHudVisible, setIsHudVisible] = useState(false); // Clean display by default
+  const [isBarsVisible, setIsBarsVisible] = useState(false); // Clean display on Face screen by default
 
-  // Auto-hiding HUD timeout ref
-  const hudTimeoutRef = useRef<number | null>(null);
-
-  // Speech Synthesis Hook
-  const {
-    isSpeaking,
-    visemeLevel: ttsVisemeLevel,
-    speak,
-    stop: stopSpeaking
-  } = useSpeechSynthesis({
-    onStart: () => setExpression('speaking'),
-    onEnd: () => setExpression('idle')
+  // Language state (Persisted in localStorage)
+  const [selectedLanguage, setSelectedLanguage] = useState<string>(() => {
+    return localStorage.getItem('kairo_stt_lang') || 'en-IN';
   });
 
-  // Audio Reactive (Microphone) Hook
+  const handleSelectLanguage = (lang: string) => {
+    setSelectedLanguage(lang);
+    localStorage.setItem('kairo_stt_lang', lang);
+  };
+
+  // Auto-hiding bars timeout ref
+  const barsTimeoutRef = useRef<number | null>(null);
+
+  // Central Tablet Voice Assistant Hook
   const {
-    isListening: micListening,
-    audioLevel: micAudioLevel,
-    toggleListening: toggleMicListening
+    state: voiceState,
+    isListening: isAssistantListening,
+    isSpeaking,
+    visemeLevel,
+    transcript,
+    interimTranscript,
+    chatHistory,
+    errorMessage: voiceErrorMessage,
+    isSTTSupported,
+    startListening,
+    stopListening,
+    interrupt,
+    sendMessage,
+    retry: retryVoice,
+    availableVoices,
+    selectedVoice,
+    rate: speechRate,
+    pitch: speechPitch,
+    volume: speechVolume,
+    setRate: setSpeechRate,
+    setPitch: setSpeechPitch,
+    setVolume: setSpeechVolume,
+    setSelectedVoice
+  } = useVoiceAssistant({
+    language: selectedLanguage,
+    onExpressionChange: (exp) => setExpression(exp),
+    onMovementCommand: (_cmd) => {
+      // Forward to Jetson safety layer via hardware bridge if connected
+    }
+  });
+
+  // Audio Reactive (Microphone level analyser for attentive eye pulse)
+  const {
+    isListening: micAnalyserActive,
+    audioLevel: micAudioLevel
   } = useAudioReactive();
 
-  // Speech Recognition (Voice Commands) Hook
-  const handleVoiceCommand = useCallback((_cmd: string, exp?: FaceExpression) => {
-    if (exp) {
-      if (exp === 'happy') robotAudio.playHappy();
-      else if (exp === 'curious' || exp === 'confused') robotAudio.playConfused();
-      else if (exp === 'sleep' || exp === 'sleepy') robotAudio.playSleep();
-      else if (exp === 'error') robotAudio.playError();
-      else if (exp === 'wakeup') robotAudio.playWakeUp();
-      else if (exp === 'attentive' || exp === 'listening') robotAudio.playListening();
-
-      setExpression(exp);
-    }
-  }, []);
-
-  const {
-    isRecognizing,
-    toggleRecognition
-  } = useSpeechRecognition({
-    onCommand: handleVoiceCommand
-  });
-
-  // Hardware Bridge (WebSocket / Serial / IPC) Hook
+  // Hardware Bridge (WebSocket / Serial / Jetson IPC) Hook
   const {
     wsUrl,
     setWsUrl,
@@ -89,45 +118,19 @@ export const App: React.FC = () => {
     logMessages
   } = useHardwareBridge({
     onExpressionChange: (newExp) => setExpression(newExp),
-    onSpeak: (text) => speak(text),
+    onSpeak: (text) => sendMessage(text),
     onConfigChange: (partial) => handleUpdateConfig({ ...config, ...partial })
   });
 
-  // Viseme mouth level
-  const effectiveVisemeLevel = isSpeaking
-    ? ttsVisemeLevel
-    : micListening && micAudioLevel > 0.1
-    ? micAudioLevel * 0.95
-    : 0;
-
-  // React to mic speaking
-  useEffect(() => {
-    if (micListening && !isSpeaking) {
-      if (micAudioLevel > 0.15 && expression !== 'speaking') {
-        setExpression('speaking');
-      } else if (micAudioLevel <= 0.15 && expression === 'speaking') {
-        setExpression('attentive');
-      }
-    }
-  }, [micListening, micAudioLevel, isSpeaking, expression]);
-
-  // Demo speak phrases
-  const demoPhrases = [
-    "Hello there. All systems are nominal and ready.",
-    "I am your clean, friendly robotic assistant.",
-    "Visual and audio telemetry active.",
-    "Have a pleasant day!"
-  ];
-  const demoPhraseIndex = useRef(0);
-
-  const handleSpeakDemo = () => {
-    if (isSpeaking) {
-      stopSpeaking();
-    } else {
-      const phrase = demoPhrases[demoPhraseIndex.current % demoPhrases.length];
-      demoPhraseIndex.current += 1;
-      speak(phrase);
-    }
+  // System status object
+  const systemStatus: SystemStatus = {
+    tabletBattery: 92,
+    isTabletCharging: false,
+    jetsonConnected: connectionStatus === 'connected',
+    arduinoConnected: connectionStatus === 'connected',
+    lidarConnected: connectionStatus === 'connected',
+    cameraActive: currentScreen === 'camera',
+    motorEStop: false
   };
 
   // Fullscreen toggle
@@ -151,79 +154,214 @@ export const App: React.FC = () => {
     return () => document.removeEventListener('fullscreenchange', handleFsChange);
   }, []);
 
-  // Show HUD briefly when hovering near bottom or on user activity
-  const triggerHudTemporarily = useCallback(() => {
-    setIsHudVisible(true);
-    if (hudTimeoutRef.current) clearTimeout(hudTimeoutRef.current);
-    hudTimeoutRef.current = window.setTimeout(() => {
-      if (!isSettingsOpen && !isHardwareOpen) {
-        setIsHudVisible(false);
+  // Show UI controls temporarily when hovering near screen edges or interacting
+  const triggerBarsTemporarily = useCallback(() => {
+    setIsBarsVisible(true);
+    if (barsTimeoutRef.current) clearTimeout(barsTimeoutRef.current);
+    barsTimeoutRef.current = window.setTimeout(() => {
+      if (!isSettingsOpen && !isHardwareOpen && !isMenuOpen) {
+        setIsBarsVisible(false);
       }
-    }, 3200);
-  }, [isSettingsOpen, isHardwareOpen]);
+    }, 3500);
+  }, [isSettingsOpen, isHardwareOpen, isMenuOpen]);
 
   // Wakeup completion handler
   const handleWakeupDone = () => {
     setExpression('idle');
   };
 
+  // On non-face screens, top bar should always be visible
+  const isTopBarActive = currentScreen !== 'face' || isBarsVisible || isMenuOpen || isSettingsOpen || isHardwareOpen;
+
   return (
     <div
       className="relative w-screen h-screen bg-black overflow-hidden select-none touch-none m-0 p-0 font-sans"
       onPointerMove={(e) => {
-        // Reveal HUD only if hovering in bottom 10% of screen
-        if (e.clientY > window.innerHeight * 0.90) {
-          triggerHudTemporarily();
+        // If on face screen, reveal bars when pointer moves near top 12% or bottom 12%
+        if (currentScreen === 'face') {
+          if (e.clientY < window.innerHeight * 0.12 || e.clientY > window.innerHeight * 0.88) {
+            triggerBarsTemporarily();
+          }
         }
       }}
       onPointerDown={(e) => {
-        // Only trigger HUD if clicked directly in bottom 10% bar area
-        if (e.clientY > window.innerHeight * 0.90) {
-          triggerHudTemporarily();
+        if (currentScreen === 'face') {
+          if (e.clientY < window.innerHeight * 0.12 || e.clientY > window.innerHeight * 0.88) {
+            triggerBarsTemporarily();
+          }
         }
       }}
     >
-      {/* Primary Scalable Face UI on Pure Black Canvas (No status labels, no panels) */}
-      <RobotFace
-        config={config}
-        expression={expression}
-        onWakeupComplete={handleWakeupDone}
-        visemeLevel={effectiveVisemeLevel}
-        audioPulseLevel={micListening ? micAudioLevel : 0}
+      {/* Top Application Bar */}
+      <TopBar
+        currentScreen={currentScreen}
+        onSelectScreen={setCurrentScreen}
+        onOpenMenu={() => setIsMenuOpen(true)}
+        systemStatus={systemStatus}
+        isFullscreen={isFullscreen}
+        onToggleFullscreen={toggleFullscreen}
+        visible={isTopBarActive}
       />
 
-      {/* Floating Controller HUD (Appears only on bottom hover/click or shortcut, auto-hides) */}
-      <div
-        className={`transition-all duration-300 ${
-          isHudVisible || isSettingsOpen || isHardwareOpen
-            ? 'opacity-100 translate-y-0 pointer-events-auto'
-            : 'opacity-0 translate-y-3 pointer-events-none'
-        }`}
-      >
-        <FaceAnimationController
-          currentExpression={expression}
-          onSelectExpression={(exp) => {
-            setExpression(exp);
-            triggerHudTemporarily();
-          }}
-          onOpenSettings={() => setIsSettingsOpen(true)}
-          onOpenHardware={() => setIsHardwareOpen(true)}
-          isFullscreen={isFullscreen}
-          onToggleFullscreen={toggleFullscreen}
-          audioReactiveActive={micListening}
-          onToggleAudioReactive={toggleMicListening}
-          speechRecognitionActive={isRecognizing}
-          onToggleSpeechRecognition={toggleRecognition}
-          onSpeakDemo={handleSpeakDemo}
-          gazeTrackingActive={config.enableGazeTracking}
-          onToggleGazeTracking={() =>
-            handleUpdateConfig({ ...config, enableGazeTracking: !config.enableGazeTracking })
-          }
-          onToggleHud={() => setIsHudVisible(!isHudVisible)}
-        />
-      </div>
+      {/* Main Screen Switcher */}
+      <main className="w-full h-full relative">
+        {currentScreen === 'face' && (
+          <FaceScreen
+            config={config}
+            expression={expression}
+            onWakeupComplete={handleWakeupDone}
+            visemeLevel={visemeLevel}
+            audioPulseLevel={isAssistantListening || micAnalyserActive ? (micAudioLevel || 0.6) : 0}
+          />
+        )}
 
-      {/* Settings Modal */}
+        {currentScreen === 'welcome' && (
+          <SSUWelcomeScreen
+            onSelectScreen={setCurrentScreen}
+            onSpeakText={(text) => sendMessage(text)}
+            isSpeaking={isSpeaking}
+            onInterruptSpeech={interrupt}
+          />
+        )}
+
+        {currentScreen === 'assistant' && (
+          <AssistantScreen
+            state={voiceState}
+            transcript={transcript}
+            interimTranscript={interimTranscript}
+            chatHistory={chatHistory}
+            isListening={isAssistantListening}
+            isSpeaking={isSpeaking}
+            onStartListening={startListening}
+            onStopListening={stopListening}
+            onInterrupt={interrupt}
+            onSendMessage={sendMessage}
+            onRetry={retryVoice}
+            errorMessage={voiceErrorMessage}
+            selectedLanguage={selectedLanguage}
+            onSelectLanguage={handleSelectLanguage}
+            isSTTSupported={isSTTSupported}
+          />
+        )}
+
+        {currentScreen === 'university-info' && (
+          <UniversityInfoScreen />
+        )}
+
+        {currentScreen === 'facilities' && (
+          <CampusFacilitiesScreen />
+        )}
+
+        {currentScreen === 'diagnostics' && (
+          <VoiceDiagnosticsScreen assistantState={voiceState} />
+        )}
+
+        {currentScreen === 'camera' && (
+          <CameraScreen />
+        )}
+
+        {currentScreen === 'control' && (
+          <ControlScreen
+            isJetsonConnected={connectionStatus === 'connected'}
+            isArduinoConnected={connectionStatus === 'connected'}
+            onEmergencyStop={() => {
+              interrupt();
+              setExpression('error');
+            }}
+          />
+        )}
+
+        {currentScreen === 'mapping' && (
+          <MappingScreen lidarConnected={connectionStatus === 'connected'} />
+        )}
+
+        {currentScreen === 'navigation' && (
+          <NavScreen />
+        )}
+
+        {currentScreen === 'monitor' && (
+          <MonitorScreen systemStatus={systemStatus} />
+        )}
+
+        {currentScreen === 'settings' && (
+          <SettingsScreen
+            config={config}
+            onUpdateConfig={handleUpdateConfig}
+            onOpenFaceSettingsModal={() => setIsSettingsOpen(true)}
+            wsUrl={wsUrl}
+            onUpdateWsUrl={setWsUrl}
+            availableVoices={availableVoices}
+            selectedVoice={selectedVoice}
+            onSelectVoice={setSelectedVoice}
+            speechRate={speechRate}
+            onUpdateSpeechRate={setSpeechRate}
+            speechPitch={speechPitch}
+            onUpdateSpeechPitch={setSpeechPitch}
+            speechVolume={speechVolume}
+            onUpdateSpeechVolume={setSpeechVolume}
+            selectedLanguage={selectedLanguage}
+            onSelectLanguage={handleSelectLanguage}
+          />
+        )}
+      </main>
+
+      {/* Floating Face Expression Controller (Only on Face screen, auto-hides) */}
+      {currentScreen === 'face' && (
+        <div
+          className={`transition-all duration-300 ${
+            isBarsVisible || isSettingsOpen || isHardwareOpen
+              ? 'opacity-100 translate-y-0 pointer-events-auto'
+              : 'opacity-0 translate-y-3 pointer-events-none'
+          }`}
+        >
+          <FaceAnimationController
+            currentExpression={expression}
+            onSelectExpression={(exp) => {
+              setExpression(exp);
+              triggerBarsTemporarily();
+            }}
+            onOpenSettings={() => setIsSettingsOpen(true)}
+            onOpenHardware={() => setIsHardwareOpen(true)}
+            isFullscreen={isFullscreen}
+            onToggleFullscreen={toggleFullscreen}
+            audioReactiveActive={isAssistantListening || micAnalyserActive}
+            onToggleAudioReactive={() => {
+              if (isAssistantListening) {
+                stopListening();
+              } else {
+                startListening();
+              }
+            }}
+            speechRecognitionActive={isAssistantListening}
+            onToggleSpeechRecognition={() => {
+              if (isAssistantListening) {
+                stopListening();
+              } else {
+                startListening();
+              }
+            }}
+            onSpeakDemo={() => {
+              sendMessage("I am KAIRO, your intelligent robot companion. All systems nominal.");
+            }}
+            gazeTrackingActive={config.enableGazeTracking}
+            onToggleGazeTracking={() =>
+              handleUpdateConfig({ ...config, enableGazeTracking: !config.enableGazeTracking })
+            }
+            onToggleHud={() => setIsBarsVisible(!isBarsVisible)}
+          />
+        </div>
+      )}
+
+      {/* Slide-over Screen Navigation Drawer */}
+      <NavigationBar
+        currentScreen={currentScreen}
+        onSelectScreen={setCurrentScreen}
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+        systemStatus={systemStatus}
+      />
+
+      {/* Face Customization Modal */}
       <SettingsModal
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}

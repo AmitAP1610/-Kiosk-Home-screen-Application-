@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --ssu-maroon: #702815;
+  --ssu-maroon-dark: #45160b;
+  --ssu-maroon-light: #8a341e;
+  --ssu-gold: #C8A451;
+  --ssu-gold-light: #e4c375;
+  --ssu-gold-dark: #9e7e31;
+  --ssu-black: #000000;
+  --ssu-white: #FFFFFF;
+}
+
 @layer base {
   * {
     box-sizing: border-box;

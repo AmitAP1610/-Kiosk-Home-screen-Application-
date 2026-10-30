@@ -1,116 +1,128 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { textToSpeech, TTSOptions } from '../services/textToSpeech';
 
 interface UseSpeechSynthesisProps {
   onStart?: () => void;
   onEnd?: () => void;
+  onError?: (err: any) => void;
 }
 
-export function useSpeechSynthesis({ onStart, onEnd }: UseSpeechSynthesisProps = {}) {
+export function useSpeechSynthesis({
+  onStart,
+  onEnd,
+  onError
+}: UseSpeechSynthesisProps = {}) {
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [visemeLevel, setVisemeLevel] = useState(0); // 0 to 1 for mouth shape
+  const [visemeLevel, setVisemeLevel] = useState(0);
   const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
-  const animFrameRef = useRef<number | null>(null);
+  const [selectedVoice, setSelectedVoice] = useState<string>(() => localStorage.getItem('kairo_tts_voice') || '');
+  const [rate, setRateState] = useState<number>(() => parseFloat(localStorage.getItem('kairo_tts_rate') || '1.0'));
+  const [pitch, setPitchState] = useState<number>(() => parseFloat(localStorage.getItem('kairo_tts_pitch') || '1.05'));
+  const [volume, setVolumeState] = useState<number>(() => parseFloat(localStorage.getItem('kairo_tts_volume') || '1.0'));
 
-  // Populate voices
+  const isSupported = textToSpeech.isSupported();
+
   useEffect(() => {
-    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+    // Connect viseme stream to local state for mouth animation
+    textToSpeech.setVisemeCallback((level: number) => {
+      setVisemeLevel(level);
+    });
 
     const updateVoices = () => {
-      const voices = window.speechSynthesis.getVoices();
-      setAvailableVoices(voices);
+      const list = textToSpeech.getVoices();
+      setAvailableVoices(list);
     };
 
     updateVoices();
-    window.speechSynthesis.onvoiceschanged = updateVoices;
+
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = updateVoices;
+    }
 
     return () => {
-      if (window.speechSynthesis) {
-        window.speechSynthesis.onvoiceschanged = null;
-      }
+      textToSpeech.stop();
+      textToSpeech.setVisemeCallback(null);
     };
   }, []);
 
-  const speak = useCallback((text: string, rate = 1.0, pitch = 1.05) => {
-    if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
-      console.warn('Speech synthesis not supported in this browser.');
-      return;
-    }
+  const setRate = useCallback((val: number) => {
+    setRateState(val);
+    localStorage.setItem('kairo_tts_rate', val.toString());
+  }, []);
 
-    // Cancel current speech if any
-    window.speechSynthesis.cancel();
+  const setPitch = useCallback((val: number) => {
+    setPitchState(val);
+    localStorage.setItem('kairo_tts_pitch', val.toString());
+  }, []);
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = rate;
-    utterance.pitch = pitch;
+  const setVolume = useCallback((val: number) => {
+    setVolumeState(val);
+    localStorage.setItem('kairo_tts_volume', val.toString());
+  }, []);
 
-    // Pick English or clean robotic voice if available
-    const voice = availableVoices.find(v => v.lang.startsWith('en') && (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Samantha') || v.name.includes('David'))) || availableVoices[0];
-    if (voice) {
-      utterance.voice = voice;
-    }
+  const setVoice = useCallback((voiceURI: string) => {
+    setSelectedVoice(voiceURI);
+    localStorage.setItem('kairo_tts_voice', voiceURI);
+  }, []);
 
-    utterance.onstart = () => {
-      setIsSpeaking(true);
-      if (onStart) onStart();
+  const speak = useCallback(
+    async (text: string, options: TTSOptions = {}) => {
+      if (!isSupported) return;
 
-      // Start viseme pulse simulation
-      let startTime = performance.now();
-      const animateVisemes = (currentTime: number) => {
-        const elapsed = (currentTime - startTime) / 1000;
-        // Multi-frequency rhythm mimicking human vocal syllables
-        const primary = Math.sin(elapsed * 12);
-        const secondary = Math.cos(elapsed * 7.5);
-        const combined = Math.max(0, (primary + secondary * 0.5) / 1.5);
-
-        setVisemeLevel(combined);
-        animFrameRef.current = requestAnimationFrame(animateVisemes);
+      const mergedOptions: TTSOptions = {
+        rate,
+        pitch,
+        volume,
+        voiceURI: selectedVoice || undefined,
+        ...options
       };
 
-      animFrameRef.current = requestAnimationFrame(animateVisemes);
-    };
-
-    utterance.onend = () => {
-      setIsSpeaking(false);
-      setVisemeLevel(0);
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-      if (onEnd) onEnd();
-    };
-
-    utterance.onerror = () => {
-      setIsSpeaking(false);
-      setVisemeLevel(0);
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-      if (onEnd) onEnd();
-    };
-
-    window.speechSynthesis.speak(utterance);
-  }, [availableVoices, onStart, onEnd]);
+      try {
+        await textToSpeech.speak(text, mergedOptions, {
+          onStart: () => {
+            setIsSpeaking(true);
+            if (onStart) onStart();
+          },
+          onEnd: () => {
+            setIsSpeaking(false);
+            setVisemeLevel(0);
+            if (onEnd) onEnd();
+          },
+          onError: (err) => {
+            setIsSpeaking(false);
+            setVisemeLevel(0);
+            if (onError) onError(err);
+          }
+        });
+      } catch {
+        setIsSpeaking(false);
+        setVisemeLevel(0);
+      }
+    },
+    [isSupported, rate, pitch, volume, selectedVoice, onStart, onEnd, onError]
+  );
 
   const stop = useCallback(() => {
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
+    textToSpeech.stop();
     setIsSpeaking(false);
     setVisemeLevel(0);
-    if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
     if (onEnd) onEnd();
   }, [onEnd]);
 
-  useEffect(() => {
-    return () => {
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-      }
-    };
-  }, []);
-
   return {
+    isSupported,
     isSpeaking,
     visemeLevel,
     availableVoices,
+    selectedVoice,
+    rate,
+    pitch,
+    volume,
     speak,
-    stop
+    stop,
+    setRate,
+    setPitch,
+    setVolume,
+    setSelectedVoice: setVoice
   };
 }
-
