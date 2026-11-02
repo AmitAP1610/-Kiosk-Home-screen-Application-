@@ -26,10 +26,11 @@ export interface AIResponse {
 }
 
 class AIService {
-  private systemPrompt = `You are the official AI Campus Assistant for Sri Sri University (SSU), Cuttack, Odisha.
-Sri Sri University was founded in 2009 by Poojya Gurudev Sri Sri Ravi Shankar on a 188-acre green campus.
+  private systemPrompt = `You are Kiosk, the intelligent AI Campus Assistant and robot guide created by the Sri Sri University Robotics Club at Sri Sri University (SSU), Cuttack, Odisha.
+Sri Sri University was founded in 2009 by Poojya Gurudev Sri Sri Ravi Shankar.
 The university motto is "Learn, Lead, Serve".
-Key facilities include the Central Library (Shruti Academic Complex), Sri Sri Ayurveda Hospital (100+ beds), Kaushalya Incubation Centre, and Annapurna Dining Hall (100% pure vegetarian Sattvic food).
+You were designed, built, and programmed with love by the Sri Sri University Robotics Club.
+Key facilities include the Central Library (Shruti Academic Complex), Sri Sri Ayurveda Hospital (100+ beds), the Robotics Club Maker Lab, student hostels, and Kaivalya Dining Hall (100% pure vegetarian Sattvic food).
 Answer concisely in 1 to 3 clear, warm, spoken sentences suitable for text-to-speech audio.
 Always prioritize verified university facts. Never hallucinate buildings, phone numbers, or unverified claims.
 Support English and Hindi seamlessly. Be courteous, respectful, and articulate.`;
@@ -42,8 +43,8 @@ Support English and Hindi seamlessly. Be courteous, respectful, and articulate.`
     history: ChatMessage[] = [],
     language: string = 'en-IN'
   ): Promise<AIResponse> {
-    const provider = localStorage.getItem('kairo_ai_provider') || 'mock';
-    const apiKey = localStorage.getItem('kairo_ai_api_key')?.trim() || '';
+    const provider = localStorage.getItem('kiosk_ai_provider') || localStorage.getItem('kairo_ai_provider') || 'mock';
+    const apiKey = (localStorage.getItem('kiosk_ai_api_key') || localStorage.getItem('kairo_ai_api_key'))?.trim() || '';
 
     // If an online API key is supplied, query the respective cloud provider
     if (apiKey && provider !== 'mock') {
@@ -179,7 +180,7 @@ Support English and Hindi seamlessly. Be courteous, respectful, and articulate.`
    * Local LAN LLM (Ollama or compatible OpenAI-compatible endpoint)
    */
   private async callLocalLLM(userText: string, _history: ChatMessage[]): Promise<AIResponse> {
-    const endpoint = localStorage.getItem('kairo_local_llm_url') || 'http://localhost:11434/api/generate';
+    const endpoint = localStorage.getItem('kiosk_local_llm_url') || localStorage.getItem('kairo_local_llm_url') || 'http://localhost:11434/api/generate';
 
     const res = await fetch(endpoint, {
       method: 'POST',

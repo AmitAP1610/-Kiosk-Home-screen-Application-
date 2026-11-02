@@ -1,14 +1,16 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppScreen, FaceExpression, FaceConfig, HardwareMessage, SystemStatus } from './types/robot';
 import { DEFAULT_CONFIG } from './utils/expressionPresets';
 import { TopBar } from './components/navigation/TopBar';
-import { NavigationBar } from './components/navigation/NavigationBar';
-import { FaceAnimationController } from './components/face/FaceAnimationController';
 import { SettingsModal } from './components/SettingsModal';
 import { HardwareBridgeModal } from './components/HardwareBridgeModal';
 
 // Screens
 import { FaceScreen } from './screens/FaceScreen';
+import { HubScreen } from './screens/HubScreen';
+import { MapInfoScreen } from './screens/MapInfoScreen';
+import { SessionsAgendaScreen } from './screens/SessionsAgendaScreen';
+import { RoboInfoScreen } from './screens/RoboInfoScreen';
 import { SSUWelcomeScreen } from './screens/SSUWelcomeScreen';
 import { AssistantScreen } from './screens/AssistantScreen';
 import { UniversityInfoScreen } from './screens/UniversityInfoScreen';
@@ -29,7 +31,6 @@ import { useHardwareBridge } from './hooks/useHardwareBridge';
 export const App: React.FC = () => {
   // Navigation Screen State
   const [currentScreen, setCurrentScreen] = useState<AppScreen>('face');
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Configuration with local storage cache
   const [config, setConfig] = useState<FaceConfig>(() => {
@@ -53,20 +54,16 @@ export const App: React.FC = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isHardwareOpen, setIsHardwareOpen] = useState(false);
-  const [isBarsVisible, setIsBarsVisible] = useState(false); // Clean display on Face screen by default
 
   // Language state (Persisted in localStorage)
   const [selectedLanguage, setSelectedLanguage] = useState<string>(() => {
-    return localStorage.getItem('kairo_stt_lang') || 'en-IN';
+    return localStorage.getItem('kiosk_stt_lang') || localStorage.getItem('kairo_stt_lang') || 'en-IN';
   });
 
   const handleSelectLanguage = (lang: string) => {
     setSelectedLanguage(lang);
-    localStorage.setItem('kairo_stt_lang', lang);
+    localStorage.setItem('kiosk_stt_lang', lang);
   };
-
-  // Auto-hiding bars timeout ref
-  const barsTimeoutRef = useRef<number | null>(null);
 
   // Central Tablet Voice Assistant Hook
   const {
@@ -83,6 +80,7 @@ export const App: React.FC = () => {
     stopListening,
     interrupt,
     sendMessage,
+    speakDirect,
     retry: retryVoice,
     availableVoices,
     selectedVoice,
@@ -154,49 +152,28 @@ export const App: React.FC = () => {
     return () => document.removeEventListener('fullscreenchange', handleFsChange);
   }, []);
 
-  // Show UI controls temporarily when hovering near screen edges or interacting
-  const triggerBarsTemporarily = useCallback(() => {
-    setIsBarsVisible(true);
-    if (barsTimeoutRef.current) clearTimeout(barsTimeoutRef.current);
-    barsTimeoutRef.current = window.setTimeout(() => {
-      if (!isSettingsOpen && !isHardwareOpen && !isMenuOpen) {
-        setIsBarsVisible(false);
-      }
-    }, 3500);
-  }, [isSettingsOpen, isHardwareOpen, isMenuOpen]);
-
   // Wakeup completion handler
   const handleWakeupDone = () => {
     setExpression('idle');
   };
 
-  // On non-face screens, top bar should always be visible
-  const isTopBarActive = currentScreen !== 'face' || isBarsVisible || isMenuOpen || isSettingsOpen || isHardwareOpen;
+  // On custom tablet flow screens (Face, Hub, Map, Sessions, Robo-info), keep clean immersion
+  const isCustomTabletScreen =
+    currentScreen === 'face' ||
+    currentScreen === 'hub' ||
+    currentScreen === 'map-info' ||
+    currentScreen === 'sessions-agenda' ||
+    currentScreen === 'robo-info';
+
+  const isTopBarActive = !isCustomTabletScreen && (isSettingsOpen || isHardwareOpen);
 
   return (
-    <div
-      className="relative w-screen h-screen bg-black overflow-hidden select-none touch-none m-0 p-0 font-sans"
-      onPointerMove={(e) => {
-        // If on face screen, reveal bars when pointer moves near top 12% or bottom 12%
-        if (currentScreen === 'face') {
-          if (e.clientY < window.innerHeight * 0.12 || e.clientY > window.innerHeight * 0.88) {
-            triggerBarsTemporarily();
-          }
-        }
-      }}
-      onPointerDown={(e) => {
-        if (currentScreen === 'face') {
-          if (e.clientY < window.innerHeight * 0.12 || e.clientY > window.innerHeight * 0.88) {
-            triggerBarsTemporarily();
-          }
-        }
-      }}
-    >
-      {/* Top Application Bar */}
+    <div className="relative w-screen h-screen bg-black overflow-hidden select-none touch-none m-0 p-0 font-sans">
+      {/* Top Application Bar (Disabled on kiosk screens) */}
       <TopBar
         currentScreen={currentScreen}
         onSelectScreen={setCurrentScreen}
-        onOpenMenu={() => setIsMenuOpen(true)}
+        onOpenMenu={() => {}}
         systemStatus={systemStatus}
         isFullscreen={isFullscreen}
         onToggleFullscreen={toggleFullscreen}
@@ -212,6 +189,43 @@ export const App: React.FC = () => {
             onWakeupComplete={handleWakeupDone}
             visemeLevel={visemeLevel}
             audioPulseLevel={isAssistantListening || micAnalyserActive ? (micAudioLevel || 0.6) : 0}
+            onIntroComplete={() => setCurrentScreen('hub')}
+            onSpeakIntro={(text, onEnd) => speakDirect(text, onEnd)}
+            isSpeaking={isSpeaking}
+            onInterruptSpeech={interrupt}
+          />
+        )}
+
+        {currentScreen === 'hub' && (
+          <HubScreen
+            onNavigate={(scr) => setCurrentScreen(scr)}
+            onOpenVoiceAssistant={() => setCurrentScreen('assistant')}
+            onSpeakGreeting={(text) => speakDirect(text)}
+            isSpeaking={isSpeaking}
+          />
+        )}
+
+        {currentScreen === 'map-info' && (
+          <MapInfoScreen
+            onNavigate={(scr) => setCurrentScreen(scr)}
+            onSpeakText={(text) => speakDirect(text)}
+            isSpeaking={isSpeaking}
+          />
+        )}
+
+        {currentScreen === 'sessions-agenda' && (
+          <SessionsAgendaScreen
+            onNavigate={(scr) => setCurrentScreen(scr)}
+            onSpeakText={(text) => speakDirect(text)}
+            isSpeaking={isSpeaking}
+          />
+        )}
+
+        {currentScreen === 'robo-info' && (
+          <RoboInfoScreen
+            onNavigate={(scr) => setCurrentScreen(scr)}
+            onSpeakText={(text) => speakDirect(text)}
+            isSpeaking={isSpeaking}
           />
         )}
 
@@ -226,6 +240,7 @@ export const App: React.FC = () => {
 
         {currentScreen === 'assistant' && (
           <AssistantScreen
+            onNavigate={(scr) => setCurrentScreen(scr)}
             state={voiceState}
             transcript={transcript}
             interimTranscript={interimTranscript}
@@ -245,23 +260,35 @@ export const App: React.FC = () => {
         )}
 
         {currentScreen === 'university-info' && (
-          <UniversityInfoScreen />
+          <UniversityInfoScreen
+            onNavigate={(scr) => setCurrentScreen(scr)}
+            onSpeakText={(text) => speakDirect(text)}
+          />
         )}
 
         {currentScreen === 'facilities' && (
-          <CampusFacilitiesScreen />
+          <CampusFacilitiesScreen
+            onNavigate={(scr) => setCurrentScreen(scr)}
+            onSpeakText={(text) => speakDirect(text)}
+          />
         )}
 
         {currentScreen === 'diagnostics' && (
-          <VoiceDiagnosticsScreen assistantState={voiceState} />
+          <VoiceDiagnosticsScreen
+            onNavigate={(scr) => setCurrentScreen(scr)}
+            assistantState={voiceState}
+          />
         )}
 
         {currentScreen === 'camera' && (
-          <CameraScreen />
+          <CameraScreen
+            onNavigate={(scr) => setCurrentScreen(scr)}
+          />
         )}
 
         {currentScreen === 'control' && (
           <ControlScreen
+            onNavigate={(scr) => setCurrentScreen(scr)}
             isJetsonConnected={connectionStatus === 'connected'}
             isArduinoConnected={connectionStatus === 'connected'}
             onEmergencyStop={() => {
@@ -272,19 +299,29 @@ export const App: React.FC = () => {
         )}
 
         {currentScreen === 'mapping' && (
-          <MappingScreen lidarConnected={connectionStatus === 'connected'} />
+          <MappingScreen
+            onNavigate={(scr) => setCurrentScreen(scr)}
+            lidarConnected={connectionStatus === 'connected'}
+          />
         )}
 
         {currentScreen === 'navigation' && (
-          <NavScreen />
+          <NavScreen
+            onNavigate={(scr) => setCurrentScreen(scr)}
+          />
         )}
 
         {currentScreen === 'monitor' && (
-          <MonitorScreen systemStatus={systemStatus} />
+          <MonitorScreen
+            onNavigate={(scr) => setCurrentScreen(scr)}
+            systemStatus={systemStatus}
+          />
         )}
 
         {currentScreen === 'settings' && (
           <SettingsScreen
+            onNavigate={(scr) => setCurrentScreen(scr)}
+            onSpeakText={(text) => speakDirect(text)}
             config={config}
             onUpdateConfig={handleUpdateConfig}
             onOpenFaceSettingsModal={() => setIsSettingsOpen(true)}
@@ -304,62 +341,6 @@ export const App: React.FC = () => {
           />
         )}
       </main>
-
-      {/* Floating Face Expression Controller (Only on Face screen, auto-hides) */}
-      {currentScreen === 'face' && (
-        <div
-          className={`transition-all duration-300 ${
-            isBarsVisible || isSettingsOpen || isHardwareOpen
-              ? 'opacity-100 translate-y-0 pointer-events-auto'
-              : 'opacity-0 translate-y-3 pointer-events-none'
-          }`}
-        >
-          <FaceAnimationController
-            currentExpression={expression}
-            onSelectExpression={(exp) => {
-              setExpression(exp);
-              triggerBarsTemporarily();
-            }}
-            onOpenSettings={() => setIsSettingsOpen(true)}
-            onOpenHardware={() => setIsHardwareOpen(true)}
-            isFullscreen={isFullscreen}
-            onToggleFullscreen={toggleFullscreen}
-            audioReactiveActive={isAssistantListening || micAnalyserActive}
-            onToggleAudioReactive={() => {
-              if (isAssistantListening) {
-                stopListening();
-              } else {
-                startListening();
-              }
-            }}
-            speechRecognitionActive={isAssistantListening}
-            onToggleSpeechRecognition={() => {
-              if (isAssistantListening) {
-                stopListening();
-              } else {
-                startListening();
-              }
-            }}
-            onSpeakDemo={() => {
-              sendMessage("I am KAIRO, your intelligent robot companion. All systems nominal.");
-            }}
-            gazeTrackingActive={config.enableGazeTracking}
-            onToggleGazeTracking={() =>
-              handleUpdateConfig({ ...config, enableGazeTracking: !config.enableGazeTracking })
-            }
-            onToggleHud={() => setIsBarsVisible(!isBarsVisible)}
-          />
-        </div>
-      )}
-
-      {/* Slide-over Screen Navigation Drawer */}
-      <NavigationBar
-        currentScreen={currentScreen}
-        onSelectScreen={setCurrentScreen}
-        isOpen={isMenuOpen}
-        onClose={() => setIsMenuOpen(false)}
-        systemStatus={systemStatus}
-      />
 
       {/* Face Customization Modal */}
       <SettingsModal

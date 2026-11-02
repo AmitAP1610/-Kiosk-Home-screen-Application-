@@ -26,6 +26,10 @@ export const TopBar: React.FC<TopBarProps> = ({
   const getScreenName = (s: AppScreen) => {
     switch (s) {
       case 'face': return 'Robot Face';
+      case 'hub': return 'Campus Robot Hub';
+      case 'map-info': return 'SSU Campus Map & Info';
+      case 'sessions-agenda': return 'Sessions & Agenda';
+      case 'robo-info': return 'Robot Information';
       case 'welcome': return 'Sri Sri University Welcome';
       case 'assistant': return 'AI Campus Assistant';
       case 'university-info': return 'University Information';

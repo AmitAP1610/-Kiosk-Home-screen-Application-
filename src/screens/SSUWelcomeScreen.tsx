@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AppScreen } from '../types/robot';
 import {
+  ArrowLeft,
   Volume2,
   Sparkles,
   BookOpen,
@@ -75,8 +76,24 @@ export const SSUWelcomeScreen: React.FC<SSUWelcomeScreenProps> = ({
   return (
     <div
       onClick={handleContainerClick}
-      className="w-full h-full bg-black text-white flex flex-col pt-14 pb-4 px-4 sm:px-8 md:px-12 font-sans select-none overflow-y-auto"
+      className="w-full h-full bg-gradient-to-br from-black via-[#0d0705] to-[#04080c] text-white flex flex-col p-4 sm:p-6 md:p-8 font-sans select-none overflow-y-auto"
     >
+      {/* Back to Hub Header Button */}
+      <div className="flex items-center justify-between mb-4">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelectScreen('hub');
+          }}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black hover:bg-[#702815] border-2 border-[#C8A451]/70 text-slate-100 hover:text-white transition-all shadow-lg active:scale-95 text-xs sm:text-sm font-black"
+          title="Return to Robot Hub"
+        >
+          <ArrowLeft className="w-5 h-5 text-[#C8A451]" />
+          <span>Back to Hub</span>
+        </button>
+
+        <span className="text-xs font-mono text-[#C8A451] font-bold">SSU WELCOME PORTAL</span>
+      </div>
       {/* Top University Branding Banner */}
       <div className="relative rounded-2xl bg-gradient-to-r from-ssu-maroonDark via-ssu-maroon to-[#2d0f07] border border-ssu-gold/40 p-6 shadow-2xl mb-6 overflow-hidden">
         {/* Subtle decorative gold glow */}

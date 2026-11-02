@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { VoiceAssistantState } from '../types/robot';
 import { ChatMessage } from '../services/aiService';
 import {
+  ArrowLeft,
   Mic,
   MicOff,
   Send,
@@ -14,6 +15,7 @@ import {
 } from 'lucide-react';
 
 interface AssistantScreenProps {
+  onNavigate?: (screen: any) => void;
   state: VoiceAssistantState;
   transcript: string;
   interimTranscript: string;
@@ -32,6 +34,7 @@ interface AssistantScreenProps {
 }
 
 export const AssistantScreen: React.FC<AssistantScreenProps> = ({
+  onNavigate,
   state,
   transcript,
   interimTranscript,
@@ -84,19 +87,33 @@ export const AssistantScreen: React.FC<AssistantScreenProps> = ({
   ];
 
   return (
-    <div className="w-full h-full bg-black text-white flex flex-col pt-14 pb-4 px-3 sm:px-6 md:px-10 font-sans select-none overflow-hidden">
-      {/* Top Header Bar */}
-      <div className="flex items-center justify-between pb-3 border-b border-ssu-border">
+    <div className="w-full h-full bg-gradient-to-br from-black via-[#0d0705] to-[#04080c] text-white flex flex-col p-3 sm:p-5 md:p-6 font-sans select-none overflow-hidden">
+      {/* Top Header Bar with Back Button */}
+      <div className="flex items-center justify-between pb-3 border-b-2 border-[#C8A451]/50 bg-black/80 px-3 py-2 rounded-2xl shadow-xl mb-2">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-ssu-maroon/60 border border-ssu-gold/50 text-ssu-gold">
+          {onNavigate && (
+            <button
+              onClick={() => {
+                if (onInterrupt) onInterrupt();
+                onNavigate('hub');
+              }}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black hover:bg-[#702815] border-2 border-[#C8A451]/70 text-slate-100 hover:text-white transition-all shadow-lg active:scale-95 text-xs sm:text-sm font-black"
+              title="Return to Robot Hub"
+            >
+              <ArrowLeft className="w-5 h-5 text-[#C8A451]" />
+              <span>Back to Hub</span>
+            </button>
+          )}
+
+          <div className="p-2 rounded-xl bg-[#702815] border border-[#C8A451]/60 text-[#C8A451] hidden sm:block">
             <GraduationCap className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-base font-bold text-white tracking-wide">
+            <h1 className="text-sm sm:text-base font-black text-white tracking-wide">
               SRI SRI UNIVERSITY AI CAMPUS ASSISTANT
             </h1>
-            <p className="text-xs text-ssu-gold font-mono">
-              Realme Audio Engine • Bilingual SSU Campus Intelligence
+            <p className="text-[11px] sm:text-xs text-[#C8A451] font-mono font-bold">
+              Kiosk Speech Engine • Sri Sri University Robotics Club
             </p>
           </div>
         </div>

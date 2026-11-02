@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { FaceConfig } from '../types/robot';
-import { Settings, Save, Sliders, Key, Server, Volume2, Mic, Languages, Sparkles } from 'lucide-react';
+import { ArrowLeft, Settings, Save, Sliders, Key, Server, Volume2, Mic, Languages, Sparkles } from 'lucide-react';
 
 interface SettingsScreenProps {
+  onNavigate?: (screen: any) => void;
+  onSpeakText?: (text: string) => void;
   config: FaceConfig;
   onUpdateConfig?: (newConfig: FaceConfig) => void;
   onOpenFaceSettingsModal: () => void;
@@ -22,6 +24,8 @@ interface SettingsScreenProps {
 }
 
 export const SettingsScreen: React.FC<SettingsScreenProps> = ({
+  onNavigate,
+  onSpeakText,
   config,
   onUpdateConfig: _onUpdateConfig,
   onOpenFaceSettingsModal,
@@ -39,31 +43,46 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
   selectedLanguage,
   onSelectLanguage
 }) => {
-  const [robotName, setRobotName] = useState(() => localStorage.getItem('kairo_robot_name') || 'Sri Sri University AI Assistant');
-  const [aiApiKey, setAiApiKey] = useState(() => localStorage.getItem('kairo_ai_api_key') || '');
-  const [aiProvider, setAiProvider] = useState(() => localStorage.getItem('kairo_ai_provider') || 'mock');
+  const [robotName, setRobotName] = useState(() => localStorage.getItem('kiosk_robot_name') || localStorage.getItem('kairo_robot_name') || 'Kiosk - Sri Sri University AI Assistant');
+  const [aiApiKey, setAiApiKey] = useState(() => localStorage.getItem('kiosk_ai_api_key') || localStorage.getItem('kairo_ai_api_key') || '');
+  const [aiProvider, setAiProvider] = useState(() => localStorage.getItem('kiosk_ai_provider') || localStorage.getItem('kairo_ai_provider') || 'mock');
   const [saveAlert, setSaveAlert] = useState(false);
 
   const handleSave = () => {
-    localStorage.setItem('kairo_robot_name', robotName);
-    localStorage.setItem('kairo_ai_api_key', aiApiKey);
-    localStorage.setItem('kairo_ai_provider', aiProvider);
+    localStorage.setItem('kiosk_robot_name', robotName);
+    localStorage.setItem('kiosk_ai_api_key', aiApiKey);
+    localStorage.setItem('kiosk_ai_provider', aiProvider);
     setSaveAlert(true);
+    if (onSpeakText) onSpeakText("Settings saved successfully.");
     setTimeout(() => setSaveAlert(false), 2500);
   };
 
   return (
-    <div className="w-full h-full bg-black text-white flex flex-col pt-14 pb-4 px-3 sm:px-6 md:px-10 font-sans select-none overflow-y-auto">
-      {/* Header */}
-      <div className="flex items-center justify-between pb-3 border-b border-ssu-border mb-6">
-        <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-ssu-maroon/60 border border-ssu-gold/40 text-ssu-gold">
+    <div className="w-full h-full bg-gradient-to-br from-black via-[#0d0705] to-[#04080c] text-white flex flex-col p-3 sm:p-5 md:p-6 font-sans select-none overflow-y-auto">
+      {/* Header with Back Button */}
+      <div className="flex items-center justify-between pb-3 border-b-2 border-[#C8A451]/50 bg-black/80 px-3 py-2 rounded-2xl shadow-xl mb-6">
+        <div className="flex items-center gap-3">
+          {onNavigate && (
+            <button
+              onClick={() => {
+                if (onSpeakText) onSpeakText("Returning to robot hub.");
+                onNavigate('hub');
+              }}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black hover:bg-[#702815] border-2 border-[#C8A451]/70 text-slate-100 hover:text-white transition-all shadow-lg active:scale-95 text-xs sm:text-sm font-black"
+              title="Return to Robot Hub"
+            >
+              <ArrowLeft className="w-5 h-5 text-[#C8A451]" />
+              <span>Back to Hub</span>
+            </button>
+          )}
+
+          <div className="p-2 rounded-xl bg-[#702815] border border-[#C8A451]/50 text-[#C8A451] hidden sm:block">
             <Settings className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-base font-bold text-white tracking-wide">SYSTEM SETTINGS</h1>
-            <p className="text-xs text-ssu-gold font-mono">
-              Configuration for SSU Assistant, Voice, AI Providers & Hardware IPC
+            <h1 className="text-sm sm:text-base font-black text-white tracking-wide">SYSTEM SETTINGS</h1>
+            <p className="text-[11px] sm:text-xs text-[#C8A451] font-mono font-bold">
+              Configuration for Kiosk Assistant, Voice, AI Providers & Hardware IPC
             </p>
           </div>
         </div>
@@ -123,20 +142,80 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             <span>Text-to-Speech (TTS) Voice Settings</span>
           </div>
 
+          {/* Target Reference Audio Sample Player */}
+          <div className="p-3.5 rounded-xl bg-black/60 border border-[#C8A451]/50 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-mono text-[#C8A451] font-bold uppercase flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5" /> Target Voice Reference (Uploaded Baritone Sample)
+              </span>
+              <span className="text-[10px] font-mono text-emerald-400 font-bold">ACTIVE SAMPLE</span>
+            </div>
+            <p className="text-[11px] text-slate-300 italic">
+              "I fear darkness hunts us. Use what you've learned, and stay the course."
+            </p>
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  const audio = new Audio('/voice-sample.mp3');
+                  audio.play();
+                }}
+                className="px-3.5 py-1.5 rounded-xl bg-[#702815] hover:bg-[#8a341e] text-[#C8A451] hover:text-white text-xs font-bold font-mono flex items-center gap-1.5 transition-all shadow"
+              >
+                <span>▶ Play Audio Sample</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  onUpdateSpeechPitch(0.82);
+                  onUpdateSpeechRate(0.90);
+                }}
+                className="px-3.5 py-1.5 rounded-xl bg-[#C8A451] hover:bg-[#d6b464] text-black text-xs font-bold font-mono flex items-center gap-1.5 transition-all shadow"
+              >
+                <span>✓ Match Reference Tone (Pitch: 0.82, Rate: 0.90)</span>
+              </button>
+            </div>
+          </div>
+
           <div>
             <label className="block text-slate-400 mb-1">Speech Voice</label>
-            <select
-              value={selectedVoice}
-              onChange={(e) => onSelectVoice(e.target.value)}
-              className="w-full bg-black border border-ssu-border rounded-xl px-3 py-2 text-white focus:outline-none focus:border-ssu-gold cursor-pointer text-xs"
-            >
-              <option value="">Default System Voice (Auto-detect English / Hindi)</option>
-              {availableVoices.map((v) => (
-                <option key={v.voiceURI} value={v.voiceURI}>
-                  {v.name} ({v.lang}) {v.default ? '— Default' : ''}
-                </option>
-              ))}
-            </select>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+              <select
+                value={selectedVoice}
+                onChange={(e) => onSelectVoice(e.target.value)}
+                className="flex-1 bg-black border border-ssu-border rounded-xl px-3 py-2 text-white focus:outline-none focus:border-ssu-gold cursor-pointer text-xs"
+              >
+                <option value="">Default Male AI Voice (Auto-selected natural male)</option>
+                {availableVoices.map((v) => (
+                  <option key={v.voiceURI} value={v.voiceURI}>
+                    {v.name} ({v.lang}) {v.default ? '— Default' : ''}
+                  </option>
+                ))}
+              </select>
+
+              <button
+                type="button"
+                onClick={() => {
+                  if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const u = new SpeechSynthesisUtterance("Namaste! I am Kiosk, created by the Sri Sri University Robotics Club.");
+                    if (selectedVoice) {
+                      const found = availableVoices.find(v => v.voiceURI === selectedVoice);
+                      if (found) u.voice = found;
+                    }
+                    u.rate = speechRate;
+                    u.pitch = speechPitch;
+                    u.volume = speechVolume;
+                    window.speechSynthesis.speak(u);
+                  }
+                }}
+                className="px-4 py-2 rounded-xl bg-[#C8A451] hover:bg-[#d6b464] text-black font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all shadow"
+              >
+                <Volume2 className="w-3.5 h-3.5" />
+                <span>Test Voice</span>
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

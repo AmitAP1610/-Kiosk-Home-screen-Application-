@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Navigation, MapPin, StopCircle, Play, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Navigation, MapPin, StopCircle, Play, CheckCircle2 } from 'lucide-react';
 
 interface NavScreenProps {
+  onNavigate?: (screen: any) => void;
   onStopNav?: () => void;
   isNavigating?: boolean;
 }
 
 export const NavScreen: React.FC<NavScreenProps> = ({
+  onNavigate,
   onStopNav,
   isNavigating = false
 }) => {
@@ -30,16 +32,27 @@ export const NavScreen: React.FC<NavScreenProps> = ({
   };
 
   return (
-    <div className="w-full h-full bg-black text-slate-100 flex flex-col pt-14 pb-4 px-3 sm:px-6 md:px-10 font-sans select-none overflow-hidden">
+    <div className="w-full h-full bg-gradient-to-br from-black via-[#0d0705] to-[#04080c] text-slate-100 flex flex-col p-4 sm:p-6 font-sans select-none overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
+      <div className="flex items-center justify-between pb-3 border-b border-slate-800/80 bg-black/80 p-3 rounded-2xl mb-4 shadow-xl">
         <div className="flex items-center gap-2.5">
+          {onNavigate && (
+            <button
+              onClick={() => onNavigate('hub')}
+              className="flex items-center gap-2 px-3 py-2 rounded-xl bg-black hover:bg-[#702815] border border-[#C8A451]/60 text-slate-100 hover:text-white transition-all text-xs font-bold mr-1"
+              title="Return to Robot Hub"
+            >
+              <ArrowLeft className="w-4 h-4 text-[#C8A451]" />
+              <span>Back to Hub</span>
+            </button>
+          )}
+
           <div className="p-2 rounded-xl bg-cyan-500/20 border border-cyan-400/40 text-cyan-300">
             <Navigation className="w-5 h-5" />
           </div>
           <div>
             <h1 className="text-base font-bold text-white tracking-wide">AUTONOMOUS NAVIGATION</h1>
-            <p className="text-xs text-slate-400 font-mono">Jetson Nav2 Path Planner & Obstacle Avoidance</p>
+            <p className="text-xs text-[#00f3ff] font-mono">Jetson Nav2 Path Planner & Obstacle Avoidance</p>
           </div>
         </div>
 

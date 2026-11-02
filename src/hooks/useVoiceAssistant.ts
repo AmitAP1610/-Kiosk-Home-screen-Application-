@@ -196,6 +196,21 @@ export function useVoiceAssistant({
     [isSpeaking, ttsStop, handleFinalSpeech]
   );
 
+  // Direct Speech Output (Without AI processing)
+  const speakDirect = useCallback(
+    async (text: string, onEndCallback?: () => void) => {
+      if (!text.trim()) return;
+      if (isSpeaking) ttsStop();
+      try {
+        await ttsSpeak(text);
+        if (onEndCallback) onEndCallback();
+      } catch {
+        if (onEndCallback) onEndCallback();
+      }
+    },
+    [isSpeaking, ttsStop, ttsSpeak]
+  );
+
   return {
     state,
     isListening,
@@ -211,6 +226,7 @@ export function useVoiceAssistant({
     stopListening,
     interrupt,
     sendMessage,
+    speakDirect,
     retry: sttRetry,
     // TTS voice settings
     availableVoices,

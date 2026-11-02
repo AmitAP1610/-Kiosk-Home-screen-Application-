@@ -14,18 +14,22 @@ export type FaceExpression =
   | 'wakeup';
 
 export type AppScreen =
-  | 'face'            // Screen 1: Home / Pure Robot Face
-  | 'welcome'         // Screen 2: Sri Sri University Welcome
-  | 'assistant'       // Screen 3: AI Campus Assistant & Chat
-  | 'university-info' // Screen 4: University Information, Faculties & Vision
-  | 'facilities'      // Screen 5: Campus Facilities & Guidance
-  | 'camera'          // Screen 6: Camera & Computer Vision
-  | 'control'         // Screen 7: Robot Teleoperation & E-Stop
-  | 'mapping'         // Screen 8: LiDAR Scan & 2D Map Visualization
-  | 'navigation'      // Screen 9: Autonomous Navigation & Routes
-  | 'monitor'         // Screen 10: System Monitor & Telemetry
-  | 'diagnostics'     // Screen 11: Dedicated Voice & Audio Diagnostics
-  | 'settings';       // Screen 12: System Configuration
+  | 'face'            // Screen 1: Home / Pure Robot Face (Intro voice -> auto-shifts to hub)
+  | 'hub'             // Screen 2: Tablet Main Hub (Back button + 3 circular buttons)
+  | 'map-info'        // Screen 3: SSU Campus Map & Basic Info
+  | 'sessions-agenda' // Screen 4: Sessions & Agenda
+  | 'robo-info'       // Screen 5: Robo Info (How made, who made, Mention Members)
+  | 'welcome'         // Sri Sri University Welcome
+  | 'assistant'       // AI Campus Assistant & Chat
+  | 'university-info' // University Information, Faculties & Vision
+  | 'facilities'      // Campus Facilities & Guidance
+  | 'camera'          // Camera & Computer Vision
+  | 'control'         // Robot Teleoperation & E-Stop
+  | 'mapping'         // LiDAR Scan & 2D Map Visualization
+  | 'navigation'      // Autonomous Navigation & Routes
+  | 'monitor'         // System Monitor & Telemetry
+  | 'diagnostics'     // Dedicated Voice & Audio Diagnostics
+  | 'settings';       // System Configuration
 
 export type VoiceAssistantState =
   | 'IDLE'

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { UNIVERSITY_INFO, CampusFacility } from '../data/universityInfo';
 import {
+  ArrowLeft,
   Building2,
   BookOpen,
   HeartPulse,
@@ -13,7 +14,15 @@ import {
   Compass
 } from 'lucide-react';
 
-export const CampusFacilitiesScreen: React.FC = () => {
+interface CampusFacilitiesScreenProps {
+  onNavigate?: (screen: any) => void;
+  onSpeakText?: (text: string) => void;
+}
+
+export const CampusFacilitiesScreen: React.FC<CampusFacilitiesScreenProps> = ({
+  onNavigate,
+  onSpeakText
+}) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [activeFacility, setActiveFacility] = useState<CampusFacility>(UNIVERSITY_INFO.facilities[0]);
 
@@ -44,19 +53,33 @@ export const CampusFacilitiesScreen: React.FC = () => {
   };
 
   return (
-    <div className="w-full h-full bg-black text-white flex flex-col pt-14 pb-4 px-4 sm:px-8 md:px-12 font-sans select-none overflow-y-auto">
-      {/* Top Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-ssu-border mb-6 gap-4">
+    <div className="w-full h-full bg-gradient-to-br from-black via-[#0d0705] to-[#04080c] text-white flex flex-col p-4 sm:p-6 md:p-8 font-sans select-none overflow-y-auto">
+      {/* Top Header with Back Button */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b-2 border-[#C8A451]/50 bg-black/80 p-3 rounded-2xl mb-6 gap-4 shadow-xl">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-ssu-maroon/50 border border-ssu-gold/40 text-ssu-gold">
+          {onNavigate && (
+            <button
+              onClick={() => {
+                if (onSpeakText) onSpeakText("Returning to robot hub.");
+                onNavigate('hub');
+              }}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black hover:bg-[#702815] border-2 border-[#C8A451]/70 text-slate-100 hover:text-white transition-all shadow-lg active:scale-95 text-xs sm:text-sm font-black"
+              title="Return to Robot Hub"
+            >
+              <ArrowLeft className="w-5 h-5 text-[#C8A451]" />
+              <span>Back to Hub</span>
+            </button>
+          )}
+
+          <div className="p-2.5 rounded-xl bg-[#702815] border border-[#C8A451]/50 text-[#C8A451]">
             <Building2 className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-wide">
+            <h1 className="text-xl sm:text-2xl font-black text-white tracking-wide">
               CAMPUS FACILITIES & GUIDANCE
             </h1>
-            <p className="text-xs text-ssu-gold font-mono">
-              Sri Sri University 188-Acre Integrated Holistic Campus
+            <p className="text-xs text-[#C8A451] font-mono font-bold">
+              Explore Academic, Healthcare, Hostels, and Dining Spaces
             </p>
           </div>
         </div>

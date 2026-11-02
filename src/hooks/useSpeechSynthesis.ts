@@ -15,10 +15,10 @@ export function useSpeechSynthesis({
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [visemeLevel, setVisemeLevel] = useState(0);
   const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
-  const [selectedVoice, setSelectedVoice] = useState<string>(() => localStorage.getItem('kairo_tts_voice') || '');
-  const [rate, setRateState] = useState<number>(() => parseFloat(localStorage.getItem('kairo_tts_rate') || '1.0'));
-  const [pitch, setPitchState] = useState<number>(() => parseFloat(localStorage.getItem('kairo_tts_pitch') || '1.05'));
-  const [volume, setVolumeState] = useState<number>(() => parseFloat(localStorage.getItem('kairo_tts_volume') || '1.0'));
+  const [selectedVoice, setSelectedVoice] = useState<string>(() => localStorage.getItem('kiosk_tts_voice') || '');
+  const [rate, setRateState] = useState<number>(() => parseFloat(localStorage.getItem('kiosk_tts_rate') || '0.90'));
+  const [pitch, setPitchState] = useState<number>(() => parseFloat(localStorage.getItem('kiosk_tts_pitch') || '0.82'));
+  const [volume, setVolumeState] = useState<number>(() => parseFloat(localStorage.getItem('kiosk_tts_volume') || '1.0'));
 
   const isSupported = textToSpeech.isSupported();
 
@@ -47,22 +47,22 @@ export function useSpeechSynthesis({
 
   const setRate = useCallback((val: number) => {
     setRateState(val);
-    localStorage.setItem('kairo_tts_rate', val.toString());
+    localStorage.setItem('kiosk_tts_rate', val.toString());
   }, []);
 
   const setPitch = useCallback((val: number) => {
     setPitchState(val);
-    localStorage.setItem('kairo_tts_pitch', val.toString());
+    localStorage.setItem('kiosk_tts_pitch', val.toString());
   }, []);
 
   const setVolume = useCallback((val: number) => {
     setVolumeState(val);
-    localStorage.setItem('kairo_tts_volume', val.toString());
+    localStorage.setItem('kiosk_tts_volume', val.toString());
   }, []);
 
   const setVoice = useCallback((voiceURI: string) => {
     setSelectedVoice(voiceURI);
-    localStorage.setItem('kairo_tts_voice', voiceURI);
+    localStorage.setItem('kiosk_tts_voice', voiceURI);
   }, []);
 
   const speak = useCallback(

@@ -104,7 +104,8 @@ class TextToSpeechService {
 
   /**
    * Finds the best voice matching language preference.
-   * Prioritizes Indian English (en-IN), Hindi (hi-IN), or natural sounding voices.
+   * Strictly prioritizes deep resonant natural male voices (like George, Google UK/US Male, Brian, David, Guy)
+   * matching the uploaded baritone reference audio sample ("I fear darkness hunts us...").
    */
   public findBestVoice(lang = 'en-IN', voiceURI?: string): SpeechSynthesisVoice | null {
     const list = this.getVoices();
@@ -115,16 +116,68 @@ class TextToSpeechService {
       if (match) return match;
     }
 
-    // Match exact language code (e.g. 'en-IN' or 'hi-IN')
+    // Explicit female names to filter out
+    const femaleKeywords = [
+      'female', 'zira', 'jenny', 'aria', 'hazel', 'susan', 'linda',
+      'heera', 'kalpana', 'samantha', 'victoria', 'karen', 'catherine',
+      'helena', 'stephanie', 'nicole', 'ananya', 'priya', 'pooja', 'neerja'
+    ];
+    const isFemale = (name: string) => femaleKeywords.some(k => name.toLowerCase().includes(k));
+
+    // Deep resonant male voice keywords (mirrors the uploaded baritone audio sample)
+    const priorityBaritoneKeywords = [
+      'george', 'uk english male', 'brian', 'ryan', 'guy', 'david', 'mark', 'richard', 'en-gb-male'
+    ];
+    const generalMaleKeywords = [
+      'male', 'ravi', 'prabhat', 'james', 'andrew', 'daniel', 'madhav', 'rohit'
+    ];
+
+    const isPriorityBaritone = (name: string) =>
+      priorityBaritoneKeywords.some(k => name.toLowerCase().includes(k)) && !isFemale(name);
+
+    const isGeneralMale = (name: string) =>
+      (priorityBaritoneKeywords.some(k => name.toLowerCase().includes(k)) ||
+       generalMaleKeywords.some(k => name.toLowerCase().includes(k))) && !isFemale(name);
+
+    // 1. Top priority: British/deep baritone male matching reference tone
+    const baritoneMatch = list.find(v => isPriorityBaritone(v.name));
+    if (baritoneMatch) return baritoneMatch;
+
+    // 2. Prioritize target language male voice
+    const targetMale = list.find(v => {
+      const langLower = v.lang.replace('_', '-').toLowerCase();
+      return (langLower.startsWith(lang.toLowerCase()) || langLower.startsWith(lang.split('-')[0].toLowerCase())) && isGeneralMale(v.name);
+    });
+    if (targetMale) return targetMale;
+
+    // 3. Try any English male voice
+    const anyEnglishMale = list.find(v => {
+      const langLower = v.lang.replace('_', '-').toLowerCase();
+      return langLower.startsWith('en') && isGeneralMale(v.name);
+    });
+    if (anyEnglishMale) return anyEnglishMale;
+
+    // 4. Try any male voice in the system
+    const anyMale = list.find(v => isGeneralMale(v.name));
+    if (anyMale) return anyMale;
+
+    // 5. Prefer non-female voice matching language
+    const nonFemaleLang = list.find(v => {
+      const langLower = v.lang.replace('_', '-').toLowerCase();
+      return (langLower.startsWith(lang.toLowerCase()) || langLower.startsWith(lang.split('-')[0].toLowerCase())) && !isFemale(v.name);
+    });
+    if (nonFemaleLang) return nonFemaleLang;
+
+    // 6. Match exact language code (e.g. 'en-IN' or 'hi-IN')
     const langMatch = list.find(v => v.lang.replace('_', '-').toLowerCase() === lang.toLowerCase());
     if (langMatch) return langMatch;
 
-    // Match prefix (e.g. 'hi' for Hindi, 'en' for English)
+    // 7. Match prefix (e.g. 'hi' for Hindi, 'en' for English)
     const prefix = lang.split('-')[0].toLowerCase();
     const prefixMatch = list.find(v => v.lang.toLowerCase().startsWith(prefix));
     if (prefixMatch) return prefixMatch;
 
-    // Fallback to default or first available
+    // 8. Fallback to default or first available
     return list.find(v => v.default) || list[0] || null;
   }
 
@@ -204,8 +257,9 @@ class TextToSpeechService {
           utterance.voice = voice;
         }
 
-        utterance.rate = Math.max(0.5, Math.min(2.0, options.rate ?? 1.0));
-        utterance.pitch = Math.max(0.5, Math.min(2.0, options.pitch ?? 1.02));
+        // Calibrate pitch and rate to mirror the deep baritone sample (0.82 pitch, 0.90 rate)
+        utterance.rate = Math.max(0.5, Math.min(2.0, options.rate ?? 0.90));
+        utterance.pitch = Math.max(0.5, Math.min(2.0, options.pitch ?? 0.82));
         utterance.volume = Math.max(0.0, Math.min(1.0, options.volume ?? 1.0));
 
         utterance.onstart = () => {

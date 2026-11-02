@@ -14,7 +14,11 @@ import {
   Wrench,
   Settings,
   X,
-  ExternalLink
+  ExternalLink,
+  LayoutGrid,
+  Bot,
+  MapPin,
+  Calendar
 } from 'lucide-react';
 
 interface NavigationBarProps {
@@ -42,10 +46,43 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
   }> = [
     {
       id: 'face',
-      title: 'Robot Face (Home)',
-      description: 'Animated cyan eyes, natural blinks & gaze',
+      title: '1. Robot Face (Home)',
+      description: 'Animated cyan eyes with voice intro',
       icon: Smile,
-      category: 'SSU Campus'
+      category: 'SSU Campus',
+      badge: 'Box 1'
+    },
+    {
+      id: 'hub',
+      title: '2. Campus Robot Hub',
+      description: 'Tablet main menu with 3 circular modules',
+      icon: LayoutGrid,
+      category: 'SSU Campus',
+      badge: 'Box 2'
+    },
+    {
+      id: 'robo-info',
+      title: 'Robo Info (How & Who Made)',
+      description: 'Architecture, specs & team members',
+      icon: Bot,
+      category: 'SSU Campus',
+      badge: 'Circle 1'
+    },
+    {
+      id: 'map-info',
+      title: 'Map & SSU Info',
+      description: '188-acre campus map & basic information',
+      icon: MapPin,
+      category: 'SSU Campus',
+      badge: 'Circle 2'
+    },
+    {
+      id: 'sessions-agenda',
+      title: 'Sessions / Agenda',
+      description: 'Conferences, workshops & campus events',
+      icon: Calendar,
+      category: 'SSU Campus',
+      badge: 'Circle 3'
     },
     {
       id: 'welcome',

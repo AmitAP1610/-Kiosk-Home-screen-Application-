@@ -1,7 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Camera, SwitchCamera, Play, Square, ShieldCheck, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Camera, SwitchCamera, Play, Square, ShieldCheck, AlertTriangle } from 'lucide-react';
 
-export const CameraScreen: React.FC = () => {
+interface CameraScreenProps {
+  onNavigate?: (screen: any) => void;
+}
+
+export const CameraScreen: React.FC<CameraScreenProps> = ({ onNavigate }) => {
   const [isActive, setIsActive] = useState(false);
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -64,16 +68,27 @@ export const CameraScreen: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full h-full bg-black text-slate-100 flex flex-col pt-14 pb-4 px-3 sm:px-6 md:px-10 font-sans select-none overflow-hidden">
+    <div className="w-full h-full bg-gradient-to-br from-black via-[#0d0705] to-[#04080c] text-slate-100 flex flex-col p-4 sm:p-6 font-sans select-none overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
+      <div className="flex items-center justify-between pb-3 border-b border-slate-800/80 bg-black/80 p-3 rounded-2xl mb-4 shadow-xl">
         <div className="flex items-center gap-2.5">
+          {onNavigate && (
+            <button
+              onClick={() => onNavigate('hub')}
+              className="flex items-center gap-2 px-3 py-2 rounded-xl bg-black hover:bg-[#702815] border border-[#C8A451]/60 text-slate-100 hover:text-white transition-all text-xs font-bold mr-1"
+              title="Return to Robot Hub"
+            >
+              <ArrowLeft className="w-4 h-4 text-[#C8A451]" />
+              <span>Back to Hub</span>
+            </button>
+          )}
+
           <div className="p-2 rounded-xl bg-cyan-500/20 border border-cyan-400/40 text-cyan-300">
             <Camera className="w-5 h-5" />
           </div>
           <div>
             <h1 className="text-base font-bold text-white tracking-wide">CAMERA & COMPUTER VISION</h1>
-            <p className="text-xs text-slate-400 font-mono">Realme Tablet Camera • On-Device Visual Understanding</p>
+            <p className="text-xs text-[#00f3ff] font-mono">Realme Tablet Camera • On-Device Visual Understanding</p>
           </div>
         </div>
 

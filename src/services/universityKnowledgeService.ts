@@ -57,8 +57,8 @@ class UniversityKnowledgeService {
     ) {
       return {
         text: isHindi
-          ? "मैं श्री श्री यूनिवर्सिटी का आधिकारिक एआई कैंपस सहायक हूँ। मैं आगंतुकों और छात्रों को विश्वविद्यालय, पाठ्यक्रमों, सुविधाओं और प्रवेश संबंधी जानकारी में सहायता प्रदान करता हूँ।"
-          : "I am the official AI Campus Assistant for Sri Sri University. I help visitors and students navigate our 188-acre campus, explore academic courses, discover facilities, and connect with admissions.",
+          ? "मैं कियोस्क (Kiosk) हूँ, श्री श्री यूनिवर्सिटी का आधिकारिक एआई कैंपस सहायक। मैं आगंतुकों और छात्रों को विश्वविद्यालय, पाठ्यक्रमों, सुविधाओं और परिसर मार्गदर्शन में सहायता प्रदान करता हूँ।"
+          : "I am Kiosk, the official AI Campus Assistant for Sri Sri University. I help visitors and students navigate our 188-acre campus, explore academic courses, discover facilities, and check today's agenda.",
         source: 'identity',
         confidence: 0.98,
         suggestedExpression: 'happy'
