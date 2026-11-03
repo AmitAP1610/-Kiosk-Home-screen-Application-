@@ -14,7 +14,7 @@ The KIOSK robot employs a strict 3-tier distributed processing architecture to g
 │ • Runs React 18 / TypeScript / Vite UI                 │
 │ • Procedural animated SVG robot face & eye tracking     │
 │ • Web Speech API STT (Recognition) & TTS (Synthesis)   │
-│ • Real Leaflet GIS Campus Map (Satellite/Dark/Street)  │
+│ • Campus Highlights & Facilities photo guide & audio tours │
 │ • Static IP: 172.17.0.1                                │
 └───────────────────────────┬────────────────────────────┘
                             │ WebSocket / REST over Local Wi-Fi
@@ -43,7 +43,7 @@ The KIOSK robot employs a strict 3-tier distributed processing architecture to g
 
 | Processing Layer | Hardware Target | Mandatory Responsibilities | Forbidden Responsibilities |
 | :--- | :--- | :--- | :--- |
-| **Tier 1 (Interface)** | **Realme Android Tablet** (10.4" 2K Display) | Face rendering, eye gaze tracking, Web Speech API audio, Leaflet real campus map, timetable, tablet UI | LiDAR data ingestion, SLAM computation, direct motor PWM control |
+| **Tier 1 (Interface)** | **Realme Android Tablet** (10.4" 2K Display) | Face rendering, eye gaze tracking, Web Speech API audio, campus highlights guide, timetable, tablet UI | LiDAR data ingestion, SLAM computation, direct motor PWM control |
 | **Tier 2 (Robotics)** | **NVIDIA Jetson Edge Node** (GPU Accelerated) | 2D LiDAR scanning, occupancy grid SLAM, Nav2 trajectory calculation, dynamic obstacle avoidance | Microphone audio capture, speech recognition, tablet UI rendering |
 | **Tier 3 (Actuation)** | **Arduino Mega 2560** (16 MHz AVR) | H-bridge motor PWM, encoder odometry counting, 300ms watchdog timer, emergency stop cutout | High-level path planning, speech synthesis, AI language processing |
 

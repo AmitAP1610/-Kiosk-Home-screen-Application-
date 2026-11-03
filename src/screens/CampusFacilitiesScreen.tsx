@@ -53,9 +53,9 @@ export const CampusFacilitiesScreen: React.FC<CampusFacilitiesScreenProps> = ({
   };
 
   return (
-    <div className="w-full h-full bg-gradient-to-br from-black via-[#0d0705] to-[#04080c] text-white flex flex-col p-4 sm:p-6 md:p-8 font-sans select-none overflow-y-auto">
-      {/* Top Header with Back Button */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b-2 border-[#C8A451]/50 bg-black/80 p-3 rounded-2xl mb-6 gap-4 shadow-xl">
+    <div className="w-full h-full bg-[#F2F2EF] text-[#30343B] flex flex-col p-3 sm:p-5 md:p-6 font-sans select-none overflow-y-auto">
+      {/* Top Header: Industrial Primary Bar */}
+      <header className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between bg-[#30343B] text-white px-4 sm:px-6 py-3 rounded-xl border border-[#B0B4B8]/30 shadow-sm mb-4 gap-3">
         <div className="flex items-center gap-3">
           {onNavigate && (
             <button
@@ -63,49 +63,49 @@ export const CampusFacilitiesScreen: React.FC<CampusFacilitiesScreenProps> = ({
                 if (onSpeakText) onSpeakText("Returning to robot hub.");
                 onNavigate('hub');
               }}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black hover:bg-[#702815] border-2 border-[#C8A451]/70 text-slate-100 hover:text-white transition-all shadow-lg active:scale-95 text-xs sm:text-sm font-black"
+              className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#202124] hover:bg-[#17191C] border border-[#B0B4B8]/40 text-white transition-all shadow-sm active:scale-98 text-xs font-bold"
               title="Return to Robot Hub"
             >
-              <ArrowLeft className="w-5 h-5 text-[#C8A451]" />
+              <ArrowLeft className="w-4 h-4 text-[#D49A36]" />
               <span>Back to Hub</span>
             </button>
           )}
 
-          <div className="p-2.5 rounded-xl bg-[#702815] border border-[#C8A451]/50 text-[#C8A451]">
-            <Building2 className="w-6 h-6" />
+          <div className="p-1.5 rounded-md bg-[#202124] border border-[#B0B4B8]/30 text-[#D49A36]">
+            <Building2 className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-xl sm:text-2xl font-black text-white tracking-wide">
+            <h1 className="text-sm sm:text-base font-extrabold text-white tracking-wide">
               CAMPUS FACILITIES & GUIDANCE
             </h1>
-            <p className="text-xs text-[#C8A451] font-mono font-bold">
+            <p className="text-[11px] text-[#B0B4B8] font-mono">
               Explore Academic, Healthcare, Hostels, and Dining Spaces
             </p>
           </div>
         </div>
 
         {/* Category Filter Pills */}
-        <div className="flex flex-wrap gap-1.5 p-1 rounded-xl bg-ssu-surface border border-ssu-border text-xs">
+        <div className="flex flex-wrap gap-1 p-1 rounded-lg bg-[#202124] border border-[#B0B4B8]/30 text-xs">
           {categories.map((c) => (
             <button
               key={c.id}
               onClick={() => setSelectedCategory(c.id)}
-              className={`px-3 py-1.5 rounded-lg transition-all ${
+              className={`px-3 py-1 rounded-md transition-all ${
                 selectedCategory === c.id
-                  ? 'bg-ssu-gold text-black font-bold shadow'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-[#D49A36] text-[#202124] font-bold'
+                  : 'text-[#B0B4B8] hover:text-white'
               }`}
             >
               {c.label}
             </button>
           ))}
         </div>
-      </div>
+      </header>
 
       {/* Main Facilities Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Left List */}
-        <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Left List: Crisp White Cards */}
+        <div className="space-y-2 max-h-[500px] overflow-y-auto pr-1">
           {filtered.map((fac) => {
             const Icon = getCategoryIcon(fac.category);
             const isSelected = activeFacility.id === fac.id;
@@ -113,25 +113,27 @@ export const CampusFacilitiesScreen: React.FC<CampusFacilitiesScreenProps> = ({
               <div
                 key={fac.id}
                 onClick={() => setActiveFacility(fac)}
-                className={`p-4 rounded-xl border transition-all cursor-pointer ${
+                className={`p-3 rounded-xl border transition-all cursor-pointer shadow-sm ${
                   isSelected
-                    ? 'bg-ssu-maroon border-ssu-gold text-white shadow-xl'
-                    : 'bg-ssu-card border-ssu-border text-slate-300 hover:border-ssu-gold/40'
+                    ? 'bg-[#30343B] text-white border-[#30343B]'
+                    : 'bg-[#FFFFFF] border-[#B0B4B8]/60 text-[#30343B] hover:border-[#D49A36]'
                 }`}
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2.5">
                   <div
-                    className={`p-2 rounded-lg ${
-                      isSelected ? 'bg-ssu-gold text-black' : 'bg-black/50 text-ssu-gold border border-ssu-border'
+                    className={`p-1.5 rounded-md ${
+                      isSelected ? 'bg-[#202124] text-[#D49A36]' : 'bg-[#F2F2EF] text-[#30343B]'
                     }`}
                   >
                     <Icon className="w-4 h-4" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-xs font-bold truncate leading-snug">{fac.name}</h3>
-                    <div className="flex items-center gap-1.5 text-[10px] text-slate-400 font-mono mt-0.5">
-                      <MapPin className="w-3 h-3 text-ssu-gold flex-shrink-0" />
-                      <span className="truncate">{fac.location}</span>
+                    <h3 className={`text-xs font-bold truncate leading-snug ${isSelected ? 'text-white' : 'text-[#30343B]'}`}>
+                      {fac.name}
+                    </h3>
+                    <div className="flex items-center gap-1 text-[10px] font-mono mt-0.5">
+                      <MapPin className="w-3 h-3 text-[#D49A36] flex-shrink-0" />
+                      <span className={`truncate ${isSelected ? 'text-[#B0B4B8]' : 'text-[#5F666D]'}`}>{fac.location}</span>
                     </div>
                   </div>
                 </div>
@@ -140,46 +142,46 @@ export const CampusFacilitiesScreen: React.FC<CampusFacilitiesScreenProps> = ({
           })}
         </div>
 
-        {/* Right Detail Pane */}
-        <div className="md:col-span-2 p-6 rounded-2xl bg-ssu-card border border-ssu-gold/40 shadow-2xl space-y-5">
+        {/* Right Detail Pane: Crisp White Card */}
+        <div className="md:col-span-2 p-5 sm:p-6 rounded-xl bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 shadow-sm space-y-4">
           <div className="flex items-start justify-between">
             <div>
-              <span className="text-[11px] font-mono px-2.5 py-1 rounded-full bg-ssu-maroon/60 border border-ssu-gold/40 text-ssu-gold font-bold uppercase tracking-wider inline-block mb-2">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#D49A36] text-[#202124] font-bold uppercase tracking-wider inline-block mb-1.5">
                 {activeFacility.category.toUpperCase()} INFRASTRUCTURE
               </span>
-              <h2 className="text-xl sm:text-2xl font-bold text-white">{activeFacility.name}</h2>
-              <div className="flex items-center gap-1.5 text-xs text-slate-300 font-mono mt-1">
-                <MapPin className="w-4 h-4 text-ssu-gold" />
+              <h2 className="text-lg sm:text-xl font-bold text-[#30343B]">{activeFacility.name}</h2>
+              <div className="flex items-center gap-1.5 text-xs text-[#5F666D] font-mono mt-0.5">
+                <MapPin className="w-3.5 h-3.5 text-[#D49A36]" />
                 <span>{activeFacility.location}</span>
               </div>
             </div>
           </div>
 
-          <p className="text-xs sm:text-sm text-slate-200 leading-relaxed bg-black/40 p-4 rounded-xl border border-ssu-border">
+          <p className="text-xs sm:text-sm text-[#5F666D] leading-relaxed bg-[#F2F2EF] p-3 rounded-lg border border-[#B0B4B8]/40">
             {activeFacility.description}
           </p>
 
           <div>
-            <h3 className="text-xs font-bold text-ssu-gold uppercase tracking-wider mb-3">
+            <h3 className="text-xs font-bold text-[#30343B] uppercase tracking-wider mb-2">
               Facility Highlights & Student Amenities
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {activeFacility.highlights.map((h, i) => (
                 <div
                   key={i}
-                  className="p-3 rounded-xl bg-ssu-surface border border-ssu-border text-xs text-slate-200 flex items-start gap-2.5"
+                  className="p-2.5 rounded-lg bg-[#F2F2EF] border border-[#B0B4B8]/40 text-xs text-[#5F666D] flex items-start gap-2"
                 >
-                  <CheckCircle2 className="w-4 h-4 text-ssu-gold flex-shrink-0 mt-0.5" />
-                  <span className="leading-snug">{h}</span>
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#D49A36] flex-shrink-0 mt-0.5" />
+                  <span className="leading-snug text-[#30343B] font-medium">{h}</span>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Visitor Guidance Notice */}
-          <div className="p-4 rounded-xl bg-ssu-maroon/30 border border-ssu-gold/30 text-xs text-slate-300 flex items-center justify-between">
+          <div className="p-3 rounded-lg bg-[#F2F2EF] border border-[#B0B4B8]/40 text-xs text-[#5F666D] flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Compass className="w-4 h-4 text-ssu-gold flex-shrink-0" />
+              <Compass className="w-4 h-4 text-[#D49A36] flex-shrink-0" />
               <span>Ask the AI Voice Assistant for real-time guidance to this facility.</span>
             </div>
           </div>

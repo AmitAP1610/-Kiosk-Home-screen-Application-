@@ -5,13 +5,32 @@
 @tailwind utilities;
 
 :root {
-  --ssu-maroon: #702815;
-  --ssu-maroon-dark: #45160b;
-  --ssu-maroon-light: #8a341e;
-  --ssu-gold: #C8A451;
-  --ssu-gold-light: #e4c375;
-  --ssu-gold-dark: #9e7e31;
-  --ssu-black: #000000;
+  /* Industrial AMR White Control Dashboard Palette */
+  --color-main-bg: #F2F2EF;
+  --color-primary: #30343B;
+  --color-secondary: #B0B4B8;
+  --color-dark: #202124;
+  --color-accent: #D49A36;
+  --color-card: #FFFFFF;
+  --color-text-primary: #30343B;
+  --color-text-secondary: #5F666D;
+  --color-text-on-dark: #FFFFFF;
+
+  /* Aliases for backwards compatibility */
+  --color-industrial-white: #F2F2EF;
+  --color-off-white: #F2F2EF;
+  --color-charcoal: #30343B;
+  --color-maroon: #D49A36;
+  --color-near-black: #202124;
+  --color-white: #FFFFFF;
+  --color-silver-grey: #B0B4B8;
+  --color-rubber-black: #202124;
+
+  --ssu-maroon: #D49A36;
+  --ssu-maroon-dark: #B88328;
+  --ssu-maroon-light: #E0AC54;
+  --ssu-gold: #D49A36;
+  --ssu-black: #202124;
   --ssu-white: #FFFFFF;
 }
 
@@ -26,11 +45,12 @@
     height: 100%;
     margin: 0;
     padding: 0;
-    background-color: #000000;
-    color: #f1f5f9;
+    background-color: var(--color-off-white);
+    color: var(--color-charcoal);
     overflow: hidden;
     user-select: none;
     -webkit-user-select: none;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   }
 
   /* Completely eliminate all scrollbars for kiosk mode */
@@ -46,24 +66,14 @@
   }
 }
 
-/* Futuristic smooth transitions */
-.transition-face {
-  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+/* Professional component transitions */
+.transition-ui {
+  transition: all 0.2s ease-in-out;
 }
 
-/* Subtle breathing pulsation for sleep & idle state */
-@keyframes softPulse {
-  0%, 100% {
-    opacity: 0.35;
-  }
-  50% {
-    opacity: 0.6;
-  }
-}
-
-/* Kiosk Giant Font scale for standing distance viewing on tablet */
+/* Kiosk text readability scaling */
 .kiosk-giant-font p {
-  font-size: 1.125rem;
+  font-size: 1.15rem;
   line-height: 1.6;
 }
 .kiosk-giant-font li {
@@ -76,8 +86,3 @@
 .kiosk-giant-font h3 {
   font-size: 1.5rem;
 }
-
-.animate-soft-pulse {
-  animation: softPulse 4s ease-in-out infinite;
-}
-

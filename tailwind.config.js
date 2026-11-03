@@ -7,41 +7,65 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Industrial AMR White Control Dashboard Palette
+        amr: {
+          bg: '#F2F2EF',        // Main background
+          primary: '#30343B',   // Sidebar and primary elements
+          secondary: '#B0B4B8', // Secondary elements
+          dark: '#202124',      // Dark components
+          accent: '#D49A36',    // Warning/accent (Industrial Amber)
+          accentHover: '#C0882B',
+          card: '#FFFFFF',      // Cards
+          text: '#30343B',      // Primary readable text
+          textMuted: '#5F666D', // Secondary text
+        },
+        chaos: {
+          bg: '#F2F2EF',        // Main background
+          charcoal: '#30343B',  // Sidebar & primary elements
+          charcoalDark: '#23272D',
+          charcoalLight: '#3A3F47',
+          maroon: '#D49A36',    // Warning/accent (Industrial Amber)
+          maroonHover: '#C0882B',
+          maroonLight: '#E0AC54',
+          display: '#202124',   // Dark components / displays
+          white: '#FFFFFF',     // Primary text
+          silver: '#B0B4B8',    // Secondary elements / borders
+          rubber: '#202124',    // Dark components
+          card: '#FFFFFF',      // Cards
+        },
         robot: {
-          bg: '#000000',
-          cyan: '#00f3ff',
-          cyanDim: '#009bb3',
-          cyanGlow: '#38f9d7',
-          cyanDark: '#04222f',
-          bezel: '#12151b',
-          bezelBorder: '#232936',
-          whiteChassis: '#f0f3f6',
+          bg: '#202124',
+          cyan: '#D49A36',
+          cyanDim: '#B88328',
+          cyanGlow: '#D49A36',
+          cyanDark: '#202124',
+          bezel: '#30343B',
+          bezelBorder: '#B0B4B8',
+          whiteChassis: '#F2F2EF',
         },
         ssu: {
-          maroon: '#702815',
-          maroonDark: '#45160b',
-          maroonLight: '#8a341e',
-          maroonMuted: 'rgba(112, 40, 21, 0.25)',
-          gold: '#C8A451',
-          goldLight: '#e4c375',
-          goldDark: '#9e7e31',
-          goldMuted: 'rgba(200, 164, 81, 0.2)',
-          black: '#000000',
+          maroon: '#D49A36',
+          maroonDark: '#B88328',
+          maroonLight: '#E0AC54',
+          maroonMuted: 'rgba(212, 154, 54, 0.2)',
+          gold: '#D49A36',
+          goldLight: '#E0AC54',
+          goldDark: '#B88328',
+          goldMuted: 'rgba(212, 154, 54, 0.2)',
+          black: '#202124',
           white: '#FFFFFF',
-          surface: '#120704',
-          card: '#1a0b07',
-          border: '#38160e',
-          borderGold: '#5e4414',
+          surface: '#30343B',
+          card: '#FFFFFF',
+          border: '#B0B4B8',
+          borderGold: '#D49A36',
         }
       },
       boxShadow: {
-        'cyan-glow': '0 0 15px rgba(0, 243, 255, 0.6), 0 0 30px rgba(0, 243, 255, 0.3)',
-        'cyan-intense': '0 0 20px rgba(0, 243, 255, 0.9), 0 0 45px rgba(0, 243, 255, 0.5)',
-        'ssu-gold': '0 0 15px rgba(200, 164, 81, 0.4), 0 0 30px rgba(200, 164, 81, 0.2)',
-        'ssu-maroon': '0 0 20px rgba(112, 40, 21, 0.5)',
+        'subtle': '0 2px 8px rgba(0, 0, 0, 0.08)',
+        'card': '0 4px 12px rgba(0, 0, 0, 0.12)',
+        'modal': '0 8px 24px rgba(0, 0, 0, 0.20)',
       }
     },
   },
   plugins: [],
 }
-

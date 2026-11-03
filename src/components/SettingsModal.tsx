@@ -50,17 +50,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-      <div className="relative w-full max-w-xl max-h-[90vh] bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-2xl flex flex-col text-slate-200 overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+      <div className="relative w-full max-w-xl max-h-[90vh] bg-[#30343B] border border-[#B0B4B8]/30 rounded-2xl p-6 shadow-xl flex flex-col text-white overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div className="flex items-center justify-between pb-4 border-b border-[#B0B4B8]/30">
           <div className="flex items-center gap-2.5">
-            <Sliders className="w-5 h-5 text-cyan-400" />
-            <h2 className="text-lg font-semibold tracking-wide text-white">Face UI Configuration</h2>
+            <Sliders className="w-5 h-5 text-[#D49A36]" />
+            <h2 className="text-base font-bold tracking-wide text-white">Face UI Configuration</h2>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-900 transition-colors"
+            className="p-1.5 rounded-lg text-[#B0B4B8] hover:text-white hover:bg-[#202124] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -70,7 +70,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         <div className="overflow-y-auto space-y-6 py-4 pr-1 text-sm font-mono">
           {/* Theme Presets */}
           <div>
-            <label className="block text-xs uppercase tracking-wider text-slate-400 mb-2.5 font-bold">
+            <label className="block text-xs uppercase tracking-wider text-[#B0B4B8] mb-2.5 font-bold">
               Color Theme Preset
             </label>
             <div className="grid grid-cols-3 gap-2">
@@ -80,10 +80,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   <button
                     key={theme.name}
                     onClick={() => update({ primaryColor: theme.primary })}
-                    className={`flex items-center gap-2 p-2 rounded-xl border text-xs font-medium transition-all ${
+                    className={`flex items-center gap-2 p-2 rounded-lg border text-xs font-medium transition-all ${
                       isSelected
-                        ? 'border-cyan-400 bg-cyan-950/40 text-cyan-200 shadow-[0_0_12px_rgba(0,243,255,0.25)]'
-                        : 'border-slate-800 bg-slate-900/60 text-slate-300 hover:border-slate-700'
+                        ? 'border-[#D49A36] bg-[#D49A36] text-[#202124] font-bold shadow-sm'
+                        : 'border-[#B0B4B8]/30 bg-[#202124] text-[#B0B4B8] hover:text-white hover:border-[#D49A36]'
                     }`}
                   >
                     <span
@@ -98,11 +98,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           </div>
 
           {/* Eye Proportions */}
-          <div className="space-y-4 pt-2 border-t border-slate-800/80">
-            <h3 className="text-xs uppercase tracking-wider text-cyan-400 font-bold">Eye Proportions</h3>
+          <div className="space-y-4 pt-2 border-t border-[#B0B4B8]/20">
+            <h3 className="text-xs uppercase tracking-wider text-[#D49A36] font-bold">Eye Proportions</h3>
 
             <div>
-              <div className="flex justify-between text-xs text-slate-400 mb-1">
+              <div className="flex justify-between text-xs text-[#B0B4B8] mb-1">
                 <span>Eye Size (Radius)</span>
                 <span>{config.eyeSize}px</span>
               </div>
@@ -112,12 +112,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 max="75"
                 value={config.eyeSize}
                 onChange={(e) => update({ eyeSize: Number(e.target.value) })}
-                className="w-full accent-cyan-400 cursor-pointer"
+                className="w-full accent-[#D49A36] cursor-pointer"
               />
             </div>
 
             <div>
-              <div className="flex justify-between text-xs text-slate-400 mb-1">
+              <div className="flex justify-between text-xs text-[#B0B4B8] mb-1">
                 <span>Interocular Distance (Spacing)</span>
                 <span>{config.eyeSpacing}px</span>
               </div>
@@ -127,32 +127,32 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 max="300"
                 value={config.eyeSpacing}
                 onChange={(e) => update({ eyeSpacing: Number(e.target.value) })}
-                className="w-full accent-cyan-400 cursor-pointer"
+                className="w-full accent-[#D49A36] cursor-pointer"
               />
             </div>
 
             <div>
-              <div className="flex justify-between text-xs text-slate-400 mb-1">
-                <span>Eye Vertical Position (Offset Y)</span>
+              <div className="flex justify-between text-xs text-[#B0B4B8] mb-1">
+                <span>Vertical Offset</span>
                 <span>{config.eyeOffsetY}px</span>
               </div>
               <input
                 type="range"
-                min="-90"
-                max="20"
+                min="-60"
+                max="40"
                 value={config.eyeOffsetY}
                 onChange={(e) => update({ eyeOffsetY: Number(e.target.value) })}
-                className="w-full accent-cyan-400 cursor-pointer"
+                className="w-full accent-[#D49A36] cursor-pointer"
               />
             </div>
           </div>
 
           {/* Mouth Proportions */}
-          <div className="space-y-4 pt-2 border-t border-slate-800/80">
-            <h3 className="text-xs uppercase tracking-wider text-cyan-400 font-bold">Mouth Proportions</h3>
+          <div className="space-y-4 pt-2 border-t border-[#B0B4B8]/20">
+            <h3 className="text-xs uppercase tracking-wider text-[#D49A36] font-bold">Mouth Proportions</h3>
 
             <div>
-              <div className="flex justify-between text-xs text-slate-400 mb-1">
+              <div className="flex justify-between text-xs text-[#B0B4B8] mb-1">
                 <span>Mouth Width</span>
                 <span>{config.mouthWidth}px</span>
               </div>
@@ -162,12 +162,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 max="90"
                 value={config.mouthWidth}
                 onChange={(e) => update({ mouthWidth: Number(e.target.value) })}
-                className="w-full accent-cyan-400 cursor-pointer"
+                className="w-full accent-[#D49A36] cursor-pointer"
               />
             </div>
 
             <div>
-              <div className="flex justify-between text-xs text-slate-400 mb-1">
+              <div className="flex justify-between text-xs text-[#B0B4B8] mb-1">
                 <span>Smile Curvature Depth</span>
                 <span>{config.mouthCurve}px</span>
               </div>
@@ -177,12 +177,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 max="30"
                 value={config.mouthCurve}
                 onChange={(e) => update({ mouthCurve: Number(e.target.value) })}
-                className="w-full accent-cyan-400 cursor-pointer"
+                className="w-full accent-[#D49A36] cursor-pointer"
               />
             </div>
 
             <div>
-              <div className="flex justify-between text-xs text-slate-400 mb-1">
+              <div className="flex justify-between text-xs text-[#B0B4B8] mb-1">
                 <span>Mouth Vertical Offset</span>
                 <span>{config.mouthOffsetY}px</span>
               </div>
@@ -192,18 +192,18 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 max="120"
                 value={config.mouthOffsetY}
                 onChange={(e) => update({ mouthOffsetY: Number(e.target.value) })}
-                className="w-full accent-cyan-400 cursor-pointer"
+                className="w-full accent-[#D49A36] cursor-pointer"
               />
             </div>
           </div>
 
           {/* Glow & Animation Dynamics */}
-          <div className="space-y-4 pt-2 border-t border-slate-800/80">
-            <h3 className="text-xs uppercase tracking-wider text-cyan-400 font-bold">Glow & Behavior</h3>
+          <div className="space-y-4 pt-2 border-t border-[#B0B4B8]/20">
+            <h3 className="text-xs uppercase tracking-wider text-[#D49A36] font-bold">Glow & Behavior</h3>
 
             <div>
-              <div className="flex justify-between text-xs text-slate-400 mb-1">
-                <span>Neon Glow Bloom Intensity</span>
+              <div className="flex justify-between text-xs text-[#B0B4B8] mb-1">
+                <span>Glow Intensity</span>
                 <span>{config.glowIntensity.toFixed(2)}x</span>
               </div>
               <input
@@ -213,12 +213,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 step="0.05"
                 value={config.glowIntensity}
                 onChange={(e) => update({ glowIntensity: Number(e.target.value) })}
-                className="w-full accent-cyan-400 cursor-pointer"
+                className="w-full accent-[#D49A36] cursor-pointer"
               />
             </div>
 
             <div>
-              <div className="flex justify-between text-xs text-slate-400 mb-1">
+              <div className="flex justify-between text-xs text-[#B0B4B8] mb-1">
                 <span>Blink Interval (Avg)</span>
                 <span>{config.blinkIntervalMin}s - {config.blinkIntervalMax}s</span>
               </div>
@@ -232,32 +232,32 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   blinkIntervalMin: Number(e.target.value),
                   blinkIntervalMax: Number(e.target.value) + 2.5
                 })}
-                className="w-full accent-cyan-400 cursor-pointer"
+                className="w-full accent-[#D49A36] cursor-pointer"
               />
             </div>
           </div>
         </div>
 
         {/* Footer Actions */}
-        <div className="flex flex-wrap items-center justify-between gap-2 pt-4 border-t border-slate-800 mt-2 font-mono text-xs">
+        <div className="flex flex-wrap items-center justify-between gap-2 pt-4 border-t border-[#B0B4B8]/30 mt-2 font-mono text-xs">
           <button
             onClick={resetDefaults}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-800 bg-slate-900 text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-[#B0B4B8]/30 bg-[#202124] text-[#B0B4B8] hover:text-white hover:bg-[#17191C] transition-colors"
           >
-            <RotateCcw className="w-3.5 h-3.5 text-cyan-400" />
+            <RotateCcw className="w-3.5 h-3.5 text-[#D49A36]" />
             <span>Reset to Reference</span>
           </button>
 
           <div className="flex items-center gap-2">
             <button
               onClick={exportConfig}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-800 bg-slate-900 text-slate-300 hover:text-white transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-[#B0B4B8]/30 bg-[#202124] text-[#B0B4B8] hover:text-white hover:bg-[#17191C] transition-colors"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Export</span>
             </button>
 
-            <label className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-800 bg-slate-900 text-slate-300 hover:text-white cursor-pointer transition-colors">
+            <label className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-[#B0B4B8]/30 bg-[#202124] text-[#B0B4B8] hover:text-white hover:bg-[#17191C] cursor-pointer transition-colors">
               <Upload className="w-3.5 h-3.5" />
               <span>Import</span>
               <input
@@ -270,7 +270,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
             <button
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-semibold transition-colors"
+              className="px-4 py-2 rounded-lg bg-[#D49A36] hover:bg-[#C0882B] text-[#202124] font-bold transition-colors shadow-sm"
             >
               Done
             </button>
@@ -280,4 +280,3 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     </div>
   );
 };
-

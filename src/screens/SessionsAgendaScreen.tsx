@@ -9,7 +9,11 @@ import {
   User,
   Volume2,
   Search,
-  Navigation
+  Sparkles,
+  CheckCircle2,
+  Ticket,
+  Users,
+  Compass
 } from 'lucide-react';
 
 interface SessionsAgendaScreenProps {
@@ -45,7 +49,7 @@ export const SessionsAgendaScreen: React.FC<SessionsAgendaScreenProps> = ({
   const handleSpeakSession = (session: CampusSession) => {
     if (onSpeakText) {
       onSpeakText(
-        `Session: ${session.title}. Hosted by ${session.speaker}, at ${session.time} in ${session.venue}. ${session.description}`
+        `Session: ${session.title}. Hosted by ${session.speaker}, at ${session.time} in ${session.venue}. Highlights include: ${session.highlights.join('. ')}. ${session.description}`
       );
     }
   };
@@ -53,58 +57,63 @@ export const SessionsAgendaScreen: React.FC<SessionsAgendaScreenProps> = ({
   const handleSpeakAllAgenda = () => {
     if (onSpeakText) {
       const todaySessions = CAMPUS_SESSIONS.filter(s => s.dateCategory === 'today');
-      const titles = todaySessions.map(s => `${s.title} at ${s.time} in ${s.venue}`).join('. ');
-      onSpeakText(`Today's university agenda includes: ${titles}.`);
+      const titles = todaySessions.map(s => `${s.title} at ${s.time} in ${sessionVenueBasename(s.venue)}`).join('. ');
+      onSpeakText(`Today's university agenda features: ${titles}.`);
     }
   };
 
+  const sessionVenueBasename = (venue: string) => venue.split(',')[0];
+
   return (
-    <div className="w-full h-full bg-gradient-to-br from-black via-[#0d0914] to-[#04060c] text-white flex flex-col p-4 sm:p-6 md:p-8 font-sans select-none overflow-hidden">
-      {/* HEADER: Back Button to Hub + Title + Voice Summary (Crisp & Sharp, No Blur) */}
-      <header className="flex items-center justify-between border-b-2 border-[#C8A451]/60 pb-4 mb-4 bg-black/90 p-3 rounded-2xl shadow-xl">
+    <div className="w-full h-full bg-[#F2F2EF] text-[#30343B] flex flex-col p-3 sm:p-5 md:p-6 font-sans select-none overflow-hidden relative">
+      {/* HEADER: Industrial Primary Bar */}
+      <header className="relative z-10 flex items-center justify-between bg-[#30343B] text-white px-4 sm:px-6 py-3 rounded-xl border border-[#B0B4B8]/30 shadow-sm mb-3">
+        {/* Back Button */}
         <button
           onClick={() => {
-            if (onSpeakText) onSpeakText("Returning to hub menu.");
+            if (onSpeakText) onSpeakText("Returning to robot hub.");
             onNavigate('hub');
           }}
-          className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-black hover:bg-[#702815] border-2 border-[#C8A451]/70 text-slate-100 hover:text-white transition-all shadow-xl active:scale-95 text-base sm:text-lg font-black"
+          className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#202124] hover:bg-[#17191C] border border-[#B0B4B8]/40 text-white transition-all shadow-sm active:scale-98 text-xs sm:text-sm font-bold"
         >
-          <ArrowLeft className="w-6 h-6 text-[#C8A451]" />
+          <ArrowLeft className="w-4 h-4 text-[#D49A36]" />
           <span>Back to Hub</span>
         </button>
 
+        {/* Center Title */}
         <div className="text-center">
-          <div className="flex items-center justify-center gap-2.5">
-            <span className="text-xl sm:text-3xl font-black text-white tracking-wide">
-              SESSIONS & CAMPUS AGENDA
+          <div className="flex items-center justify-center gap-2">
+            <span className="text-sm sm:text-lg md:text-xl font-extrabold text-white tracking-wide">
+              CAMPUS SESSIONS & TIMETABLE
             </span>
-            <span className="text-xs sm:text-sm font-mono px-3.5 py-1 rounded-full bg-indigo-900 border-2 border-indigo-400 text-indigo-200 font-black">
-              SCHEDULE
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#D49A36] text-[#202124] font-bold uppercase tracking-wider">
+              LIVE AGENDA
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-[#C8A451] font-mono font-bold hidden sm:block mt-1">
-            Sri Sri University Academic Symposia, Robotics Demos, Meditation & Workshops
+          <p className="text-[11px] text-[#B0B4B8] font-mono mt-0.5 hidden sm:block">
+            Sri Sri University • Robotics Demos, Symposia, Meditation & Workshops
           </p>
         </div>
 
+        {/* Right Voice Button */}
         <button
           onClick={handleSpeakAllAgenda}
-          className={`flex items-center gap-2.5 px-5 py-3 rounded-2xl border-2 transition-all text-sm sm:text-base font-black shadow-xl ${
+          className={`flex items-center gap-2 px-3.5 py-2 rounded-lg border transition-all text-xs sm:text-sm font-bold shadow-sm ${
             isSpeaking
-              ? 'bg-cyan-500/30 border-cyan-400 text-cyan-300 animate-pulse'
-              : 'bg-black border-[#C8A451]/70 text-[#C8A451] hover:text-white'
+              ? 'bg-[#D49A36] border-[#D49A36] text-[#202124]'
+              : 'bg-[#202124] border-[#B0B4B8]/40 text-white hover:bg-[#17191C]'
           }`}
           title="Read Today's Agenda Aloud"
         >
-          <Volume2 className="w-5 h-5" />
+          <Volume2 className="w-4 h-4 text-[#D49A36]" />
           <span className="hidden sm:inline">Read Agenda Aloud</span>
         </button>
       </header>
 
-      {/* FILTER & SEARCH BAR */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mb-5 bg-black/90 p-4 rounded-3xl border-2 border-slate-800 shadow-xl">
+      {/* FILTER & SEARCH BAR: Clean White Card */}
+      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-2.5 mb-3 bg-[#FFFFFF] p-2.5 rounded-xl border border-[#B0B4B8]/60 shadow-sm">
         {/* Date Selector Pills */}
-        <div className="flex items-center gap-2.5 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
+        <div className="flex items-center gap-1.5 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
           {(['today', 'tomorrow', 'upcoming', 'all'] as const).map((date) => (
             <button
               key={date}
@@ -112,10 +121,10 @@ export const SessionsAgendaScreen: React.FC<SessionsAgendaScreenProps> = ({
                 if (onSpeakText) onSpeakText(`Showing ${date} agenda schedule.`);
                 setSelectedDate(date);
               }}
-              className={`px-5 py-2.5 rounded-2xl text-sm sm:text-base font-black uppercase font-mono transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase font-mono transition-all ${
                 selectedDate === date
-                  ? 'bg-[#C8A451] text-black shadow-lg scale-105 border-2 border-white'
-                  : 'bg-black/80 text-slate-300 hover:text-white border-2 border-slate-800'
+                  ? 'bg-[#D49A36] text-[#202124] shadow-sm'
+                  : 'bg-[#F2F2EF] text-[#30343B] hover:bg-[#E5E5E0] border border-[#B0B4B8]/50'
               }`}
             >
               {date}
@@ -124,7 +133,7 @@ export const SessionsAgendaScreen: React.FC<SessionsAgendaScreenProps> = ({
         </div>
 
         {/* Track Pills */}
-        <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
+        <div className="flex items-center gap-1 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
           {tracks.map((track) => (
             <button
               key={track}
@@ -132,10 +141,10 @@ export const SessionsAgendaScreen: React.FC<SessionsAgendaScreenProps> = ({
                 if (onSpeakText) onSpeakText(track === 'all' ? "Showing all session tracks." : `Filtered by ${track} sessions.`);
                 setSelectedTrack(track);
               }}
-              className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-black whitespace-nowrap transition-all ${
+              className={`px-2.5 py-1 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
                 selectedTrack === track
-                  ? 'bg-indigo-600 text-white shadow-lg border-2 border-white'
-                  : 'bg-black/60 text-slate-300 hover:text-white border border-slate-800'
+                  ? 'bg-[#30343B] text-white shadow-sm'
+                  : 'bg-[#F2F2EF] text-[#5F666D] hover:text-[#30343B] border border-[#B0B4B8]/50'
               }`}
             >
               {track === 'all' ? 'All Tracks' : track}
@@ -144,114 +153,160 @@ export const SessionsAgendaScreen: React.FC<SessionsAgendaScreenProps> = ({
         </div>
 
         {/* Search Input */}
-        <div className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-black/90 border-2 border-slate-700 text-sm sm:text-base w-full sm:w-72 shadow-inner">
-          <Search className="w-5 h-5 text-slate-400" />
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#F2F2EF] border border-[#B0B4B8]/50 text-xs w-full md:w-60">
+          <Search className="w-3.5 h-3.5 text-[#D49A36]" />
           <input
             type="text"
             placeholder="Search session or speaker..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="bg-transparent text-white outline-none w-full placeholder:text-slate-400 font-sans font-medium"
+            className="bg-transparent text-[#30343B] outline-none w-full placeholder:text-[#5F666D] font-sans font-medium text-xs"
           />
         </div>
       </div>
 
       {/* SESSIONS LIST GRID */}
-      <div className="flex-1 min-h-0 overflow-y-auto pr-1">
+      <div className="relative z-10 flex-1 min-h-0 overflow-y-auto pr-1">
         {filteredSessions.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center p-8 text-center text-slate-400">
-            <Calendar className="w-16 h-16 text-slate-600 mb-3" />
-            <h3 className="text-xl font-black text-white mb-1">No sessions match your filter</h3>
-            <p className="text-base text-slate-400">Try selecting a different date or clearing the search query.</p>
+          <div className="h-full flex flex-col items-center justify-center p-8 text-center text-[#5F666D]">
+            <Calendar className="w-12 h-12 text-[#D49A36] mb-2" />
+            <h3 className="text-base font-bold text-[#30343B] mb-1">No sessions match your filter</h3>
+            <p className="text-xs text-[#5F666D]">Try selecting a different date or clearing the search query.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-5">
             {filteredSessions.map((session) => {
               const isLive = session.status === 'LIVE NOW';
 
               return (
                 <div
                   key={session.id}
-                  className={`p-7 rounded-3xl border-2 transition-all flex flex-col justify-between shadow-2xl ${
-                    isLive
-                      ? 'bg-gradient-to-br from-emerald-950/60 via-black to-black border-emerald-500 shadow-[0_0_30px_rgba(16,185,129,0.3)]'
-                      : 'bg-slate-950/95 border-slate-800 hover:border-indigo-400'
-                  }`}
+                  className="rounded-xl border border-[#B0B4B8]/60 hover:border-[#D49A36] bg-[#FFFFFF] text-[#30343B] overflow-hidden transition-all flex flex-col justify-between shadow-sm"
                 >
-                  <div className="space-y-4">
-                    {/* Top Row: Track & Status */}
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs sm:text-sm font-mono px-3.5 py-1.5 rounded-full bg-indigo-950 text-indigo-300 border-2 border-indigo-500/60 font-black uppercase tracking-wider">
+                  {/* Top Photo Banner */}
+                  <div className="relative h-40 sm:h-44 w-full overflow-hidden">
+                    <img
+                      src={session.image}
+                      alt={session.title}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#202124]/80 via-transparent to-black/20" />
+
+                    {/* Track Badge & Live Status */}
+                    <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between">
+                      <span className="text-[10px] font-mono px-2.5 py-0.5 rounded bg-[#30343B] text-white font-bold uppercase tracking-wider shadow-sm">
                         {session.track}
                       </span>
 
                       <span
-                        className={`text-xs sm:text-sm font-mono px-3.5 py-1.5 rounded-full font-black uppercase tracking-wider flex items-center gap-2 ${
+                        className={`text-[10px] font-mono px-2.5 py-0.5 rounded font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm ${
                           isLive
-                            ? 'bg-emerald-950 text-emerald-300 border-2 border-emerald-500 animate-pulse'
-                            : 'bg-black text-slate-300 border-2 border-slate-800'
+                            ? 'bg-[#D49A36] text-[#202124]'
+                            : 'bg-[#202124]/90 text-[#B0B4B8] border border-[#B0B4B8]/30'
                         }`}
                       >
-                        {isLive && <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />}
+                        {isLive && <span className="w-2 h-2 rounded-full bg-[#202124]" />}
                         <span>{session.status}</span>
                       </span>
                     </div>
 
-                    {/* Title */}
-                    <h3 className="text-xl sm:text-2xl font-black text-white leading-snug">
-                      {session.title}
-                    </h3>
-
-                    {/* Speaker */}
-                    <div className="flex items-center gap-3.5 text-base text-slate-200">
-                      <div className="w-10 h-10 rounded-full bg-[#702815] text-[#C8A451] flex items-center justify-center font-black text-sm border-2 border-[#C8A451]">
-                        <User className="w-5 h-5" />
+                    {/* Duration / Seats Overlay */}
+                    <div className="absolute bottom-2 left-2.5 right-2.5 flex items-center justify-between text-[11px] font-mono text-white">
+                      <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#202124]/90 border border-[#B0B4B8]/30">
+                        <Clock className="w-3 h-3 text-[#D49A36]" />
+                        <span className="font-semibold text-white">{session.duration}</span>
                       </div>
-                      <div>
-                        <span className="font-black text-white block text-base sm:text-lg">{session.speaker}</span>
-                        <span className="text-xs sm:text-sm text-[#C8A451] font-mono font-bold">{session.speakerRole}</span>
-                      </div>
-                    </div>
-
-                    {/* Description */}
-                    <p className="text-sm sm:text-base text-slate-100 leading-relaxed font-medium bg-black/70 p-4 rounded-2xl border border-slate-800">
-                      {session.description}
-                    </p>
-
-                    {/* Time & Venue Info Box */}
-                    <div className="grid grid-cols-2 gap-3 text-sm font-mono font-bold">
-                      <div className="p-3.5 rounded-2xl bg-black/80 border-2 border-slate-800 flex items-center gap-3">
-                        <Clock className="w-5 h-5 text-cyan-400 flex-shrink-0" />
-                        <span className="text-white truncate">{session.time}</span>
-                      </div>
-
-                      <div className="p-3.5 rounded-2xl bg-black/80 border-2 border-slate-800 flex items-center gap-3">
-                        <MapPin className="w-5 h-5 text-[#C8A451] flex-shrink-0" />
-                        <span className="text-white truncate">{session.venue.split(',')[0]}</span>
-                      </div>
+                      {session.seatsAvailable && (
+                        <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#202124]/90 border border-[#B0B4B8]/30 text-white">
+                          <Users className="w-3 h-3 text-[#B0B4B8]" />
+                          <span className="font-semibold">{session.seatsAvailable} Seats Left</span>
+                        </div>
+                      )}
                     </div>
                   </div>
 
-                  {/* Card Action Buttons */}
-                  <div className="flex items-center gap-3 pt-5 border-t-2 border-slate-800 mt-5">
-                    <button
-                      onClick={() => handleSpeakSession(session)}
-                      className="flex-1 py-3.5 px-4 rounded-2xl bg-black hover:bg-[#702815] border-2 border-[#C8A451]/60 text-sm sm:text-base font-black text-[#C8A451] hover:text-white flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg"
-                    >
-                      <Volume2 className="w-5 h-5" />
-                      <span>Speak Summary</span>
-                    </button>
+                  {/* Body Content */}
+                  <div className="p-4 sm:p-5 space-y-3 flex-1 flex flex-col justify-between">
+                    <div className="space-y-2.5">
+                      {/* Title */}
+                      <h3 className="text-base sm:text-lg font-bold text-[#30343B] leading-snug">
+                        {session.title}
+                      </h3>
 
-                    <button
-                      onClick={() => {
-                        if (onSpeakText) onSpeakText(`Locating ${session.venue} on campus map.`);
-                        onNavigate('map-info');
-                      }}
-                      className="flex-1 py-3.5 px-4 rounded-2xl bg-[#C8A451] hover:bg-[#d6b464] text-black text-sm sm:text-base font-black flex items-center justify-center gap-2 transition-all active:scale-95 shadow-xl"
-                    >
-                      <Navigation className="w-5 h-5" />
-                      <span>View on Map</span>
-                    </button>
+                      {/* Speaker */}
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-lg bg-[#F2F2EF] text-[#30343B] flex items-center justify-center font-bold text-xs border border-[#B0B4B8]/50">
+                          <User className="w-4 h-4 text-[#D49A36]" />
+                        </div>
+                        <div>
+                          <span className="font-bold text-[#30343B] block text-xs sm:text-sm">{session.speaker}</span>
+                          <span className="text-[11px] text-[#5F666D] font-mono">{session.speakerRole}</span>
+                        </div>
+                      </div>
+
+                      {/* Description */}
+                      <p className="text-xs text-[#5F666D] leading-relaxed bg-[#F2F2EF] p-2.5 rounded-lg border border-[#B0B4B8]/40">
+                        {session.description}
+                      </p>
+
+                      {/* Key Highlights */}
+                      <div className="space-y-1">
+                        <span className="text-[10px] font-mono text-[#5F666D] font-bold uppercase tracking-wider flex items-center gap-1">
+                          <Sparkles className="w-3 h-3 text-[#D49A36]" />
+                          <span>Session Highlights:</span>
+                        </span>
+                        <div className="space-y-0.5">
+                          {session.highlights.map((h, i) => (
+                            <div key={i} className="flex items-start gap-1.5 text-xs text-[#5F666D]">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-[#D49A36] flex-shrink-0 mt-0.5" />
+                              <span>{h}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Time & Venue */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono font-semibold pt-0.5">
+                        <div className="p-2 rounded-lg bg-[#F2F2EF] border border-[#B0B4B8]/40 flex items-center gap-1.5">
+                          <Clock className="w-3.5 h-3.5 text-[#D49A36] flex-shrink-0" />
+                          <span className="text-[#30343B] truncate">{session.time}</span>
+                        </div>
+
+                        <div className="p-2 rounded-lg bg-[#F2F2EF] border border-[#B0B4B8]/40 flex items-center gap-1.5">
+                          <MapPin className="w-3.5 h-3.5 text-[#D49A36] flex-shrink-0" />
+                          <span className="text-[#30343B] truncate">{sessionVenueBasename(session.venue)}</span>
+                        </div>
+                      </div>
+
+                      {/* Entry Requirement Badge */}
+                      <div className="p-2 rounded-lg bg-[#F2F2EF] border border-[#B0B4B8]/40 flex items-center gap-1.5 text-[11px] font-mono text-[#5F666D]">
+                        <Ticket className="w-3.5 h-3.5 text-[#D49A36] flex-shrink-0" />
+                        <span className="font-semibold text-[#30343B]">{session.entryRequirement}</span>
+                      </div>
+                    </div>
+
+                    {/* Card Action Buttons */}
+                    <div className="flex items-center gap-2 pt-2 border-t border-[#B0B4B8]/30 mt-2">
+                      <button
+                        onClick={() => handleSpeakSession(session)}
+                        className="flex-1 py-2.5 px-3 rounded-lg bg-[#30343B] hover:bg-[#202124] border border-[#B0B4B8]/40 text-xs sm:text-sm font-bold text-white flex items-center justify-center gap-1.5 transition-all active:scale-98 shadow-sm"
+                      >
+                        <Volume2 className="w-3.5 h-3.5 text-[#D49A36]" />
+                        <span>Speak Overview</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          if (onSpeakText) onSpeakText(`Viewing facility guide for ${session.venue}.`);
+                          onNavigate('map-info');
+                        }}
+                        className="flex-1 py-2.5 px-3 rounded-lg bg-[#D49A36] hover:bg-[#C0882B] text-[#202124] text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 transition-all active:scale-98 shadow-sm"
+                      >
+                        <Compass className="w-3.5 h-3.5 text-[#202124]" />
+                        <span>Explore Venue</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               );
