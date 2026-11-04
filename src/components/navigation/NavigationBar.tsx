@@ -213,7 +213,7 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
         <div className="flex-1 overflow-y-auto p-3 space-y-3.5">
           {/* Section 1: SSU Campus */}
           <div>
-            <span className="px-2 text-[10px] font-mono text-[#D49A36] uppercase tracking-wider font-bold block mb-1">
+            <span className="px-2 text-[10px] font-mono text-[#DCE8E1] uppercase tracking-wider font-bold block mb-1">
               Sri Sri University Services
             </span>
             <div className="space-y-1">
@@ -229,13 +229,13 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
                     }}
                     className={`w-full p-2.5 rounded-lg text-left flex items-center gap-2.5 transition-all ${
                       isSelected
-                        ? 'bg-[#D49A36] text-[#202124] shadow-sm font-bold'
+                        ? 'bg-[#174D3A] text-white shadow-sm font-bold'
                         : 'hover:bg-[#202124] text-white/90 hover:text-white border border-transparent'
                     }`}
                   >
                     <div
                       className={`p-1.5 rounded-md ${
-                        isSelected ? 'bg-[#202124] text-[#D49A36]' : 'bg-[#202124] text-[#B0B4B8]'
+                        isSelected ? 'bg-[#134232] text-[#DCE8E1]' : 'bg-[#202124] text-[#B0B4B8]'
                       }`}
                     >
                       <Icon className="w-4 h-4" />
@@ -245,13 +245,13 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
                         <span className="text-xs font-bold truncate">{screen.title}</span>
                         {screen.badge && (
                           <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded font-semibold ${
-                            isSelected ? 'bg-[#202124] text-[#D49A36]' : 'bg-[#202124] text-[#B0B4B8] border border-[#B0B4B8]/30'
+                            isSelected ? 'bg-[#134232] text-[#DCE8E1]' : 'bg-[#202124] text-[#B0B4B8] border border-[#B0B4B8]/30'
                           }`}>
                             {screen.badge}
                           </span>
                         )}
                       </div>
-                      <p className={`text-[10px] truncate mt-0.5 ${isSelected ? 'text-[#202124]/80' : 'text-[#B0B4B8]'}`}>
+                      <p className={`text-[10px] truncate mt-0.5 ${isSelected ? 'text-white/80' : 'text-[#B0B4B8]'}`}>
                         {screen.description}
                       </p>
                     </div>
@@ -263,7 +263,7 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
 
           {/* Section 2: Robotics & Hardware */}
           <div>
-            <span className="px-2 text-[10px] font-mono text-[#D49A36] uppercase tracking-wider font-bold block mb-1">
+            <span className="px-2 text-[10px] font-mono text-[#DCE8E1] uppercase tracking-wider font-bold block mb-1">
               Robotics, Jetson & Arduino
             </span>
             <div className="space-y-1">
@@ -279,13 +279,13 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
                     }}
                     className={`w-full p-2.5 rounded-lg text-left flex items-center gap-2.5 transition-all ${
                       isSelected
-                        ? 'bg-[#D49A36] text-[#202124] shadow-sm font-bold'
+                        ? 'bg-[#174D3A] text-white shadow-sm font-bold'
                         : 'hover:bg-[#202124] text-white/90 hover:text-white border border-transparent'
                     }`}
                   >
                     <div
                       className={`p-1.5 rounded-md ${
-                        isSelected ? 'bg-[#202124] text-[#D49A36]' : 'bg-[#202124] text-[#B0B4B8]'
+                        isSelected ? 'bg-[#134232] text-[#DCE8E1]' : 'bg-[#202124] text-[#B0B4B8]'
                       }`}
                     >
                       <Icon className="w-4 h-4" />
@@ -299,7 +299,7 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
                           </span>
                         )}
                       </div>
-                      <p className={`text-[10px] truncate mt-0.5 ${isSelected ? 'text-[#202124]/80' : 'text-[#B0B4B8]'}`}>
+                      <p className={`text-[10px] truncate mt-0.5 ${isSelected ? 'text-white/80' : 'text-[#B0B4B8]'}`}>
                         {screen.description}
                       </p>
                     </div>
@@ -327,10 +327,10 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
               href="https://srisriuniversity.edu.in"
               target="_blank"
               rel="noreferrer"
-              className="text-white hover:text-[#D49A36] text-[10px] inline-flex items-center gap-1 transition-colors"
+              className="text-white hover:text-[#DCE8E1] text-[10px] inline-flex items-center gap-1 transition-colors"
             >
               <span>srisriuniversity.edu.in</span>
-              <ExternalLink className="w-2.5 h-2.5 text-[#D49A36]" />
+              <ExternalLink className="w-2.5 h-2.5 text-[#DCE8E1]" />
             </a>
           </div>
         </div>

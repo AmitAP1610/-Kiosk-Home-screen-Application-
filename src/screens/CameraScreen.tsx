@@ -71,7 +71,7 @@ export const CameraScreen: React.FC<CameraScreenProps> = ({ onNavigate }) => {
   }, [stream]);
 
   return (
-    <div className="w-full h-full bg-[#F2F2EF] text-[#30343B] flex flex-col p-4 sm:p-6 font-sans select-none overflow-hidden">
+    <div className="w-full h-full bg-[#FFFFFF] text-[#30343B] flex flex-col p-4 sm:p-6 font-sans select-none overflow-hidden">
       {/* Header: Industrial Primary Bar */}
       <div className="flex items-center justify-between pb-3 bg-[#30343B] text-white p-3.5 rounded-xl mb-4 border border-[#B0B4B8]/30 shadow-sm">
         <div className="flex items-center gap-2.5">
@@ -81,12 +81,12 @@ export const CameraScreen: React.FC<CameraScreenProps> = ({ onNavigate }) => {
               className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#202124] hover:bg-[#17191C] border border-[#B0B4B8]/40 text-white transition-all text-xs font-bold mr-1"
               title="Return to Robot Hub"
             >
-              <ArrowLeft className="w-4 h-4 text-[#D49A36]" />
+              <ArrowLeft className="w-4 h-4 text-[#DCE8E1]" />
               <span>Back to Hub</span>
             </button>
           )}
 
-          <div className="p-2 rounded-lg bg-[#202124] border border-[#B0B4B8]/30 text-[#D49A36]">
+          <div className="p-2 rounded-lg bg-[#202124] border border-[#B0B4B8]/30 text-[#DCE8E1]">
             <Camera className="w-5 h-5 text-white" />
           </div>
           <div>
@@ -104,9 +104,9 @@ export const CameraScreen: React.FC<CameraScreenProps> = ({ onNavigate }) => {
 
           <button
             onClick={toggleCameraFacing}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-[#B0B4B8]/30 bg-[#202124] hover:border-[#D49A36] text-white transition-colors"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-[#B0B4B8]/30 bg-[#202124] hover:border-[#174D3A] text-white transition-colors"
           >
-            <SwitchCamera className="w-3.5 h-3.5 text-[#D49A36]" />
+            <SwitchCamera className="w-3.5 h-3.5 text-[#DCE8E1]" />
             <span className="text-[11px] capitalize">{facingMode === 'user' ? 'Front' : 'Rear'}</span>
           </button>
         </div>
@@ -118,11 +118,11 @@ export const CameraScreen: React.FC<CameraScreenProps> = ({ onNavigate }) => {
         <div className="flex-1 relative bg-[#202124] rounded-xl border border-[#B0B4B8]/40 overflow-hidden flex items-center justify-center shadow-sm">
           {errorMsg ? (
             <div className="p-6 text-center max-w-sm">
-              <AlertTriangle className="w-8 h-8 text-[#D49A36] mx-auto mb-2" />
+              <AlertTriangle className="w-8 h-8 text-amber-500 mx-auto mb-2" />
               <p className="text-xs text-[#B0B4B8] font-mono mb-3">{errorMsg}</p>
               <button
                 onClick={() => startCamera()}
-                className="px-4 py-2 rounded-lg bg-[#D49A36] hover:bg-[#C0882B] text-[#202124] font-bold text-xs transition-colors shadow-sm"
+                className="px-4 py-2 rounded-lg bg-[#174D3A] hover:bg-[#134232] text-white font-bold text-xs transition-colors shadow-sm"
               >
                 Retry Camera
               </button>
@@ -164,9 +164,9 @@ export const CameraScreen: React.FC<CameraScreenProps> = ({ onNavigate }) => {
               </p>
               <button
                 onClick={() => startCamera()}
-                className="px-5 py-2.5 rounded-lg bg-[#D49A36] hover:bg-[#C0882B] text-[#202124] font-bold text-xs transition-colors flex items-center gap-2 mx-auto shadow-sm"
+                className="px-5 py-2.5 rounded-lg bg-[#174D3A] hover:bg-[#134232] text-white font-bold text-xs transition-colors flex items-center gap-2 mx-auto shadow-sm"
               >
-                <Play className="w-4 h-4 fill-current text-[#202124]" />
+                <Play className="w-4 h-4 fill-current text-white" />
                 START CAMERA
               </button>
             </div>
@@ -178,29 +178,29 @@ export const CameraScreen: React.FC<CameraScreenProps> = ({ onNavigate }) => {
           <div>
             <h3 className="font-bold text-[#30343B] uppercase tracking-wider mb-2 text-xs">Vision Controls</h3>
             <div className="space-y-2">
-              <label className="flex items-center justify-between p-2.5 rounded-lg border border-[#B0B4B8]/40 bg-[#F2F2EF] cursor-pointer">
+              <label className="flex items-center justify-between p-2.5 rounded-lg border border-[#B0B4B8]/40 bg-[#FFFFFF] cursor-pointer">
                 <span className="text-[#30343B] font-semibold">Person Detection</span>
                 <input
                   type="checkbox"
                   checked={detectPersons}
                   onChange={(e) => setDetectPersons(e.target.checked)}
-                  className="accent-[#D49A36]"
+                  className="accent-[#174D3A]"
                 />
               </label>
 
-              <label className="flex items-center justify-between p-2.5 rounded-lg border border-[#B0B4B8]/40 bg-[#F2F2EF] cursor-pointer">
+              <label className="flex items-center justify-between p-2.5 rounded-lg border border-[#B0B4B8]/40 bg-[#FFFFFF] cursor-pointer">
                 <span className="text-[#30343B] font-semibold">Object Detection</span>
                 <input
                   type="checkbox"
                   checked={detectObjects}
                   onChange={(e) => setDetectObjects(e.target.checked)}
-                  className="accent-[#D49A36]"
+                  className="accent-[#174D3A]"
                 />
               </label>
             </div>
           </div>
 
-          <div className="p-3 rounded-lg border border-[#B0B4B8]/40 bg-[#F2F2EF] text-[11px] text-[#5F666D] space-y-1">
+          <div className="p-3 rounded-lg border border-[#B0B4B8]/40 bg-[#DCE8E1]/20 text-[11px] text-[#5F666D] space-y-1">
             <span className="text-[#30343B] font-semibold block mb-1">Architectural Notice</span>
             <p>Tablet camera runs on Realme tablet hardware (MediaPipe / TFLite).</p>
             <p className="text-[#5F666D]">Distance measurements are strictly handled by LiDAR on NVIDIA Jetson.</p>
@@ -218,9 +218,9 @@ export const CameraScreen: React.FC<CameraScreenProps> = ({ onNavigate }) => {
             ) : (
               <button
                 onClick={() => startCamera()}
-                className="w-full py-2.5 rounded-lg bg-[#D49A36] hover:bg-[#C0882B] text-[#202124] font-bold transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+                className="w-full py-2.5 rounded-lg bg-[#174D3A] hover:bg-[#134232] text-white font-bold transition-colors flex items-center justify-center gap-1.5 shadow-sm"
               >
-                <Play className="w-3.5 h-3.5 fill-current text-[#202124]" />
+                <Play className="w-3.5 h-3.5 fill-current text-white" />
                 START CAMERA
               </button>
             )}

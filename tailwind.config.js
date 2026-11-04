@@ -7,63 +7,85 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Industrial AMR White Control Dashboard Palette
+        // Official KIOSK AMR Physical Robot Palette
+        kiosk: {
+          white: '#FFFFFF',
+          charcoal: '#30343B',
+          green: '#174D3A',
+          greenHover: '#134232',
+          lightGreen: '#DCE8E1',
+          dark: '#202124',
+          border: '#DDE3DE',
+          silver: '#B0B4B8',
+          text: '#30343B',
+          textSecondary: '#68736C',
+          textMuted: '#68736C',
+          warning: '#D49A36',
+          error: '#B42318',
+        },
         amr: {
-          bg: '#F2F2EF',        // Main background
+          bg: '#FFFFFF',        // Main background
           primary: '#30343B',   // Sidebar and primary elements
-          secondary: '#B0B4B8', // Secondary elements
+          secondary: '#68736C', // Secondary text
+          border: '#DDE3DE',    // Border and dividers
           dark: '#202124',      // Dark components
-          accent: '#D49A36',    // Warning/accent (Industrial Amber)
-          accentHover: '#C0882B',
+          accent: '#174D3A',    // Forest Green accent
+          accentHover: '#134232',
+          highlight: '#DCE8E1', // Light Green highlight
           card: '#FFFFFF',      // Cards
           text: '#30343B',      // Primary readable text
-          textMuted: '#5F666D', // Secondary text
+          textMuted: '#68736C', // Secondary text
+          warning: '#D49A36',
+          error: '#B42318',
         },
         chaos: {
-          bg: '#F2F2EF',        // Main background
-          charcoal: '#30343B',  // Sidebar & primary elements
+          bg: '#FFFFFF',
+          charcoal: '#30343B',
           charcoalDark: '#23272D',
           charcoalLight: '#3A3F47',
-          maroon: '#D49A36',    // Warning/accent (Industrial Amber)
-          maroonHover: '#C0882B',
-          maroonLight: '#E0AC54',
-          display: '#202124',   // Dark components / displays
-          white: '#FFFFFF',     // Primary text
-          silver: '#B0B4B8',    // Secondary elements / borders
-          rubber: '#202124',    // Dark components
-          card: '#FFFFFF',      // Cards
+          maroon: '#174D3A',    // Forest Green
+          maroonHover: '#134232',
+          maroonLight: '#237A5C',
+          display: '#202124',
+          white: '#FFFFFF',
+          silver: '#B0B4B8',
+          rubber: '#202124',
+          card: '#FFFFFF',
         },
         robot: {
           bg: '#202124',
-          cyan: '#D49A36',
-          cyanDim: '#B88328',
-          cyanGlow: '#D49A36',
+          cyan: '#174D3A',
+          cyanDim: '#134232',
+          cyanGlow: '#237A5C',
           cyanDark: '#202124',
           bezel: '#30343B',
           bezelBorder: '#B0B4B8',
-          whiteChassis: '#F2F2EF',
+          whiteChassis: '#FFFFFF',
         },
         ssu: {
-          maroon: '#D49A36',
-          maroonDark: '#B88328',
-          maroonLight: '#E0AC54',
-          maroonMuted: 'rgba(212, 154, 54, 0.2)',
-          gold: '#D49A36',
-          goldLight: '#E0AC54',
-          goldDark: '#B88328',
-          goldMuted: 'rgba(212, 154, 54, 0.2)',
+          maroon: '#174D3A',
+          maroonDark: '#134232',
+          maroonLight: '#237A5C',
+          maroonMuted: 'rgba(23, 77, 58, 0.15)',
+          gold: '#174D3A',
+          goldLight: '#237A5C',
+          goldDark: '#134232',
+          goldMuted: 'rgba(23, 77, 58, 0.15)',
           black: '#202124',
           white: '#FFFFFF',
           surface: '#30343B',
           card: '#FFFFFF',
           border: '#B0B4B8',
-          borderGold: '#D49A36',
+          borderGold: '#174D3A',
         }
       },
+      fontFamily: {
+        sans: ['Inter', 'Roboto', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Fira Code', 'Consolas', 'monospace'],
+      },
       boxShadow: {
-        'subtle': '0 2px 8px rgba(0, 0, 0, 0.08)',
-        'card': '0 4px 12px rgba(0, 0, 0, 0.12)',
-        'modal': '0 8px 24px rgba(0, 0, 0, 0.20)',
+        'subtle': '0 1px 3px rgba(48, 52, 59, 0.08), 0 1px 2px rgba(48, 52, 59, 0.04)',
+        'card': '0 2px 6px rgba(48, 52, 59, 0.06)',
       }
     },
   },

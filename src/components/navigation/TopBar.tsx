@@ -53,7 +53,7 @@ export const TopBar: React.FC<TopBarProps> = ({
           title="Open Application Menu"
           className="px-2.5 py-1 rounded bg-[#202124] hover:bg-[#1A1B1D] border border-[#B0B4B8]/40 text-white transition-colors flex items-center gap-1.5"
         >
-          <Menu className="w-3.5 h-3.5 text-[#D49A36]" />
+          <Menu className="w-3.5 h-3.5 text-[#DCE8E1]" />
           <span className="font-bold text-[11px] hidden sm:inline">MENU</span>
         </button>
 
@@ -63,7 +63,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             title="Return to Robot Face (Home)"
             className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#202124] hover:bg-[#1A1B1D] border border-[#B0B4B8]/40 text-white transition-colors font-medium text-[11px]"
           >
-            <Home className="w-3.5 h-3.5 text-[#D49A36]" />
+            <Home className="w-3.5 h-3.5 text-[#DCE8E1]" />
             <span className="hidden md:inline">FACE</span>
           </button>
         )}
@@ -74,14 +74,14 @@ export const TopBar: React.FC<TopBarProps> = ({
             title="Sri Sri University Welcome Experience"
             className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#202124] hover:bg-[#1A1B1D] border border-[#B0B4B8]/40 text-[#B0B4B8] hover:text-white transition-colors font-medium text-[11px]"
           >
-            <Sparkles className="w-3.5 h-3.5 text-[#D49A36]" />
+            <Sparkles className="w-3.5 h-3.5 text-[#DCE8E1]" />
             <span className="hidden md:inline">WELCOME</span>
           </button>
         )}
 
         <div className="hidden lg:flex items-center gap-2 pl-2 border-l border-[#B0B4B8]/30">
           <span className="font-bold text-white tracking-wide text-xs">{getScreenName(currentScreen)}</span>
-          <span className="text-[10px] px-2 py-0.5 rounded bg-[#D49A36] text-[#202124] font-bold uppercase">
+          <span className="text-[10px] px-2 py-0.5 rounded bg-[#174D3A] text-white font-bold uppercase tracking-wider">
             SSU ROBOTICS
           </span>
         </div>
@@ -94,7 +94,7 @@ export const TopBar: React.FC<TopBarProps> = ({
           title={systemStatus.jetsonConnected ? 'Jetson Robotics: Connected' : 'Jetson Robotics: Disconnected'}
           className="flex items-center gap-1 px-2 py-0.5 rounded bg-[#202124] border border-[#B0B4B8]/40 text-[11px]"
         >
-          <Cpu className="w-3 h-3 text-[#D49A36]" />
+          <Cpu className="w-3 h-3 text-[#DCE8E1]" />
           <span className="hidden md:inline text-[#B0B4B8]">JETSON:</span>
           <span className={systemStatus.jetsonConnected ? 'text-white font-bold' : 'text-[#B0B4B8]'}>
             {systemStatus.jetsonConnected ? 'ON' : 'OFF'}
@@ -106,7 +106,7 @@ export const TopBar: React.FC<TopBarProps> = ({
           title={systemStatus.arduinoConnected ? 'Arduino Motors: Ready' : 'Arduino Motors: Offline'}
           className="flex items-center gap-1 px-2 py-0.5 rounded bg-[#202124] border border-[#B0B4B8]/40 text-[11px]"
         >
-          <Wifi className="w-3 h-3 text-[#D49A36]" />
+          <Wifi className="w-3 h-3 text-[#DCE8E1]" />
           <span className="hidden md:inline text-[#B0B4B8]">ARDUINO:</span>
           <span className={systemStatus.arduinoConnected ? 'text-white font-bold' : 'text-[#B0B4B8]'}>
             {systemStatus.arduinoConnected ? 'ON' : 'OFF'}
@@ -116,7 +116,7 @@ export const TopBar: React.FC<TopBarProps> = ({
         {/* Tablet Battery Status */}
         <div className="flex items-center gap-1 px-2 py-0.5 rounded bg-[#202124] border border-[#B0B4B8]/40 text-[11px] text-white">
           {systemStatus.isTabletCharging ? (
-            <BatteryCharging className="w-3 h-3 text-[#D49A36]" />
+            <BatteryCharging className="w-3 h-3 text-[#DCE8E1]" />
           ) : (
             <Battery className="w-3 h-3 text-[#B0B4B8]" />
           )}

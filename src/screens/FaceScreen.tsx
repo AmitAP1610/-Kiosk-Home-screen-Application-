@@ -88,7 +88,7 @@ export const FaceScreen: React.FC<FaceScreenProps> = ({
       onClick={handleFaceTap}
       className="w-full h-full bg-[#202124] select-none overflow-hidden relative cursor-pointer"
     >
-      {/* Robot Face Display Viewport */}
+      {/* Robot Face Display Viewport (Near Black #202124) */}
       <RobotFace
         config={config}
         expression={expression}
@@ -105,10 +105,13 @@ export const FaceScreen: React.FC<FaceScreenProps> = ({
             e.stopPropagation();
             if (onSpeakIntro) onSpeakIntro("Hardware network static IP is 172.17.0.1 on the internal robot communication bus.");
           }}
-          className="flex items-center gap-2.5 px-4 py-2.5 rounded-lg bg-[#30343B] border border-[#B0B4B8]/40 text-sm font-mono shadow-sm cursor-pointer hover:border-[#D49A36] transition-colors"
+          className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-[#30343B] border border-[#DDE3DE]/20 text-sm font-mono shadow-card cursor-pointer hover:border-[#174D3A] transition-all"
           title="Internal Bus Static IP"
         >
-          <Wifi className="w-4 h-4 text-[#D49A36]" />
+          <div className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <Wifi className="w-4 h-4 text-[#DCE8E1]" />
+          </div>
           <span className="text-[#B0B4B8] font-semibold text-xs uppercase">IP:</span>
           <span className="text-white font-bold tracking-wider text-sm">172.17.0.1</span>
         </div>
@@ -117,19 +120,20 @@ export const FaceScreen: React.FC<FaceScreenProps> = ({
       {/* TOP RIGHT: Voice prompt notice if not speaking */}
       {!isSpeaking && (
         <div className="absolute top-0 right-0 z-30 p-4 sm:p-6 pointer-events-auto">
-          <div className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#30343B] border border-[#B0B4B8]/40 text-white font-mono text-xs shadow-sm">
-            <Volume2 className="w-3.5 h-3.5 text-[#D49A36]" />
-            <span className="text-[#B0B4B8]">Tap screen for voice guide</span>
+          <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#30343B] border border-[#DDE3DE]/20 text-white font-mono text-xs shadow-card">
+            <Volume2 className="w-3.5 h-3.5 text-[#DCE8E1]" />
+            <span className="text-[#DCE8E1]">Tap screen for voice guide</span>
           </div>
         </div>
       )}
+
 
       {/* BOTTOM OVERLAY: Clean Engineering Navigation Control */}
       <div className="absolute bottom-6 left-0 right-0 z-30 px-4 sm:px-8 flex flex-col items-center justify-center space-y-3 pointer-events-auto">
         <div className="flex items-center gap-3">
           <button
             onClick={handleSkipOrExplore}
-            className="px-7 py-3.5 rounded-lg bg-[#D49A36] hover:bg-[#C0882B] text-[#202124] font-bold text-sm sm:text-base flex items-center gap-2.5 shadow-sm transition-all active:scale-98 border border-[#D49A36]"
+            className="min-h-[48px] px-8 py-3 rounded-xl bg-[#174D3A] hover:bg-[#134232] text-white font-bold text-sm sm:text-base flex items-center gap-2.5 shadow-card transition-all active:scale-98 border border-[#174D3A]"
           >
             <span>{isSpeaking ? 'Skip Intro & Enter Hub' : 'Enter Campus Hub'}</span>
             <ArrowRight className="w-4 h-4" />
@@ -138,9 +142,9 @@ export const FaceScreen: React.FC<FaceScreenProps> = ({
           {!isSpeaking && !hasStartedIntro && (
             <button
               onClick={startIntro}
-              className="px-6 py-3.5 rounded-lg bg-[#30343B] hover:bg-[#202124] border border-[#B0B4B8]/40 text-white font-bold text-sm sm:text-base flex items-center gap-2 transition-all shadow-sm"
+              className="min-h-[48px] px-6 py-3 rounded-xl bg-[#30343B] hover:bg-[#202124] border border-[#DDE3DE]/30 text-white font-bold text-sm sm:text-base flex items-center gap-2 transition-all shadow-card active:scale-98"
             >
-              <Volume2 className="w-4 h-4 text-[#D49A36]" />
+              <Volume2 className="w-4 h-4 text-[#DCE8E1]" />
               <span>Hear Intro Speech</span>
             </button>
           )}

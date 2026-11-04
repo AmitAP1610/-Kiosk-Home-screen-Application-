@@ -25,7 +25,7 @@ export const UniversityInfoScreen: React.FC<UniversityInfoScreenProps> = ({
   const [selectedFaculty, setSelectedFaculty] = useState<AcademicFaculty>(UNIVERSITY_INFO.faculties[0]);
 
   return (
-    <div className="w-full h-full bg-[#F2F2EF] text-[#30343B] flex flex-col p-3 sm:p-5 md:p-6 font-sans select-none overflow-y-auto">
+    <div className="w-full h-full bg-[#FFFFFF] text-[#30343B] flex flex-col p-3 sm:p-5 md:p-6 font-sans select-none overflow-y-auto">
       {/* Top Header: Industrial Primary Bar */}
       <header className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between bg-[#30343B] text-white px-4 sm:px-6 py-3 rounded-xl border border-[#B0B4B8]/30 shadow-sm mb-4 gap-3">
         <div className="flex items-center gap-3">
@@ -38,12 +38,12 @@ export const UniversityInfoScreen: React.FC<UniversityInfoScreenProps> = ({
               className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#202124] hover:bg-[#17191C] border border-[#B0B4B8]/40 text-white transition-all shadow-sm active:scale-98 text-xs font-bold"
               title="Return to Robot Hub"
             >
-              <ArrowLeft className="w-4 h-4 text-[#D49A36]" />
+              <ArrowLeft className="w-4 h-4 text-[#DCE8E1]" />
               <span>Back to Hub</span>
             </button>
           )}
 
-          <div className="p-1.5 rounded-md bg-[#202124] border border-[#B0B4B8]/30 text-[#D49A36]">
+          <div className="p-1.5 rounded-md bg-[#202124] border border-[#B0B4B8]/30 text-[#DCE8E1]">
             <GraduationCap className="w-5 h-5" />
           </div>
           <div>
@@ -61,7 +61,7 @@ export const UniversityInfoScreen: React.FC<UniversityInfoScreenProps> = ({
           <button
             onClick={() => setActiveTab('overview')}
             className={`px-3 py-1 rounded-md transition-all ${
-              activeTab === 'overview' ? 'bg-[#D49A36] text-[#202124] font-bold' : 'text-[#B0B4B8] hover:text-white'
+              activeTab === 'overview' ? 'bg-[#174D3A] text-white font-bold' : 'text-[#B0B4B8] hover:text-white'
             }`}
           >
             Overview
@@ -69,7 +69,7 @@ export const UniversityInfoScreen: React.FC<UniversityInfoScreenProps> = ({
           <button
             onClick={() => setActiveTab('faculties')}
             className={`px-3 py-1 rounded-md transition-all ${
-              activeTab === 'faculties' ? 'bg-[#D49A36] text-[#202124] font-bold' : 'text-[#B0B4B8] hover:text-white'
+              activeTab === 'faculties' ? 'bg-[#174D3A] text-white font-bold' : 'text-[#B0B4B8] hover:text-white'
             }`}
           >
             11 Faculties
@@ -77,7 +77,7 @@ export const UniversityInfoScreen: React.FC<UniversityInfoScreenProps> = ({
           <button
             onClick={() => setActiveTab('vision')}
             className={`px-3 py-1 rounded-md transition-all ${
-              activeTab === 'vision' ? 'bg-[#D49A36] text-[#202124] font-bold' : 'text-[#B0B4B8] hover:text-white'
+              activeTab === 'vision' ? 'bg-[#174D3A] text-white font-bold' : 'text-[#B0B4B8] hover:text-white'
             }`}
           >
             Vision & Mission
@@ -85,7 +85,7 @@ export const UniversityInfoScreen: React.FC<UniversityInfoScreenProps> = ({
           <button
             onClick={() => setActiveTab('contact')}
             className={`px-3 py-1 rounded-md transition-all ${
-              activeTab === 'contact' ? 'bg-[#D49A36] text-[#202124] font-bold' : 'text-[#B0B4B8] hover:text-white'
+              activeTab === 'contact' ? 'bg-[#174D3A] text-white font-bold' : 'text-[#B0B4B8] hover:text-white'
             }`}
           >
             Admissions
@@ -98,22 +98,22 @@ export const UniversityInfoScreen: React.FC<UniversityInfoScreenProps> = ({
         <div className="space-y-4">
           <div className="p-5 sm:p-6 rounded-xl bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 shadow-sm">
             <h2 className="text-base sm:text-lg font-bold text-[#30343B] flex items-center gap-2 mb-2.5">
-              <Sparkles className="w-4 h-4 text-[#D49A36]" />
+              <Sparkles className="w-4 h-4 text-[#174D3A]" />
               <span>About Sri Sri University</span>
             </h2>
             <p className="text-xs sm:text-sm text-[#5F666D] leading-relaxed mb-4">
               {UNIVERSITY_INFO.name} ({UNIVERSITY_INFO.shortName}) was established in 2009 under the {UNIVERSITY_INFO.legislativeAct} by founder {UNIVERSITY_INFO.founder}. Nestled on a {UNIVERSITY_INFO.campusSize}, the university is pioneering a transformative model of higher education that synthesizes cutting-edge modern technology with timeless human values and mindful self-discovery.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-              <div className="p-3 rounded-lg bg-[#F2F2EF] border border-[#B0B4B8]/40">
+              <div className="p-3 rounded-lg bg-[#FFFFFF] border border-[#B0B4B8]/40">
                 <span className="text-[10px] font-mono text-[#5F666D] block mb-0.5">Motto</span>
-                <span className="text-xs sm:text-sm font-bold text-[#D49A36]">{UNIVERSITY_INFO.motto}</span>
+                <span className="text-xs sm:text-sm font-bold text-[#174D3A]">{UNIVERSITY_INFO.motto}</span>
               </div>
-              <div className="p-3 rounded-lg bg-[#F2F2EF] border border-[#B0B4B8]/40">
+              <div className="p-3 rounded-lg bg-[#FFFFFF] border border-[#B0B4B8]/40">
                 <span className="text-[10px] font-mono text-[#5F666D] block mb-0.5">Campus Location</span>
                 <span className="text-xs sm:text-sm font-bold text-[#30343B]">Cuttack, Odisha</span>
               </div>
-              <div className="p-3 rounded-lg bg-[#F2F2EF] border border-[#B0B4B8]/40">
+              <div className="p-3 rounded-lg bg-[#FFFFFF] border border-[#B0B4B8]/40">
                 <span className="text-[10px] font-mono text-[#5F666D] block mb-0.5">Campus Lifestyle</span>
                 <span className="text-xs sm:text-sm font-bold text-[#30343B]">100% Vegetarian & Green</span>
               </div>
@@ -125,8 +125,8 @@ export const UniversityInfoScreen: React.FC<UniversityInfoScreenProps> = ({
             <h3 className="text-sm sm:text-base font-bold text-[#30343B] mb-2.5">Pillars of Holistic Education</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {UNIVERSITY_INFO.coreValues.map((val, idx) => (
-                <div key={idx} className="p-3 rounded-lg bg-[#F2F2EF] border border-[#B0B4B8]/40 flex items-start gap-2.5">
-                  <div className="w-5 h-5 rounded bg-[#30343B] text-[#D49A36] flex items-center justify-center flex-shrink-0 text-[10px] font-bold">
+                <div key={idx} className="p-3 rounded-lg bg-[#FFFFFF] border border-[#B0B4B8]/40 flex items-start gap-2.5">
+                  <div className="w-5 h-5 rounded bg-[#30343B] text-[#DCE8E1] flex items-center justify-center flex-shrink-0 text-[10px] font-bold">
                     {idx + 1}
                   </div>
                   <span className="text-xs text-[#5F666D] leading-relaxed font-medium">{val}</span>
@@ -149,20 +149,20 @@ export const UniversityInfoScreen: React.FC<UniversityInfoScreenProps> = ({
                 className={`p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between shadow-sm ${
                   selectedFaculty.id === fac.id
                     ? 'bg-[#30343B] text-white border-[#30343B]'
-                    : 'bg-[#FFFFFF] border-[#B0B4B8]/60 text-[#30343B] hover:border-[#D49A36]'
+                    : 'bg-[#FFFFFF] border-[#B0B4B8]/60 text-[#30343B] hover:border-[#174D3A]'
                 }`}
               >
                 <div>
                   <h4 className="text-xs font-bold leading-snug">{fac.name}</h4>
                   <div className="flex gap-1 mt-1">
                     {fac.degrees.map((d, i) => (
-                      <span key={i} className={`text-[10px] font-mono px-1.5 py-0.2 rounded ${selectedFaculty.id === fac.id ? 'bg-[#202124] text-white' : 'bg-[#F2F2EF] text-[#5F666D]'}`}>
+                      <span key={i} className={`text-[10px] font-mono px-1.5 py-0.2 rounded ${selectedFaculty.id === fac.id ? 'bg-[#202124] text-white' : 'bg-[#DCE8E1]/40 text-[#174D3A]'}`}>
                         {d}
                       </span>
                     ))}
                   </div>
                 </div>
-                <ChevronRight className={`w-4 h-4 flex-shrink-0 ml-1.5 ${selectedFaculty.id === fac.id ? 'text-[#D49A36]' : 'text-[#5F666D]'}`} />
+                <ChevronRight className={`w-4 h-4 flex-shrink-0 ml-1.5 ${selectedFaculty.id === fac.id ? 'text-[#DCE8E1]' : 'text-[#5F666D]'}`} />
               </div>
             ))}
           </div>
@@ -170,7 +170,7 @@ export const UniversityInfoScreen: React.FC<UniversityInfoScreenProps> = ({
           {/* Right: Selected Faculty Details */}
           <div className="md:col-span-2 p-5 sm:p-6 rounded-xl bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 shadow-sm space-y-3.5">
             <div>
-              <span className="text-[10px] font-mono text-[#D49A36] uppercase tracking-wider block mb-0.5 font-bold">
+              <span className="text-[10px] font-mono text-[#174D3A] uppercase tracking-wider block mb-0.5 font-bold">
                 Academic Division
               </span>
               <h3 className="text-lg sm:text-xl font-bold text-[#30343B]">{selectedFaculty.name}</h3>
@@ -187,7 +187,7 @@ export const UniversityInfoScreen: React.FC<UniversityInfoScreenProps> = ({
                 {selectedFaculty.degrees.map((deg, i) => (
                   <span
                     key={i}
-                    className="px-2.5 py-0.5 rounded bg-[#F2F2EF] border border-[#B0B4B8]/40 text-[#30343B] font-mono text-xs font-semibold"
+                    className="px-2.5 py-0.5 rounded bg-[#DCE8E1]/40 border border-[#B0B4B8]/40 text-[#174D3A] font-mono text-xs font-semibold"
                   >
                     {deg}
                   </span>
@@ -203,9 +203,9 @@ export const UniversityInfoScreen: React.FC<UniversityInfoScreenProps> = ({
                 {selectedFaculty.featuredPrograms.map((prog, i) => (
                   <div
                     key={i}
-                    className="p-2.5 rounded-lg bg-[#F2F2EF] border border-[#B0B4B8]/40 text-xs text-[#5F666D] flex items-center gap-2"
+                    className="p-2.5 rounded-lg bg-[#FFFFFF] border border-[#B0B4B8]/40 text-xs text-[#5F666D] flex items-center gap-2"
                   >
-                    <BookOpen className="w-3.5 h-3.5 text-[#D49A36] flex-shrink-0" />
+                    <BookOpen className="w-3.5 h-3.5 text-[#174D3A] flex-shrink-0" />
                     <span className="text-[#30343B] font-medium">{prog}</span>
                   </div>
                 ))}
@@ -217,10 +217,10 @@ export const UniversityInfoScreen: React.FC<UniversityInfoScreenProps> = ({
                 href={UNIVERSITY_INFO.officialLinks.admissions}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#30343B] hover:bg-[#202124] text-white text-xs font-bold transition-all shadow-sm border border-[#30343B]"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#174D3A] hover:bg-[#134232] text-white text-xs font-bold transition-all shadow-sm border border-[#174D3A]"
               >
                 <span>Apply for this Faculty</span>
-                <ExternalLink className="w-3.5 h-3.5 text-[#D49A36]" />
+                <ExternalLink className="w-3.5 h-3.5 text-white" />
               </a>
             </div>
           </div>
@@ -231,7 +231,7 @@ export const UniversityInfoScreen: React.FC<UniversityInfoScreenProps> = ({
       {activeTab === 'vision' && (
         <div className="space-y-4">
           <div className="p-5 sm:p-6 rounded-xl bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 shadow-sm">
-            <div className="inline-block px-2.5 py-0.5 rounded bg-[#D49A36] text-[#202124] text-xs font-bold uppercase tracking-wider mb-2.5">
+            <div className="inline-block px-2.5 py-0.5 rounded bg-[#174D3A] text-white text-xs font-bold uppercase tracking-wider mb-2.5">
               Institutional Vision
             </div>
             <p className="text-xs sm:text-sm text-[#5F666D] font-serif italic leading-relaxed">
@@ -240,7 +240,7 @@ export const UniversityInfoScreen: React.FC<UniversityInfoScreenProps> = ({
           </div>
 
           <div className="p-5 sm:p-6 rounded-xl bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 shadow-sm">
-            <div className="inline-block px-2.5 py-0.5 rounded bg-[#D49A36] text-[#202124] text-xs font-bold uppercase tracking-wider mb-2.5">
+            <div className="inline-block px-2.5 py-0.5 rounded bg-[#174D3A] text-white text-xs font-bold uppercase tracking-wider mb-2.5">
               Institutional Mission
             </div>
             <p className="text-xs sm:text-sm text-[#5F666D] font-serif italic leading-relaxed">
@@ -272,16 +272,16 @@ export const UniversityInfoScreen: React.FC<UniversityInfoScreenProps> = ({
                 href={UNIVERSITY_INFO.officialLinks.admissions}
                 target="_blank"
                 rel="noreferrer"
-                className="px-4 py-2 rounded-lg bg-[#D49A36] hover:bg-[#C0882B] text-[#202124] font-bold text-xs flex items-center gap-1.5 shadow-sm"
+                className="px-4 py-2 rounded-lg bg-[#174D3A] hover:bg-[#134232] text-white font-bold text-xs flex items-center gap-1.5 shadow-sm"
               >
                 <span>Official Admissions Portal</span>
-                <ExternalLink className="w-3.5 h-3.5 text-[#202124]" />
+                <ExternalLink className="w-3.5 h-3.5 text-white" />
               </a>
               <a
                 href="tel:+917894424562"
                 className="px-4 py-2 rounded-lg bg-[#30343B] hover:bg-[#202124] border border-[#B0B4B8]/40 text-white font-bold text-xs flex items-center gap-1.5"
               >
-                <Phone className="w-3.5 h-3.5 text-[#D49A36]" />
+                <Phone className="w-3.5 h-3.5 text-[#DCE8E1]" />
                 <span>+91-7894424562</span>
               </a>
             </div>
@@ -293,17 +293,17 @@ export const UniversityInfoScreen: React.FC<UniversityInfoScreenProps> = ({
                 <span className="text-xs font-bold text-[#30343B] block">{c.department}</span>
                 {c.phone && (
                   <div className="flex items-center gap-1.5 text-xs text-[#5F666D]">
-                    <Phone className="w-3 h-3 text-[#D49A36]" />
+                    <Phone className="w-3 h-3 text-[#174D3A]" />
                     <span>{c.phone}</span>
                   </div>
                 )}
                 <div className="flex items-center gap-1.5 text-xs text-[#5F666D]">
-                  <Mail className="w-3 h-3 text-[#D49A36]" />
+                  <Mail className="w-3 h-3 text-[#174D3A]" />
                   <span>{c.email}</span>
                 </div>
                 {c.location && (
                   <div className="flex items-center gap-1.5 text-xs text-[#5F666D]">
-                    <MapPin className="w-3 h-3 text-[#D49A36]" />
+                    <MapPin className="w-3 h-3 text-[#174D3A]" />
                     <span>{c.location}</span>
                   </div>
                 )}
@@ -317,10 +317,10 @@ export const UniversityInfoScreen: React.FC<UniversityInfoScreenProps> = ({
               href={UNIVERSITY_INFO.officialLinks.contactUs}
               target="_blank"
               rel="noreferrer"
-              className="text-[#30343B] hover:text-[#D49A36] flex items-center gap-1 font-semibold"
+              className="text-[#30343B] hover:text-[#174D3A] flex items-center gap-1 font-semibold"
             >
               <span>View Map</span>
-              <ExternalLink className="w-3 h-3 text-[#D49A36]" />
+              <ExternalLink className="w-3 h-3 text-[#174D3A]" />
             </a>
           </div>
         </div>

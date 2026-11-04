@@ -160,7 +160,7 @@ export const FaceAnimationController: React.FC<FaceAnimationControllerProps> = (
                   isActive
                     ? item.id === 'error'
                       ? 'bg-red-700 text-white border border-red-500'
-                      : 'bg-[#D49A36] text-[#202124] font-bold border border-[#D49A36]'
+                      : 'bg-[#174D3A] text-white font-bold border border-[#174D3A]'
                     : 'text-[#B0B4B8] hover:text-white hover:bg-[#30343B]'
                 }`}
               >
@@ -182,7 +182,7 @@ export const FaceAnimationController: React.FC<FaceAnimationControllerProps> = (
             title={audioReactiveActive ? 'Disable Microphone Voice Reactivity' : 'Enable Live Mic Reactivity'}
             className={`p-2 rounded-lg text-xs border font-mono transition-all ${
               audioReactiveActive
-                ? 'bg-[#D49A36] text-[#202124] font-bold border-[#D49A36]'
+                ? 'bg-[#174D3A] text-white font-bold border-[#174D3A]'
                 : 'bg-[#202124] text-[#B0B4B8] border-transparent hover:text-white'
             }`}
           >
@@ -208,7 +208,7 @@ export const FaceAnimationController: React.FC<FaceAnimationControllerProps> = (
             title={gazeTrackingActive ? 'Gaze Tracking: Cursor Active' : 'Gaze Tracking: Locked to Center'}
             className={`p-2 rounded-lg text-xs border font-mono transition-all ${
               gazeTrackingActive
-                ? 'bg-[#D49A36] text-[#202124] font-bold border-[#D49A36]'
+                ? 'bg-[#174D3A] text-white font-bold border-[#174D3A]'
                 : 'bg-[#202124] text-[#B0B4B8] border-transparent hover:text-white'
             }`}
           >
@@ -221,7 +221,7 @@ export const FaceAnimationController: React.FC<FaceAnimationControllerProps> = (
             title="Robot Hardware / WebSocket IPC Bridge"
             className="p-2 rounded-lg text-xs bg-[#202124] text-[#B0B4B8] hover:text-white hover:bg-[#17191C] transition-all font-mono"
           >
-            <Cpu className="w-3.5 h-3.5 text-[#D49A36]" />
+            <Cpu className="w-3.5 h-3.5 text-[#DCE8E1]" />
           </button>
 
           {/* Settings Customizer */}
@@ -230,7 +230,7 @@ export const FaceAnimationController: React.FC<FaceAnimationControllerProps> = (
             title="Face Configuration"
             className="p-2 rounded-lg text-xs bg-[#202124] text-[#B0B4B8] hover:text-white hover:bg-[#17191C] transition-all font-mono"
           >
-            <Sliders className="w-3.5 h-3.5 text-[#D49A36]" />
+            <Sliders className="w-3.5 h-3.5 text-[#DCE8E1]" />
           </button>
 
           {/* Fullscreen / Kiosk Mode */}

@@ -55,7 +55,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-[#B0B4B8]/30">
           <div className="flex items-center gap-2.5">
-            <Sliders className="w-5 h-5 text-[#D49A36]" />
+            <Sliders className="w-5 h-5 text-[#DCE8E1]" />
             <h2 className="text-base font-bold tracking-wide text-white">Face UI Configuration</h2>
           </div>
           <button
@@ -82,8 +82,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     onClick={() => update({ primaryColor: theme.primary })}
                     className={`flex items-center gap-2 p-2 rounded-lg border text-xs font-medium transition-all ${
                       isSelected
-                        ? 'border-[#D49A36] bg-[#D49A36] text-[#202124] font-bold shadow-sm'
-                        : 'border-[#B0B4B8]/30 bg-[#202124] text-[#B0B4B8] hover:text-white hover:border-[#D49A36]'
+                        ? 'border-[#174D3A] bg-[#174D3A] text-white font-bold shadow-sm'
+                        : 'border-[#B0B4B8]/30 bg-[#202124] text-[#B0B4B8] hover:text-white hover:border-[#174D3A]'
                     }`}
                   >
                     <span
@@ -99,7 +99,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
           {/* Eye Proportions */}
           <div className="space-y-4 pt-2 border-t border-[#B0B4B8]/20">
-            <h3 className="text-xs uppercase tracking-wider text-[#D49A36] font-bold">Eye Proportions</h3>
+            <h3 className="text-xs uppercase tracking-wider text-[#DCE8E1] font-bold">Eye Proportions</h3>
 
             <div>
               <div className="flex justify-between text-xs text-[#B0B4B8] mb-1">
@@ -112,7 +112,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 max="75"
                 value={config.eyeSize}
                 onChange={(e) => update({ eyeSize: Number(e.target.value) })}
-                className="w-full accent-[#D49A36] cursor-pointer"
+                className="w-full accent-[#174D3A] cursor-pointer"
               />
             </div>
 
@@ -127,7 +127,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 max="300"
                 value={config.eyeSpacing}
                 onChange={(e) => update({ eyeSpacing: Number(e.target.value) })}
-                className="w-full accent-[#D49A36] cursor-pointer"
+                className="w-full accent-[#174D3A] cursor-pointer"
               />
             </div>
 
@@ -142,14 +142,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 max="40"
                 value={config.eyeOffsetY}
                 onChange={(e) => update({ eyeOffsetY: Number(e.target.value) })}
-                className="w-full accent-[#D49A36] cursor-pointer"
+                className="w-full accent-[#174D3A] cursor-pointer"
               />
             </div>
           </div>
 
           {/* Mouth Proportions */}
           <div className="space-y-4 pt-2 border-t border-[#B0B4B8]/20">
-            <h3 className="text-xs uppercase tracking-wider text-[#D49A36] font-bold">Mouth Proportions</h3>
+            <h3 className="text-xs uppercase tracking-wider text-[#DCE8E1] font-bold">Mouth Proportions</h3>
 
             <div>
               <div className="flex justify-between text-xs text-[#B0B4B8] mb-1">
@@ -162,7 +162,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 max="90"
                 value={config.mouthWidth}
                 onChange={(e) => update({ mouthWidth: Number(e.target.value) })}
-                className="w-full accent-[#D49A36] cursor-pointer"
+                className="w-full accent-[#174D3A] cursor-pointer"
               />
             </div>
 
@@ -177,7 +177,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 max="30"
                 value={config.mouthCurve}
                 onChange={(e) => update({ mouthCurve: Number(e.target.value) })}
-                className="w-full accent-[#D49A36] cursor-pointer"
+                className="w-full accent-[#174D3A] cursor-pointer"
               />
             </div>
 
@@ -192,14 +192,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 max="120"
                 value={config.mouthOffsetY}
                 onChange={(e) => update({ mouthOffsetY: Number(e.target.value) })}
-                className="w-full accent-[#D49A36] cursor-pointer"
+                className="w-full accent-[#174D3A] cursor-pointer"
               />
             </div>
           </div>
 
           {/* Glow & Animation Dynamics */}
           <div className="space-y-4 pt-2 border-t border-[#B0B4B8]/20">
-            <h3 className="text-xs uppercase tracking-wider text-[#D49A36] font-bold">Glow & Behavior</h3>
+            <h3 className="text-xs uppercase tracking-wider text-[#DCE8E1] font-bold">Glow & Behavior</h3>
 
             <div>
               <div className="flex justify-between text-xs text-[#B0B4B8] mb-1">
@@ -213,7 +213,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 step="0.05"
                 value={config.glowIntensity}
                 onChange={(e) => update({ glowIntensity: Number(e.target.value) })}
-                className="w-full accent-[#D49A36] cursor-pointer"
+                className="w-full accent-[#174D3A] cursor-pointer"
               />
             </div>
 
@@ -232,7 +232,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   blinkIntervalMin: Number(e.target.value),
                   blinkIntervalMax: Number(e.target.value) + 2.5
                 })}
-                className="w-full accent-[#D49A36] cursor-pointer"
+                className="w-full accent-[#174D3A] cursor-pointer"
               />
             </div>
           </div>
@@ -244,7 +244,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             onClick={resetDefaults}
             className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-[#B0B4B8]/30 bg-[#202124] text-[#B0B4B8] hover:text-white hover:bg-[#17191C] transition-colors"
           >
-            <RotateCcw className="w-3.5 h-3.5 text-[#D49A36]" />
+            <RotateCcw className="w-3.5 h-3.5 text-[#DCE8E1]" />
             <span>Reset to Reference</span>
           </button>
 
@@ -270,7 +270,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
             <button
               onClick={onClose}
-              className="px-4 py-2 rounded-lg bg-[#D49A36] hover:bg-[#C0882B] text-[#202124] font-bold transition-colors shadow-sm"
+              className="px-4 py-2 rounded-lg bg-[#174D3A] hover:bg-[#134232] text-white font-bold transition-colors shadow-sm"
             >
               Done
             </button>

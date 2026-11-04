@@ -51,7 +51,7 @@ export const RobotFace: React.FC<RobotFaceProps> = ({
   });
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center bg-black overflow-hidden select-none touch-none">
+    <div className="relative w-full h-full flex items-center justify-center bg-[#202124] overflow-hidden select-none touch-none">
       {/* SVG Canvas for precision vector rendering (Zero clipping filters, zero rectangular borders) */}
       <svg
         ref={svgRef}
@@ -62,22 +62,22 @@ export const RobotFace: React.FC<RobotFaceProps> = ({
         <defs>
           {/* Circular Glow Radial Gradient with Smooth Falloff */}
           <radialGradient id="eyeGlowRadial" cx="50%" cy="50%" r="50%">
-            <stop offset="55%" stopColor={config.primaryColor} stopOpacity="0.24" />
-            <stop offset="75%" stopColor={config.primaryColor} stopOpacity="0.12" />
-            <stop offset="90%" stopColor={config.primaryColor} stopOpacity="0.04" />
+            <stop offset="55%" stopColor={config.primaryColor} stopOpacity="0.28" />
+            <stop offset="75%" stopColor={config.primaryColor} stopOpacity="0.14" />
+            <stop offset="90%" stopColor={config.primaryColor} stopOpacity="0.05" />
             <stop offset="100%" stopColor={config.primaryColor} stopOpacity="0" />
           </radialGradient>
 
-          {/* Dark Teal Iris with Realistic Digital Depth */}
+          {/* Forest Green Iris with Realistic Digital Depth */}
           <radialGradient id="darkTealIris" cx="44%" cy="40%" r="58%">
-            <stop offset="0%" stopColor="#083847" />
-            <stop offset="60%" stopColor="#04202b" />
-            <stop offset="100%" stopColor="#010e14" />
+            <stop offset="0%" stopColor="#174D3A" />
+            <stop offset="60%" stopColor="#0E3326" />
+            <stop offset="100%" stopColor="#071A13" />
           </radialGradient>
         </defs>
 
-        {/* Pure Pitch Black Screen Canvas */}
-        <rect width="800" height="500" fill="#000000" />
+        {/* Near Black Screen Canvas */}
+        <rect width="800" height="500" fill="#202124" />
 
         {/* Polished Robot Eyes with Interactive Pointer Tracking and Eyelid Mask */}
         <RobotEyes

@@ -58,7 +58,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
   };
 
   return (
-    <div className="w-full h-full bg-[#F2F2EF] text-[#30343B] flex flex-col p-3 sm:p-5 md:p-6 font-sans select-none overflow-y-auto">
+    <div className="w-full h-full bg-[#FFFFFF] text-[#30343B] flex flex-col p-3 sm:p-5 md:p-6 font-sans select-none overflow-y-auto">
       {/* Header: Industrial Primary Bar */}
       <header className="relative z-10 flex items-center justify-between bg-[#30343B] text-white px-4 sm:px-6 py-3 rounded-xl border border-[#B0B4B8]/30 shadow-sm mb-4">
         <div className="flex items-center gap-3">
@@ -71,12 +71,12 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
               className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#202124] hover:bg-[#17191C] border border-[#B0B4B8]/40 text-white transition-all shadow-sm active:scale-98 text-xs sm:text-sm font-bold"
               title="Return to Robot Hub"
             >
-              <ArrowLeft className="w-4 h-4 text-[#D49A36]" />
+              <ArrowLeft className="w-4 h-4 text-[#DCE8E1]" />
               <span>Back to Hub</span>
             </button>
           )}
 
-          <div className="p-1.5 rounded-md bg-[#202124] border border-[#B0B4B8]/30 text-[#D49A36] hidden sm:block">
+          <div className="p-1.5 rounded-md bg-[#202124] border border-[#B0B4B8]/30 text-[#DCE8E1] hidden sm:block">
             <Settings className="w-4 h-4" />
           </div>
           <div>
@@ -88,7 +88,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         </div>
 
         {saveAlert && (
-          <span className="text-xs font-mono text-[#202124] px-3 py-1 rounded bg-[#D49A36] font-bold shadow-sm">
+          <span className="text-xs font-mono text-white px-3 py-1 rounded bg-[#174D3A] font-bold shadow-sm">
             Saved Successfully
           </span>
         )}
@@ -98,7 +98,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         {/* Robot & University Identity: Crisp White Card */}
         <div className="p-4 rounded-xl bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 space-y-2.5 shadow-sm">
           <div className="flex items-center gap-2 text-[#30343B] font-bold text-xs sm:text-sm">
-            <Sparkles className="w-4 h-4 text-[#D49A36]" />
+            <Sparkles className="w-4 h-4 text-[#174D3A]" />
             <span>Assistant Persona Identity</span>
           </div>
           <div>
@@ -107,7 +107,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
               type="text"
               value={robotName}
               onChange={(e) => setRobotName(e.target.value)}
-              className="w-full bg-[#F2F2EF] border border-[#B0B4B8]/50 rounded-lg px-3 py-2 text-[#30343B] focus:outline-none focus:border-[#D49A36]"
+              className="w-full bg-[#FFFFFF] border border-[#B0B4B8]/50 rounded-lg px-3 py-2 text-[#30343B] focus:outline-none focus:border-[#174D3A]"
             />
           </div>
         </div>
@@ -115,17 +115,17 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         {/* Speech Recognition (STT) Settings: Crisp White Card */}
         <div className="p-4 rounded-xl bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 space-y-2.5 shadow-sm">
           <div className="flex items-center gap-2 text-[#30343B] font-bold text-xs sm:text-sm">
-            <Mic className="w-4 h-4 text-[#D49A36]" />
+            <Mic className="w-4 h-4 text-[#174D3A]" />
             <span>Speech Recognition (STT) Settings</span>
           </div>
           <div>
             <label className="block text-[#5F666D] mb-1 font-semibold">Default Recognition Language</label>
             <div className="flex items-center gap-2">
-              <Languages className="w-4 h-4 text-[#D49A36]" />
+              <Languages className="w-4 h-4 text-[#174D3A]" />
               <select
                 value={selectedLanguage}
                 onChange={(e) => onSelectLanguage(e.target.value)}
-                className="w-full bg-[#F2F2EF] border border-[#B0B4B8]/50 rounded-lg px-3 py-2 text-[#30343B] focus:outline-none focus:border-[#D49A36] cursor-pointer"
+                className="w-full bg-[#FFFFFF] border border-[#B0B4B8]/50 rounded-lg px-3 py-2 text-[#30343B] focus:outline-none focus:border-[#174D3A] cursor-pointer"
               >
                 <option value="en-IN">English (India) - en-IN</option>
                 <option value="hi-IN">हिंदी (India) - hi-IN</option>
@@ -138,17 +138,17 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         {/* Text-to-Speech (TTS) Engine Parameters: Crisp White Card */}
         <div className="p-4 rounded-xl bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 space-y-3 shadow-sm">
           <div className="flex items-center gap-2 text-[#30343B] font-bold text-xs sm:text-sm">
-            <Volume2 className="w-4 h-4 text-[#D49A36]" />
+            <Volume2 className="w-4 h-4 text-[#174D3A]" />
             <span>Text-to-Speech (TTS) Voice Settings</span>
           </div>
 
           {/* Target Reference Audio Sample Player */}
-          <div className="p-3 rounded-lg bg-[#F2F2EF] border border-[#B0B4B8]/50 space-y-2">
+          <div className="p-3 rounded-lg bg-[#FFFFFF] border border-[#B0B4B8]/50 space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono text-[#30343B] font-bold uppercase flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-[#D49A36]" /> Target Voice Reference (Uploaded Baritone Sample)
+                <Sparkles className="w-3.5 h-3.5 text-[#174D3A]" /> Target Voice Reference (Uploaded Baritone Sample)
               </span>
-              <span className="text-[10px] font-mono text-[#202124] px-1.5 py-0.5 rounded bg-[#D49A36] font-bold">ACTIVE SAMPLE</span>
+              <span className="text-[10px] font-mono text-white px-1.5 py-0.5 rounded bg-[#174D3A] font-bold">ACTIVE SAMPLE</span>
             </div>
             <p className="text-[11px] text-[#5F666D] italic">
               "I fear darkness hunts us. Use what you've learned, and stay the course."
@@ -171,7 +171,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
                   onUpdateSpeechPitch(0.82);
                   onUpdateSpeechRate(0.90);
                 }}
-                className="px-3 py-1.5 rounded-lg bg-[#D49A36] hover:bg-[#C0882B] text-[#202124] text-xs font-bold font-mono flex items-center gap-1.5 transition-all shadow-sm"
+                className="px-3 py-1.5 rounded-lg bg-[#174D3A] hover:bg-[#134232] text-white text-xs font-bold font-mono flex items-center gap-1.5 transition-all shadow-sm"
               >
                 <span>✓ Match Reference Tone (Pitch: 0.82, Rate: 0.90)</span>
               </button>
@@ -184,7 +184,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
               <select
                 value={selectedVoice}
                 onChange={(e) => onSelectVoice(e.target.value)}
-                className="flex-1 bg-[#F2F2EF] border border-[#B0B4B8]/50 rounded-lg px-3 py-2 text-[#30343B] focus:outline-none focus:border-[#D49A36] cursor-pointer text-xs"
+                className="flex-1 bg-[#FFFFFF] border border-[#B0B4B8]/50 rounded-lg px-3 py-2 text-[#30343B] focus:outline-none focus:border-[#174D3A] cursor-pointer text-xs"
               >
                 <option value="">Default Male AI Voice (Auto-selected natural male)</option>
                 {availableVoices.map((v) => (
@@ -212,7 +212,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
                 }}
                 className="px-3.5 py-2 rounded-lg bg-[#30343B] hover:bg-[#202124] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-sm border border-[#30343B]"
               >
-                <Volume2 className="w-3.5 h-3.5 text-[#D49A36]" />
+                <Volume2 className="w-3.5 h-3.5 text-[#DCE8E1]" />
                 <span>Test Voice</span>
               </button>
             </div>
@@ -231,7 +231,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
                 step="0.05"
                 value={speechRate}
                 onChange={(e) => onUpdateSpeechRate(parseFloat(e.target.value))}
-                className="w-full accent-[#D49A36] cursor-pointer"
+                className="w-full accent-[#174D3A] cursor-pointer"
               />
             </div>
 
@@ -247,7 +247,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
                 step="0.05"
                 value={speechPitch}
                 onChange={(e) => onUpdateSpeechPitch(parseFloat(e.target.value))}
-                className="w-full accent-[#D49A36] cursor-pointer"
+                className="w-full accent-[#174D3A] cursor-pointer"
               />
             </div>
 
@@ -263,7 +263,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
                 step="0.05"
                 value={speechVolume}
                 onChange={(e) => onUpdateSpeechVolume(parseFloat(e.target.value))}
-                className="w-full accent-[#D49A36] cursor-pointer"
+                className="w-full accent-[#174D3A] cursor-pointer"
               />
             </div>
           </div>
@@ -272,7 +272,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         {/* AI Provider Configuration: Crisp White Card */}
         <div className="p-4 rounded-xl bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 space-y-2.5 shadow-sm">
           <div className="flex items-center gap-2 text-[#30343B] font-bold text-xs sm:text-sm">
-            <Key className="w-4 h-4 text-[#D49A36]" />
+            <Key className="w-4 h-4 text-[#174D3A]" />
             <span>AI Provider & API Configuration</span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -281,7 +281,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
               <select
                 value={aiProvider}
                 onChange={(e) => setAiProvider(e.target.value)}
-                className="w-full bg-[#F2F2EF] border border-[#B0B4B8]/50 rounded-lg px-3 py-2 text-[#30343B] focus:outline-none focus:border-[#D49A36] cursor-pointer"
+                className="w-full bg-[#FFFFFF] border border-[#B0B4B8]/50 rounded-lg px-3 py-2 text-[#30343B] focus:outline-none focus:border-[#174D3A] cursor-pointer"
               >
                 <option value="mock">Verified SSU On-Device Knowledge (Offline / Zero Key)</option>
                 <option value="gemini">Google Gemini 1.5 Flash (Online API)</option>
@@ -298,7 +298,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
                 onChange={(e) => setAiApiKey(e.target.value)}
                 placeholder={aiProvider === 'mock' ? 'Not needed for on-device SSU knowledge' : 'Enter API Key...'}
                 disabled={aiProvider === 'mock'}
-                className="w-full bg-[#F2F2EF] border border-[#B0B4B8]/50 rounded-lg px-3 py-2 text-[#30343B] focus:outline-none focus:border-[#D49A36] disabled:opacity-40"
+                className="w-full bg-[#FFFFFF] border border-[#B0B4B8]/50 rounded-lg px-3 py-2 text-[#30343B] focus:outline-none focus:border-[#174D3A] disabled:opacity-40"
               />
             </div>
           </div>
@@ -310,7 +310,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         {/* Jetson & Hardware IP: Crisp White Card */}
         <div className="p-4 rounded-xl bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 space-y-2.5 shadow-sm">
           <div className="flex items-center gap-2 text-[#30343B] font-bold text-xs sm:text-sm">
-            <Server className="w-4 h-4 text-[#D49A36]" />
+            <Server className="w-4 h-4 text-[#174D3A]" />
             <span>NVIDIA Jetson Robotics IPC Connection</span>
           </div>
           <div>
@@ -320,7 +320,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
               value={wsUrl}
               onChange={(e) => onUpdateWsUrl(e.target.value)}
               placeholder="ws://localhost:8080/robot-face"
-              className="w-full bg-[#F2F2EF] border border-[#B0B4B8]/50 rounded-lg px-3 py-2 text-[#30343B] focus:outline-none focus:border-[#D49A36]"
+              className="w-full bg-[#FFFFFF] border border-[#B0B4B8]/50 rounded-lg px-3 py-2 text-[#30343B] focus:outline-none focus:border-[#174D3A]"
             />
           </div>
         </div>
@@ -334,9 +334,9 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             </div>
             <button
               onClick={onOpenFaceSettingsModal}
-              className="px-3.5 py-1.5 rounded-lg border border-[#B0B4B8]/50 bg-[#F2F2EF] text-[#30343B] hover:border-[#D49A36] flex items-center gap-1.5 transition-colors font-bold"
+              className="px-3.5 py-1.5 rounded-lg border border-[#B0B4B8]/50 bg-[#FFFFFF] text-[#30343B] hover:border-[#174D3A] flex items-center gap-1.5 transition-colors font-bold"
             >
-              <Sliders className="w-3.5 h-3.5 text-[#D49A36]" />
+              <Sliders className="w-3.5 h-3.5 text-[#174D3A]" />
               <span>Customize</span>
             </button>
           </div>
@@ -346,7 +346,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         <div className="pt-1">
           <button
             onClick={handleSave}
-            className="px-6 py-2.5 rounded-lg bg-[#D49A36] hover:bg-[#C0882B] text-[#202124] font-bold flex items-center gap-2 transition-colors shadow-sm active:scale-98"
+            className="px-6 py-2.5 rounded-lg bg-[#174D3A] hover:bg-[#134232] text-white font-bold flex items-center gap-2 transition-colors shadow-sm active:scale-98"
           >
             <Save className="w-4 h-4" />
             <span>SAVE CONFIGURATION</span>

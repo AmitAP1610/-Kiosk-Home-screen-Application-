@@ -54,7 +54,7 @@ export const MonitorScreen: React.FC<MonitorScreenProps> = ({ onNavigate, system
   ];
 
   return (
-    <div className="w-full h-full bg-[#F2F2EF] text-[#30343B] flex flex-col p-4 sm:p-6 font-sans select-none overflow-y-auto">
+    <div className="w-full h-full bg-[#FFFFFF] text-[#30343B] flex flex-col p-4 sm:p-6 font-sans select-none overflow-y-auto">
       {/* Header: Industrial Primary Bar */}
       <div className="flex items-center justify-between pb-3 bg-[#30343B] text-white p-3.5 rounded-xl mb-6 border border-[#B0B4B8]/30 shadow-sm">
         <div className="flex items-center gap-2.5">
@@ -64,12 +64,12 @@ export const MonitorScreen: React.FC<MonitorScreenProps> = ({ onNavigate, system
               className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#202124] hover:bg-[#17191C] border border-[#B0B4B8]/40 text-white transition-all text-xs font-bold mr-1"
               title="Return to Robot Hub"
             >
-              <ArrowLeft className="w-4 h-4 text-[#D49A36]" />
+              <ArrowLeft className="w-4 h-4 text-[#DCE8E1]" />
               <span>Back to Hub</span>
             </button>
           )}
 
-          <div className="p-2 rounded-lg bg-[#202124] border border-[#B0B4B8]/30 text-[#D49A36]">
+          <div className="p-2 rounded-lg bg-[#202124] border border-[#B0B4B8]/30 text-[#DCE8E1]">
             <Activity className="w-5 h-5 text-white" />
           </div>
           <div>
@@ -88,14 +88,14 @@ export const MonitorScreen: React.FC<MonitorScreenProps> = ({ onNavigate, system
               key={i}
               className={`p-4 rounded-xl border bg-[#FFFFFF] text-[#30343B] space-y-2 transition-all shadow-sm ${
                 m.isOk
-                  ? 'border-[#B0B4B8]/60 hover:border-[#D49A36]'
+                  ? 'border-[#B0B4B8]/60 hover:border-[#174D3A]'
                   : 'border-red-500/50 bg-red-50/50'
               }`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="p-1.5 rounded-lg bg-[#F2F2EF] text-[#30343B] border border-[#B0B4B8]/40">
-                    <Icon className="w-4 h-4 text-[#D49A36]" />
+                  <div className="p-1.5 rounded-lg bg-[#DCE8E1]/40 text-[#174D3A] border border-[#B0B4B8]/40">
+                    <Icon className="w-4 h-4 text-[#174D3A]" />
                   </div>
                   <span className="font-bold text-[#30343B] text-xs">{m.title}</span>
                 </div>

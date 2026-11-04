@@ -25,7 +25,7 @@ export const NavScreen: React.FC<NavScreenProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div className="w-full h-full bg-[#F2F2EF] text-[#30343B] flex flex-col p-4 sm:p-6 font-sans select-none overflow-hidden">
+    <div className="w-full h-full bg-[#FFFFFF] text-[#30343B] flex flex-col p-4 sm:p-6 font-sans select-none overflow-hidden">
       {/* Header: Industrial Primary Bar */}
       <div className="flex items-center justify-between pb-3 bg-[#30343B] text-white p-3.5 rounded-xl mb-4 border border-[#B0B4B8]/30 shadow-sm">
         <div className="flex items-center gap-2.5">
@@ -35,12 +35,12 @@ export const NavScreen: React.FC<NavScreenProps> = ({ onNavigate }) => {
               className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#202124] hover:bg-[#17191C] border border-[#B0B4B8]/40 text-white transition-all text-xs font-bold mr-1"
               title="Return to Robot Hub"
             >
-              <ArrowLeft className="w-4 h-4 text-[#D49A36]" />
+              <ArrowLeft className="w-4 h-4 text-[#DCE8E1]" />
               <span>Back to Hub</span>
             </button>
           )}
 
-          <div className="p-2 rounded-lg bg-[#202124] border border-[#B0B4B8]/30 text-[#D49A36]">
+          <div className="p-2 rounded-lg bg-[#202124] border border-[#B0B4B8]/30 text-[#DCE8E1]">
             <Navigation className="w-5 h-5 text-white" />
           </div>
           <div>
@@ -52,7 +52,7 @@ export const NavScreen: React.FC<NavScreenProps> = ({ onNavigate }) => {
         <div className="flex items-center gap-2 font-mono text-xs">
           <span className={`px-2.5 py-1 rounded-md border text-[11px] font-bold ${
             navActive
-              ? 'bg-[#D49A36] border-[#D49A36] text-[#202124]'
+              ? 'bg-[#174D3A] border-[#174D3A] text-white'
               : 'bg-[#202124] border-[#B0B4B8]/30 text-[#B0B4B8]'
           }`}>
             {navActive ? 'NAVIGATING...' : 'STANDBY'}
@@ -100,15 +100,15 @@ export const NavScreen: React.FC<NavScreenProps> = ({ onNavigate }) => {
                   onClick={() => setSelectedTarget(wp.name)}
                   className={`w-full p-3 rounded-lg border text-left flex items-center justify-between transition-all ${
                     selectedTarget === wp.name
-                      ? 'border-[#D49A36] bg-[#D49A36] text-[#202124] font-bold shadow-sm'
-                      : 'border-[#B0B4B8]/40 bg-[#F2F2EF] text-[#30343B] hover:border-[#D49A36]'
+                      ? 'border-[#174D3A] bg-[#174D3A] text-white font-bold shadow-sm'
+                      : 'border-[#B0B4B8]/40 bg-[#FFFFFF] text-[#30343B] hover:border-[#174D3A]'
                   }`}
                 >
                   <div className="flex items-center gap-2">
-                    <MapPin className={`w-4 h-4 ${selectedTarget === wp.name ? 'text-[#202124]' : 'text-[#D49A36]'}`} />
+                    <MapPin className={`w-4 h-4 ${selectedTarget === wp.name ? 'text-white' : 'text-[#174D3A]'}`} />
                     <span className="font-semibold">{wp.name}</span>
                   </div>
-                  <span className={`text-[10px] ${selectedTarget === wp.name ? 'text-[#202124]/80 font-bold' : 'text-[#5F666D]'}`}>
+                  <span className={`text-[10px] ${selectedTarget === wp.name ? 'text-emerald-200 font-bold' : 'text-[#5F666D]'}`}>
                     {wp.coords}
                   </span>
                 </button>
@@ -128,9 +128,9 @@ export const NavScreen: React.FC<NavScreenProps> = ({ onNavigate }) => {
             ) : (
               <button
                 onClick={handleStartNav}
-                className="w-full py-2.5 rounded-lg bg-[#D49A36] hover:bg-[#C0882B] text-[#202124] font-bold flex items-center justify-center gap-2 shadow-sm transition-colors"
+                className="w-full py-2.5 rounded-lg bg-[#174D3A] hover:bg-[#134232] text-white font-bold flex items-center justify-center gap-2 shadow-sm transition-colors"
               >
-                <Play className="w-4 h-4 fill-current text-[#202124]" />
+                <Play className="w-4 h-4 fill-current text-white" />
                 START NAVIGATION
               </button>
             )}

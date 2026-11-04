@@ -65,7 +65,7 @@ export const SessionsAgendaScreen: React.FC<SessionsAgendaScreenProps> = ({
   const sessionVenueBasename = (venue: string) => venue.split(',')[0];
 
   return (
-    <div className="w-full h-full bg-[#F2F2EF] text-[#30343B] flex flex-col p-3 sm:p-5 md:p-6 font-sans select-none overflow-hidden relative">
+    <div className="w-full h-full bg-[#FFFFFF] text-[#30343B] flex flex-col p-3 sm:p-5 md:p-6 font-sans select-none overflow-hidden relative">
       {/* HEADER: Industrial Primary Bar */}
       <header className="relative z-10 flex items-center justify-between bg-[#30343B] text-white px-4 sm:px-6 py-3 rounded-xl border border-[#B0B4B8]/30 shadow-sm mb-3">
         {/* Back Button */}
@@ -76,7 +76,7 @@ export const SessionsAgendaScreen: React.FC<SessionsAgendaScreenProps> = ({
           }}
           className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#202124] hover:bg-[#17191C] border border-[#B0B4B8]/40 text-white transition-all shadow-sm active:scale-98 text-xs sm:text-sm font-bold"
         >
-          <ArrowLeft className="w-4 h-4 text-[#D49A36]" />
+          <ArrowLeft className="w-4 h-4 text-[#DCE8E1]" />
           <span>Back to Hub</span>
         </button>
 
@@ -86,7 +86,7 @@ export const SessionsAgendaScreen: React.FC<SessionsAgendaScreenProps> = ({
             <span className="text-sm sm:text-lg md:text-xl font-extrabold text-white tracking-wide">
               CAMPUS SESSIONS & TIMETABLE
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#D49A36] text-[#202124] font-bold uppercase tracking-wider">
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#174D3A] text-white font-bold uppercase tracking-wider">
               LIVE AGENDA
             </span>
           </div>
@@ -100,19 +100,19 @@ export const SessionsAgendaScreen: React.FC<SessionsAgendaScreenProps> = ({
           onClick={handleSpeakAllAgenda}
           className={`flex items-center gap-2 px-3.5 py-2 rounded-lg border transition-all text-xs sm:text-sm font-bold shadow-sm ${
             isSpeaking
-              ? 'bg-[#D49A36] border-[#D49A36] text-[#202124]'
+              ? 'bg-[#174D3A] border-[#174D3A] text-white'
               : 'bg-[#202124] border-[#B0B4B8]/40 text-white hover:bg-[#17191C]'
           }`}
           title="Read Today's Agenda Aloud"
         >
-          <Volume2 className="w-4 h-4 text-[#D49A36]" />
+          <Volume2 className="w-4 h-4 text-[#DCE8E1]" />
           <span className="hidden sm:inline">Read Agenda Aloud</span>
         </button>
       </header>
 
       {/* FILTER & SEARCH BAR: Clean White Card */}
       <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-2.5 mb-3 bg-[#FFFFFF] p-2.5 rounded-xl border border-[#B0B4B8]/60 shadow-sm">
-        {/* Date Selector Pills */}
+        {/* Date Selector Pills (Forest Green active) */}
         <div className="flex items-center gap-1.5 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
           {(['today', 'tomorrow', 'upcoming', 'all'] as const).map((date) => (
             <button
@@ -123,8 +123,8 @@ export const SessionsAgendaScreen: React.FC<SessionsAgendaScreenProps> = ({
               }}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase font-mono transition-all ${
                 selectedDate === date
-                  ? 'bg-[#D49A36] text-[#202124] shadow-sm'
-                  : 'bg-[#F2F2EF] text-[#30343B] hover:bg-[#E5E5E0] border border-[#B0B4B8]/50'
+                  ? 'bg-[#174D3A] text-white shadow-sm'
+                  : 'bg-[#FFFFFF] text-[#30343B] hover:bg-[#DCE8E1]/30 border border-[#B0B4B8]/50'
               }`}
             >
               {date}
@@ -143,8 +143,8 @@ export const SessionsAgendaScreen: React.FC<SessionsAgendaScreenProps> = ({
               }}
               className={`px-2.5 py-1 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
                 selectedTrack === track
-                  ? 'bg-[#30343B] text-white shadow-sm'
-                  : 'bg-[#F2F2EF] text-[#5F666D] hover:text-[#30343B] border border-[#B0B4B8]/50'
+                  ? 'bg-[#174D3A] text-white shadow-sm'
+                  : 'bg-[#FFFFFF] text-[#5F666D] hover:text-[#30343B] hover:bg-[#DCE8E1]/30 border border-[#B0B4B8]/50'
               }`}
             >
               {track === 'all' ? 'All Tracks' : track}
@@ -153,8 +153,8 @@ export const SessionsAgendaScreen: React.FC<SessionsAgendaScreenProps> = ({
         </div>
 
         {/* Search Input */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#F2F2EF] border border-[#B0B4B8]/50 text-xs w-full md:w-60">
-          <Search className="w-3.5 h-3.5 text-[#D49A36]" />
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#FFFFFF] border border-[#B0B4B8]/60 text-xs w-full md:w-60 shadow-sm">
+          <Search className="w-3.5 h-3.5 text-[#174D3A]" />
           <input
             type="text"
             placeholder="Search session or speaker..."
@@ -169,7 +169,7 @@ export const SessionsAgendaScreen: React.FC<SessionsAgendaScreenProps> = ({
       <div className="relative z-10 flex-1 min-h-0 overflow-y-auto pr-1">
         {filteredSessions.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center p-8 text-center text-[#5F666D]">
-            <Calendar className="w-12 h-12 text-[#D49A36] mb-2" />
+            <Calendar className="w-12 h-12 text-[#174D3A] mb-2" />
             <h3 className="text-base font-bold text-[#30343B] mb-1">No sessions match your filter</h3>
             <p className="text-xs text-[#5F666D]">Try selecting a different date or clearing the search query.</p>
           </div>
@@ -181,7 +181,7 @@ export const SessionsAgendaScreen: React.FC<SessionsAgendaScreenProps> = ({
               return (
                 <div
                   key={session.id}
-                  className="rounded-xl border border-[#B0B4B8]/60 hover:border-[#D49A36] bg-[#FFFFFF] text-[#30343B] overflow-hidden transition-all flex flex-col justify-between shadow-sm"
+                  className="rounded-xl border border-[#B0B4B8]/60 hover:border-[#174D3A] bg-[#FFFFFF] text-[#30343B] overflow-hidden transition-all flex flex-col justify-between shadow-card"
                 >
                   {/* Top Photo Banner */}
                   <div className="relative h-40 sm:h-44 w-full overflow-hidden">
@@ -202,11 +202,11 @@ export const SessionsAgendaScreen: React.FC<SessionsAgendaScreenProps> = ({
                       <span
                         className={`text-[10px] font-mono px-2.5 py-0.5 rounded font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm ${
                           isLive
-                            ? 'bg-[#D49A36] text-[#202124]'
+                            ? 'bg-[#174D3A] text-white'
                             : 'bg-[#202124]/90 text-[#B0B4B8] border border-[#B0B4B8]/30'
                         }`}
                       >
-                        {isLive && <span className="w-2 h-2 rounded-full bg-[#202124]" />}
+                        {isLive && <span className="w-2 h-2 rounded-full bg-[#DCE8E1] animate-pulse" />}
                         <span>{session.status}</span>
                       </span>
                     </div>
@@ -214,7 +214,7 @@ export const SessionsAgendaScreen: React.FC<SessionsAgendaScreenProps> = ({
                     {/* Duration / Seats Overlay */}
                     <div className="absolute bottom-2 left-2.5 right-2.5 flex items-center justify-between text-[11px] font-mono text-white">
                       <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#202124]/90 border border-[#B0B4B8]/30">
-                        <Clock className="w-3 h-3 text-[#D49A36]" />
+                        <Clock className="w-3 h-3 text-[#DCE8E1]" />
                         <span className="font-semibold text-white">{session.duration}</span>
                       </div>
                       {session.seatsAvailable && (
@@ -236,8 +236,8 @@ export const SessionsAgendaScreen: React.FC<SessionsAgendaScreenProps> = ({
 
                       {/* Speaker */}
                       <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-lg bg-[#F2F2EF] text-[#30343B] flex items-center justify-center font-bold text-xs border border-[#B0B4B8]/50">
-                          <User className="w-4 h-4 text-[#D49A36]" />
+                        <div className="w-8 h-8 rounded-lg bg-[#DCE8E1] text-[#174D3A] flex items-center justify-center font-bold text-xs border border-[#174D3A]/20">
+                          <User className="w-4 h-4 text-[#174D3A]" />
                         </div>
                         <div>
                           <span className="font-bold text-[#30343B] block text-xs sm:text-sm">{session.speaker}</span>
@@ -246,20 +246,20 @@ export const SessionsAgendaScreen: React.FC<SessionsAgendaScreenProps> = ({
                       </div>
 
                       {/* Description */}
-                      <p className="text-xs text-[#5F666D] leading-relaxed bg-[#F2F2EF] p-2.5 rounded-lg border border-[#B0B4B8]/40">
+                      <p className="text-xs text-[#5F666D] leading-relaxed bg-[#DCE8E1]/20 p-2.5 rounded-lg border border-[#B0B4B8]/40">
                         {session.description}
                       </p>
 
                       {/* Key Highlights */}
                       <div className="space-y-1">
                         <span className="text-[10px] font-mono text-[#5F666D] font-bold uppercase tracking-wider flex items-center gap-1">
-                          <Sparkles className="w-3 h-3 text-[#D49A36]" />
+                          <Sparkles className="w-3 h-3 text-[#174D3A]" />
                           <span>Session Highlights:</span>
                         </span>
                         <div className="space-y-0.5">
                           {session.highlights.map((h, i) => (
                             <div key={i} className="flex items-start gap-1.5 text-xs text-[#5F666D]">
-                              <CheckCircle2 className="w-3.5 h-3.5 text-[#D49A36] flex-shrink-0 mt-0.5" />
+                              <CheckCircle2 className="w-3.5 h-3.5 text-[#174D3A] flex-shrink-0 mt-0.5" />
                               <span>{h}</span>
                             </div>
                           ))}
@@ -268,20 +268,20 @@ export const SessionsAgendaScreen: React.FC<SessionsAgendaScreenProps> = ({
 
                       {/* Time & Venue */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono font-semibold pt-0.5">
-                        <div className="p-2 rounded-lg bg-[#F2F2EF] border border-[#B0B4B8]/40 flex items-center gap-1.5">
-                          <Clock className="w-3.5 h-3.5 text-[#D49A36] flex-shrink-0" />
+                        <div className="p-2 rounded-lg bg-[#DCE8E1]/20 border border-[#B0B4B8]/40 flex items-center gap-1.5">
+                          <Clock className="w-3.5 h-3.5 text-[#174D3A] flex-shrink-0" />
                           <span className="text-[#30343B] truncate">{session.time}</span>
                         </div>
 
-                        <div className="p-2 rounded-lg bg-[#F2F2EF] border border-[#B0B4B8]/40 flex items-center gap-1.5">
-                          <MapPin className="w-3.5 h-3.5 text-[#D49A36] flex-shrink-0" />
+                        <div className="p-2 rounded-lg bg-[#DCE8E1]/20 border border-[#B0B4B8]/40 flex items-center gap-1.5">
+                          <MapPin className="w-3.5 h-3.5 text-[#174D3A] flex-shrink-0" />
                           <span className="text-[#30343B] truncate">{sessionVenueBasename(session.venue)}</span>
                         </div>
                       </div>
 
                       {/* Entry Requirement Badge */}
-                      <div className="p-2 rounded-lg bg-[#F2F2EF] border border-[#B0B4B8]/40 flex items-center gap-1.5 text-[11px] font-mono text-[#5F666D]">
-                        <Ticket className="w-3.5 h-3.5 text-[#D49A36] flex-shrink-0" />
+                      <div className="p-2 rounded-lg bg-[#DCE8E1]/20 border border-[#B0B4B8]/40 flex items-center gap-1.5 text-[11px] font-mono text-[#5F666D]">
+                        <Ticket className="w-3.5 h-3.5 text-[#174D3A] flex-shrink-0" />
                         <span className="font-semibold text-[#30343B]">{session.entryRequirement}</span>
                       </div>
                     </div>
@@ -292,7 +292,7 @@ export const SessionsAgendaScreen: React.FC<SessionsAgendaScreenProps> = ({
                         onClick={() => handleSpeakSession(session)}
                         className="flex-1 py-2.5 px-3 rounded-lg bg-[#30343B] hover:bg-[#202124] border border-[#B0B4B8]/40 text-xs sm:text-sm font-bold text-white flex items-center justify-center gap-1.5 transition-all active:scale-98 shadow-sm"
                       >
-                        <Volume2 className="w-3.5 h-3.5 text-[#D49A36]" />
+                        <Volume2 className="w-3.5 h-3.5 text-[#DCE8E1]" />
                         <span>Speak Overview</span>
                       </button>
 
@@ -301,9 +301,9 @@ export const SessionsAgendaScreen: React.FC<SessionsAgendaScreenProps> = ({
                           if (onSpeakText) onSpeakText(`Viewing facility guide for ${session.venue}.`);
                           onNavigate('map-info');
                         }}
-                        className="flex-1 py-2.5 px-3 rounded-lg bg-[#D49A36] hover:bg-[#C0882B] text-[#202124] text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 transition-all active:scale-98 shadow-sm"
+                        className="flex-1 py-2.5 px-3 rounded-lg bg-[#174D3A] hover:bg-[#134232] text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 transition-all active:scale-98 shadow-sm"
                       >
-                        <Compass className="w-3.5 h-3.5 text-[#202124]" />
+                        <Compass className="w-3.5 h-3.5 text-white" />
                         <span>Explore Venue</span>
                       </button>
                     </div>

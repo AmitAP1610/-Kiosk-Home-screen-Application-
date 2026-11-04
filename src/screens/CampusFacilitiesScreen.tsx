@@ -53,7 +53,7 @@ export const CampusFacilitiesScreen: React.FC<CampusFacilitiesScreenProps> = ({
   };
 
   return (
-    <div className="w-full h-full bg-[#F2F2EF] text-[#30343B] flex flex-col p-3 sm:p-5 md:p-6 font-sans select-none overflow-y-auto">
+    <div className="w-full h-full bg-[#FFFFFF] text-[#30343B] flex flex-col p-3 sm:p-5 md:p-6 font-sans select-none overflow-y-auto">
       {/* Top Header: Industrial Primary Bar */}
       <header className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between bg-[#30343B] text-white px-4 sm:px-6 py-3 rounded-xl border border-[#B0B4B8]/30 shadow-sm mb-4 gap-3">
         <div className="flex items-center gap-3">
@@ -66,12 +66,12 @@ export const CampusFacilitiesScreen: React.FC<CampusFacilitiesScreenProps> = ({
               className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#202124] hover:bg-[#17191C] border border-[#B0B4B8]/40 text-white transition-all shadow-sm active:scale-98 text-xs font-bold"
               title="Return to Robot Hub"
             >
-              <ArrowLeft className="w-4 h-4 text-[#D49A36]" />
+              <ArrowLeft className="w-4 h-4 text-[#DCE8E1]" />
               <span>Back to Hub</span>
             </button>
           )}
 
-          <div className="p-1.5 rounded-md bg-[#202124] border border-[#B0B4B8]/30 text-[#D49A36]">
+          <div className="p-1.5 rounded-md bg-[#202124] border border-[#B0B4B8]/30 text-[#DCE8E1]">
             <Building2 className="w-5 h-5" />
           </div>
           <div>
@@ -92,7 +92,7 @@ export const CampusFacilitiesScreen: React.FC<CampusFacilitiesScreenProps> = ({
               onClick={() => setSelectedCategory(c.id)}
               className={`px-3 py-1 rounded-md transition-all ${
                 selectedCategory === c.id
-                  ? 'bg-[#D49A36] text-[#202124] font-bold'
+                  ? 'bg-[#174D3A] text-white font-bold'
                   : 'text-[#B0B4B8] hover:text-white'
               }`}
             >
@@ -116,13 +116,13 @@ export const CampusFacilitiesScreen: React.FC<CampusFacilitiesScreenProps> = ({
                 className={`p-3 rounded-xl border transition-all cursor-pointer shadow-sm ${
                   isSelected
                     ? 'bg-[#30343B] text-white border-[#30343B]'
-                    : 'bg-[#FFFFFF] border-[#B0B4B8]/60 text-[#30343B] hover:border-[#D49A36]'
+                    : 'bg-[#FFFFFF] border-[#B0B4B8]/60 text-[#30343B] hover:border-[#174D3A]'
                 }`}
               >
                 <div className="flex items-center gap-2.5">
                   <div
                     className={`p-1.5 rounded-md ${
-                      isSelected ? 'bg-[#202124] text-[#D49A36]' : 'bg-[#F2F2EF] text-[#30343B]'
+                      isSelected ? 'bg-[#202124] text-[#DCE8E1]' : 'bg-[#DCE8E1]/40 text-[#174D3A]'
                     }`}
                   >
                     <Icon className="w-4 h-4" />
@@ -132,7 +132,7 @@ export const CampusFacilitiesScreen: React.FC<CampusFacilitiesScreenProps> = ({
                       {fac.name}
                     </h3>
                     <div className="flex items-center gap-1 text-[10px] font-mono mt-0.5">
-                      <MapPin className="w-3 h-3 text-[#D49A36] flex-shrink-0" />
+                      <MapPin className={`w-3 h-3 flex-shrink-0 ${isSelected ? 'text-[#DCE8E1]' : 'text-[#174D3A]'}`} />
                       <span className={`truncate ${isSelected ? 'text-[#B0B4B8]' : 'text-[#5F666D]'}`}>{fac.location}</span>
                     </div>
                   </div>
@@ -146,18 +146,18 @@ export const CampusFacilitiesScreen: React.FC<CampusFacilitiesScreenProps> = ({
         <div className="md:col-span-2 p-5 sm:p-6 rounded-xl bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 shadow-sm space-y-4">
           <div className="flex items-start justify-between">
             <div>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#D49A36] text-[#202124] font-bold uppercase tracking-wider inline-block mb-1.5">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#174D3A] text-white font-bold uppercase tracking-wider inline-block mb-1.5">
                 {activeFacility.category.toUpperCase()} INFRASTRUCTURE
               </span>
               <h2 className="text-lg sm:text-xl font-bold text-[#30343B]">{activeFacility.name}</h2>
               <div className="flex items-center gap-1.5 text-xs text-[#5F666D] font-mono mt-0.5">
-                <MapPin className="w-3.5 h-3.5 text-[#D49A36]" />
+                <MapPin className="w-3.5 h-3.5 text-[#174D3A]" />
                 <span>{activeFacility.location}</span>
               </div>
             </div>
           </div>
 
-          <p className="text-xs sm:text-sm text-[#5F666D] leading-relaxed bg-[#F2F2EF] p-3 rounded-lg border border-[#B0B4B8]/40">
+          <p className="text-xs sm:text-sm text-[#5F666D] leading-relaxed bg-[#FFFFFF] p-3 rounded-lg border border-[#B0B4B8]/40">
             {activeFacility.description}
           </p>
 
@@ -169,9 +169,9 @@ export const CampusFacilitiesScreen: React.FC<CampusFacilitiesScreenProps> = ({
               {activeFacility.highlights.map((h, i) => (
                 <div
                   key={i}
-                  className="p-2.5 rounded-lg bg-[#F2F2EF] border border-[#B0B4B8]/40 text-xs text-[#5F666D] flex items-start gap-2"
+                  className="p-2.5 rounded-lg bg-[#FFFFFF] border border-[#B0B4B8]/40 text-xs text-[#5F666D] flex items-start gap-2"
                 >
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#D49A36] flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#174D3A] flex-shrink-0 mt-0.5" />
                   <span className="leading-snug text-[#30343B] font-medium">{h}</span>
                 </div>
               ))}
@@ -179,9 +179,9 @@ export const CampusFacilitiesScreen: React.FC<CampusFacilitiesScreenProps> = ({
           </div>
 
           {/* Visitor Guidance Notice */}
-          <div className="p-3 rounded-lg bg-[#F2F2EF] border border-[#B0B4B8]/40 text-xs text-[#5F666D] flex items-center justify-between">
+          <div className="p-3 rounded-lg bg-[#DCE8E1]/20 border border-[#B0B4B8]/40 text-xs text-[#5F666D] flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Compass className="w-4 h-4 text-[#D49A36] flex-shrink-0" />
+              <Compass className="w-4 h-4 text-[#174D3A] flex-shrink-0" />
               <span>Ask the AI Voice Assistant for real-time guidance to this facility.</span>
             </div>
           </div>

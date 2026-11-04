@@ -44,7 +44,7 @@ export const ControlScreen: React.FC<ControlScreenProps> = ({
   };
 
   return (
-    <div className="w-full h-full bg-[#F2F2EF] text-[#30343B] flex flex-col p-4 sm:p-6 font-sans select-none overflow-hidden">
+    <div className="w-full h-full bg-[#FFFFFF] text-[#30343B] flex flex-col p-4 sm:p-6 font-sans select-none overflow-hidden">
       {/* Header: Industrial Primary Bar */}
       <div className="flex items-center justify-between pb-3 bg-[#30343B] text-white p-3.5 rounded-xl mb-4 border border-[#B0B4B8]/30 shadow-sm">
         <div className="flex items-center gap-2.5">
@@ -54,12 +54,12 @@ export const ControlScreen: React.FC<ControlScreenProps> = ({
               className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#202124] hover:bg-[#17191C] border border-[#B0B4B8]/40 text-white transition-all text-xs font-bold mr-1"
               title="Return to Robot Hub"
             >
-              <ArrowLeft className="w-4 h-4 text-[#D49A36]" />
+              <ArrowLeft className="w-4 h-4 text-[#DCE8E1]" />
               <span>Back to Hub</span>
             </button>
           )}
 
-          <div className="p-2 rounded-lg bg-[#202124] border border-[#B0B4B8]/30 text-[#D49A36]">
+          <div className="p-2 rounded-lg bg-[#202124] border border-[#B0B4B8]/30 text-[#DCE8E1]">
             <Compass className="w-5 h-5 text-white" />
           </div>
           <div>
@@ -84,7 +84,7 @@ export const ControlScreen: React.FC<ControlScreenProps> = ({
               onClick={() => setControlMode('manual')}
               className={`px-3 py-1.5 rounded-md transition-colors font-semibold text-xs ${
                 controlMode === 'manual'
-                  ? 'bg-[#D49A36] text-[#202124]'
+                  ? 'bg-[#174D3A] text-white'
                   : 'text-[#B0B4B8] hover:text-white'
               }`}
             >
@@ -94,7 +94,7 @@ export const ControlScreen: React.FC<ControlScreenProps> = ({
               onClick={() => setControlMode('autonomous')}
               className={`px-3 py-1.5 rounded-md transition-colors font-semibold text-xs ${
                 controlMode === 'autonomous'
-                  ? 'bg-[#D49A36] text-[#202124]'
+                  ? 'bg-[#174D3A] text-white'
                   : 'text-[#B0B4B8] hover:text-white'
               }`}
             >
@@ -115,8 +115,8 @@ export const ControlScreen: React.FC<ControlScreenProps> = ({
             onPointerLeave={stopMove}
             className={`w-20 h-20 rounded-xl border flex items-center justify-center text-xl transition-all active:scale-95 shadow-sm ${
               activeDirection === 'forward'
-                ? 'bg-[#D49A36] text-[#202124] border-[#D49A36]'
-                : 'bg-[#FFFFFF] border-[#B0B4B8]/60 text-[#30343B] hover:border-[#D49A36]'
+                ? 'bg-[#174D3A] text-white border-[#174D3A]'
+                : 'bg-[#FFFFFF] border-[#B0B4B8]/60 text-[#30343B] hover:border-[#174D3A]'
             }`}
           >
             <ArrowUp className="w-8 h-8" />
@@ -130,8 +130,8 @@ export const ControlScreen: React.FC<ControlScreenProps> = ({
               onPointerLeave={stopMove}
               className={`w-20 h-20 rounded-xl border flex items-center justify-center text-xl transition-all active:scale-95 shadow-sm ${
                 activeDirection === 'left'
-                  ? 'bg-[#D49A36] text-[#202124] border-[#D49A36]'
-                  : 'bg-[#FFFFFF] border-[#B0B4B8]/60 text-[#30343B] hover:border-[#D49A36]'
+                  ? 'bg-[#174D3A] text-white border-[#174D3A]'
+                : 'bg-[#FFFFFF] border-[#B0B4B8]/60 text-[#30343B] hover:border-[#174D3A]'
               }`}
             >
               <ArrowLeft className="w-8 h-8" />
@@ -139,7 +139,7 @@ export const ControlScreen: React.FC<ControlScreenProps> = ({
 
             <button
               onClick={stopMove}
-              className="w-20 h-20 rounded-xl bg-[#202124] border border-[#B0B4B8]/40 text-[#D49A36] hover:border-[#D49A36] flex flex-col items-center justify-center gap-1 font-mono text-[11px] font-bold active:scale-95 shadow-sm"
+              className="w-20 h-20 rounded-xl bg-[#202124] border border-[#B0B4B8]/40 text-[#DCE8E1] hover:border-[#174D3A] flex flex-col items-center justify-center gap-1 font-mono text-[11px] font-bold active:scale-95 shadow-sm"
             >
               <Square className="w-6 h-6 fill-current" />
               <span>STOP</span>
@@ -151,8 +151,8 @@ export const ControlScreen: React.FC<ControlScreenProps> = ({
               onPointerLeave={stopMove}
               className={`w-20 h-20 rounded-xl border flex items-center justify-center text-xl transition-all active:scale-95 shadow-sm ${
                 activeDirection === 'right'
-                  ? 'bg-[#D49A36] text-[#202124] border-[#D49A36]'
-                  : 'bg-[#FFFFFF] border-[#B0B4B8]/60 text-[#30343B] hover:border-[#D49A36]'
+                  ? 'bg-[#174D3A] text-white border-[#174D3A]'
+                : 'bg-[#FFFFFF] border-[#B0B4B8]/60 text-[#30343B] hover:border-[#174D3A]'
               }`}
             >
               <ArrowRight className="w-8 h-8" />
@@ -166,8 +166,8 @@ export const ControlScreen: React.FC<ControlScreenProps> = ({
             onPointerLeave={stopMove}
             className={`w-20 h-20 rounded-xl border flex items-center justify-center text-xl transition-all active:scale-95 shadow-sm ${
               activeDirection === 'backward'
-                ? 'bg-[#D49A36] text-[#202124] border-[#D49A36]'
-                : 'bg-[#FFFFFF] border-[#B0B4B8]/60 text-[#30343B] hover:border-[#D49A36]'
+                ? 'bg-[#174D3A] text-white border-[#174D3A]'
+                : 'bg-[#FFFFFF] border-[#B0B4B8]/60 text-[#30343B] hover:border-[#174D3A]'
             }`}
           >
             <ArrowDown className="w-8 h-8" />
@@ -186,8 +186,8 @@ export const ControlScreen: React.FC<ControlScreenProps> = ({
                   onClick={() => setSpeedLevel(lvl)}
                   className={`py-2 rounded-lg border font-bold capitalize transition-all text-xs ${
                     speedLevel === lvl
-                      ? 'bg-[#D49A36] border-[#D49A36] text-[#202124]'
-                      : 'border-[#B0B4B8]/40 bg-[#F2F2EF] text-[#30343B] hover:bg-[#E5E5E0]'
+                      ? 'bg-[#174D3A] border-[#174D3A] text-white'
+                      : 'border-[#B0B4B8]/40 bg-[#FFFFFF] text-[#30343B] hover:bg-[#DCE8E1]/30'
                   }`}
                 >
                   {lvl}
@@ -202,7 +202,7 @@ export const ControlScreen: React.FC<ControlScreenProps> = ({
           {/* Safety Watchdog Notice: Crisp White Card */}
           <div className="p-3.5 rounded-xl bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 text-[11px] space-y-1 shadow-sm">
             <div className="flex items-center gap-1.5 text-[#30343B] font-semibold">
-              <ShieldAlert className="w-4 h-4 text-[#D49A36]" />
+              <ShieldAlert className="w-4 h-4 text-[#174D3A]" />
               <span>Mandatory Safety Layers</span>
             </div>
             <p className="text-[#5F666D]">

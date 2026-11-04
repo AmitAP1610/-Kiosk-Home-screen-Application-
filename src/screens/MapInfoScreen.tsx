@@ -2,20 +2,14 @@ import React, { useState } from 'react';
 import { AppScreen } from '../types/robot';
 import {
   ArrowLeft,
-  Sparkles,
   Volume2,
-  Clock,
   Compass,
+  Clock,
+  Phone,
   Search,
-  CheckCircle2,
-  Phone
+  Sparkles,
+  CheckCircle2
 } from 'lucide-react';
-
-interface MapInfoScreenProps {
-  onNavigate: (screen: AppScreen) => void;
-  onSpeakText?: (text: string) => void;
-  isSpeaking?: boolean;
-}
 
 export interface CampusLandmark {
   id: string;
@@ -178,6 +172,12 @@ export const CAMPUS_LANDMARKS: CampusLandmark[] = [
   }
 ];
 
+interface MapInfoScreenProps {
+  onNavigate: (screen: AppScreen) => void;
+  onSpeakText?: (text: string) => void;
+  isSpeaking?: boolean;
+}
+
 export const MapInfoScreen: React.FC<MapInfoScreenProps> = ({
   onNavigate,
   onSpeakText,
@@ -197,20 +197,22 @@ export const MapInfoScreen: React.FC<MapInfoScreenProps> = ({
     { id: 'residential', label: 'Hostels' }
   ];
 
-  const filteredLandmarks = CAMPUS_LANDMARKS.filter((item) => {
+  const filteredLandmarks = CAMPUS_LANDMARKS.filter((item: CampusLandmark) => {
     const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
     const matchesSearch =
       searchQuery === '' ||
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.location.toLowerCase().includes(searchQuery.toLowerCase());
+      item.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchQuery.toLowerCase());
 
     return matchesCategory && matchesSearch;
   });
 
   const handleSpeakLandmark = (item: CampusLandmark) => {
     if (onSpeakText) {
-      onSpeakText(`${item.speechText} Key highlights include: ${item.highlights.join('. ')}. Visiting hours are: ${item.timing}.`);
+      onSpeakText(
+        `Welcome to ${item.name}, located at ${item.location}. Operating hours: ${item.timing}. ${item.description}. Key features include: ${item.highlights.join(', ')}.`
+      );
     }
   };
 
@@ -223,9 +225,9 @@ export const MapInfoScreen: React.FC<MapInfoScreenProps> = ({
   };
 
   return (
-    <div className="w-full h-full bg-[#F2F2EF] text-[#30343B] flex flex-col p-3 sm:p-5 md:p-6 font-sans select-none overflow-hidden relative">
-      {/* HEADER: Charcoal Structural Container (30% palette) */}
-      <header className="relative z-10 flex items-center justify-between bg-[#30343B] text-white px-4 sm:px-6 py-3 rounded-xl border border-[#B0B4B8]/30 shadow-subtle mb-3">
+    <div className="w-full h-full bg-[#FFFFFF] text-[#30343B] flex flex-col p-3 sm:p-5 md:p-6 font-sans select-none overflow-hidden relative">
+      {/* HEADER: Charcoal Structural Container */}
+      <header className="relative z-10 flex items-center justify-between bg-[#30343B] text-white px-4 sm:px-6 py-3 rounded-xl border border-[#B0B4B8]/30 shadow-sm mb-3">
         {/* Back Button */}
         <button
           onClick={() => {
@@ -234,7 +236,7 @@ export const MapInfoScreen: React.FC<MapInfoScreenProps> = ({
           }}
           className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#202124] hover:bg-[#17191C] border border-[#B0B4B8]/40 text-white transition-all shadow-sm active:scale-98 text-xs sm:text-sm font-bold"
         >
-          <ArrowLeft className="w-4 h-4 text-[#D49A36]" />
+          <ArrowLeft className="w-4 h-4 text-[#DCE8E1]" />
           <span>Back to Hub</span>
         </button>
 
@@ -244,7 +246,7 @@ export const MapInfoScreen: React.FC<MapInfoScreenProps> = ({
             <span className="text-sm sm:text-lg md:text-xl font-extrabold text-white tracking-wide">
               CAMPUS HIGHLIGHTS & FACILITIES
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#D49A36] text-[#202124] font-bold uppercase">
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#174D3A] text-white font-bold uppercase tracking-wider">
               EXPLORE SSU
             </span>
           </div>
@@ -258,18 +260,18 @@ export const MapInfoScreen: React.FC<MapInfoScreenProps> = ({
           onClick={handleSpeakOverview}
           className={`flex items-center gap-2 px-3.5 py-2 rounded-lg border transition-all text-xs sm:text-sm font-bold shadow-sm ${
             isSpeaking
-              ? 'bg-[#D49A36] border-white text-[#202124]'
+              ? 'bg-[#174D3A] border-[#174D3A] text-white'
               : 'bg-[#202124] border-[#B0B4B8]/40 text-white hover:bg-[#1A1B1D]'
           }`}
           title="Listen to Campus Highlights Audio Tour"
         >
-          <Volume2 className="w-4 h-4 text-[#D49A36]" />
+          <Volume2 className="w-4 h-4 text-[#DCE8E1]" />
           <span className="hidden sm:inline">Audio Tour</span>
         </button>
       </header>
 
       {/* FILTER & SEARCH BAR: White Card Panel */}
-      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-2.5 mb-3 bg-[#FFFFFF] text-[#30343B] p-2.5 rounded-xl border border-[#B0B4B8]/60 shadow-subtle">
+      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-2.5 mb-3 bg-[#FFFFFF] text-[#30343B] p-2.5 rounded-xl border border-[#B0B4B8]/60 shadow-sm">
         {/* Category Pills */}
         <div className="flex items-center gap-1.5 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
           {categories.map((cat) => (
@@ -281,8 +283,8 @@ export const MapInfoScreen: React.FC<MapInfoScreenProps> = ({
               }}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
                 selectedCategory === cat.id
-                  ? 'bg-[#D49A36] text-[#202124] shadow-sm'
-                  : 'bg-[#F2F2EF] text-[#30343B] hover:bg-[#E5E5E0] border border-[#B0B4B8]/40'
+                  ? 'bg-[#174D3A] text-white shadow-sm'
+                  : 'bg-[#FFFFFF] text-[#30343B] hover:bg-[#DCE8E1]/30 border border-[#B0B4B8]/50'
               }`}
             >
               {cat.label}
@@ -291,8 +293,8 @@ export const MapInfoScreen: React.FC<MapInfoScreenProps> = ({
         </div>
 
         {/* Search Input */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#F2F2EF] border border-[#B0B4B8]/50 text-xs w-full md:w-60">
-          <Search className="w-3.5 h-3.5 text-[#D49A36]" />
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#FFFFFF] border border-[#B0B4B8]/60 text-xs w-full md:w-60 shadow-sm">
+          <Search className="w-3.5 h-3.5 text-[#174D3A]" />
           <input
             type="text"
             placeholder="Search building or facility..."
@@ -307,16 +309,16 @@ export const MapInfoScreen: React.FC<MapInfoScreenProps> = ({
       <div className="relative z-10 flex-1 min-h-0 overflow-y-auto pr-1">
         {filteredLandmarks.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center p-8 text-center text-[#5F666D]">
-            <Compass className="w-12 h-12 text-[#D49A36] mb-2" />
+            <Compass className="w-12 h-12 text-[#174D3A] mb-2" />
             <h3 className="text-base font-bold text-[#30343B] mb-1">No facilities match your search</h3>
             <p className="text-xs text-[#5F666D]">Try choosing a different category or clearing the search box.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-5">
-            {filteredLandmarks.map((item) => (
+            {filteredLandmarks.map((item: CampusLandmark) => (
               <div
                 key={item.id}
-                className="rounded-xl border border-[#B0B4B8]/60 hover:border-[#D49A36] bg-[#FFFFFF] text-[#30343B] overflow-hidden transition-all flex flex-col justify-between shadow-card"
+                className="rounded-xl border border-[#B0B4B8]/60 hover:border-[#174D3A] bg-[#FFFFFF] text-[#30343B] overflow-hidden transition-all flex flex-col justify-between shadow-card"
               >
                 {/* Image Banner */}
                 <div className="relative h-40 sm:h-44 w-full overflow-hidden">
@@ -328,14 +330,14 @@ export const MapInfoScreen: React.FC<MapInfoScreenProps> = ({
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
 
-                  {/* Category Pill */}
+                  {/* Category Pill (Forest Green #174D3A) */}
                   <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between">
-                    <span className="text-[10px] font-mono px-2.5 py-0.5 rounded bg-[#D49A36] text-[#202124] font-bold uppercase tracking-wider shadow-sm">
+                    <span className="text-[10px] font-mono px-2.5 py-0.5 rounded bg-[#174D3A] text-white font-bold uppercase tracking-wider shadow-sm">
                       {item.categoryLabel}
                     </span>
 
                     <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#202124]/90 text-white border border-[#B0B4B8]/30 font-medium flex items-center gap-1">
-                      <Compass className="w-3 h-3 text-[#D49A36]" />
+                      <Compass className="w-3 h-3 text-[#DCE8E1]" />
                       <span>{item.location}</span>
                     </span>
                   </div>
@@ -343,7 +345,7 @@ export const MapInfoScreen: React.FC<MapInfoScreenProps> = ({
                   {/* Timing Pill */}
                   <div className="absolute bottom-2 left-2.5 right-2.5 flex items-center justify-between text-[11px] font-mono text-white">
                     <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#202124]/90 border border-[#B0B4B8]/30">
-                      <Clock className="w-3 h-3 text-[#D49A36]" />
+                      <Clock className="w-3 h-3 text-[#DCE8E1]" />
                       <span className="font-semibold text-white">{item.timing}</span>
                     </div>
                   </div>
@@ -356,20 +358,20 @@ export const MapInfoScreen: React.FC<MapInfoScreenProps> = ({
                       {item.name}
                     </h3>
 
-                    <p className="text-xs text-[#5F666D] leading-relaxed bg-[#F2F2EF] p-2.5 rounded-lg border border-[#B0B4B8]/30">
+                    <p className="text-xs text-[#5F666D] leading-relaxed bg-[#DCE8E1]/20 p-2.5 rounded-lg border border-[#B0B4B8]/40">
                       {item.description}
                     </p>
 
                     {/* Highlights List */}
                     <div className="space-y-1">
                       <span className="text-[10px] font-mono text-[#30343B] font-bold uppercase tracking-wider flex items-center gap-1">
-                        <Sparkles className="w-3 h-3 text-[#D49A36]" />
+                        <Sparkles className="w-3 h-3 text-[#174D3A]" />
                         <span>Key Facilities & Highlights:</span>
                       </span>
                       <div className="space-y-0.5">
-                        {item.highlights.map((h, i) => (
+                        {item.highlights.map((h: string, i: number) => (
                           <div key={i} className="flex items-start gap-1.5 text-xs text-[#5F666D]">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-[#D49A36] flex-shrink-0 mt-0.5" />
+                            <CheckCircle2 className="w-3.5 h-3.5 text-[#174D3A] flex-shrink-0 mt-0.5" />
                             <span>{h}</span>
                           </div>
                         ))}
@@ -377,20 +379,20 @@ export const MapInfoScreen: React.FC<MapInfoScreenProps> = ({
                     </div>
 
                     {item.contactInfo && (
-                      <div className="p-2 rounded-lg bg-[#F2F2EF] border border-[#B0B4B8]/30 flex items-center gap-1.5 text-[11px] font-mono text-[#5F666D]">
-                        <Phone className="w-3 h-3 text-[#D49A36] flex-shrink-0" />
+                      <div className="p-2 rounded-lg bg-[#DCE8E1]/20 border border-[#B0B4B8]/40 flex items-center gap-1.5 text-[11px] font-mono text-[#5F666D]">
+                        <Phone className="w-3 h-3 text-[#174D3A] flex-shrink-0" />
                         <span className="truncate">{item.contactInfo}</span>
                       </div>
                     )}
                   </div>
 
-                  {/* Action Button: Speak Facility Guide */}
+                  {/* Action Button: Speak Facility Guide (Forest Green) */}
                   <div className="pt-2 border-t border-[#B0B4B8]/30 mt-2">
                     <button
                       onClick={() => handleSpeakLandmark(item)}
-                      className="w-full py-2.5 px-3 rounded-lg bg-[#30343B] hover:bg-[#202124] text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all active:scale-98 shadow-sm"
+                      className="w-full py-2.5 px-3 rounded-lg bg-[#174D3A] hover:bg-[#134232] text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all active:scale-98 shadow-sm"
                     >
-                      <Volume2 className="w-3.5 h-3.5 text-[#D49A36]" />
+                      <Volume2 className="w-3.5 h-3.5 text-[#DCE8E1]" />
                       <span>Hear Facility Audio Tour</span>
                     </button>
                   </div>
