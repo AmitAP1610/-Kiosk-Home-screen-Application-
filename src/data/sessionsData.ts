@@ -41,7 +41,7 @@ export const CAMPUS_SESSIONS: CampusSession[] = [
     status: 'LIVE NOW',
     seatsAvailable: 15,
     tags: ['Robotics', 'Jetson', 'Nav2', 'Edge AI'],
-    image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80',
+    image: '/images/gallery/university-events-ice-day.jpg',
     highlights: [
       'Live 2D LiDAR SLAM & obstacle avoidance demo',
       'Architecture breakdown of the Kiosk robot',
@@ -65,7 +65,7 @@ export const CAMPUS_SESSIONS: CampusSession[] = [
     status: 'UPCOMING',
     seatsAvailable: 80,
     tags: ['Meditation', 'Pranayama', 'Wellness', 'Sattvic'],
-    image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80',
+    image: '/images/gallery/amphitheatre-g3.jpg',
     highlights: [
       'Pranayama rhythmic breathing techniques',
       'Effortless 20-minute guided Sahaj meditation',
@@ -89,7 +89,7 @@ export const CAMPUS_SESSIONS: CampusSession[] = [
     status: 'UPCOMING',
     seatsAvailable: 45,
     tags: ['Ayurveda', 'Healthcare', 'Medicine', 'Wellness'],
-    image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80',
+    image: '/images/gallery/academic-architecture.jpg',
     highlights: [
       'Overview of 100+ bed hospital facilities & 24/7 casualty',
       'Evidence-based Panchakarma case studies',
@@ -113,7 +113,7 @@ export const CAMPUS_SESSIONS: CampusSession[] = [
     status: 'UPCOMING',
     seatsAvailable: 30,
     tags: ['Robotics Club', 'Autonomous AI', 'ROS 2', 'Demo'],
-    image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
+    image: '/images/gallery/laboratory-practical-3.jpg',
     highlights: [
       'Interactive control and sensor test of Kiosk',
       'Hands-on showcase of autonomous wheeled rovers',
@@ -137,7 +137,7 @@ export const CAMPUS_SESSIONS: CampusSession[] = [
     status: 'UPCOMING',
     seatsAvailable: 25,
     tags: ['Hands-on', 'Arduino', 'Sensors', 'Workshop'],
-    image: 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?auto=format&fit=crop&w=800&q=80',
+    image: '/images/gallery/classroom-lab-session-1.jpg',
     highlights: [
       'Wiring distance sensors to Arduino microcontrollers',
       'Streaming serial packets to ROS 2 nodes',
@@ -163,7 +163,7 @@ export const CAMPUS_SESSIONS: CampusSession[] = [
     status: 'UPCOMING',
     seatsAvailable: 60,
     tags: ['Yoga', 'Sunrise', 'Wellness', 'Pranayama'],
-    image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80',
+    image: '/images/gallery/campus-green-vista-g5.jpg',
     highlights: [
       '12 cycles of classical Surya Namaskar at dawn',
       'Breathwork overlooking Mahanadi river hills',
@@ -187,7 +187,7 @@ export const CAMPUS_SESSIONS: CampusSession[] = [
     status: 'UPCOMING',
     seatsAvailable: 50,
     tags: ['Campus Tour', 'Eco-friendly', 'Biodiversity'],
-    image: 'https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=800&q=80',
+    image: '/images/gallery/campus-greenery-lawns.jpg',
     highlights: [
       'Guided walk across 188-acre green hilltop campus',
       'Visit to organic orchards & native Gaushala',
@@ -211,7 +211,7 @@ export const CAMPUS_SESSIONS: CampusSession[] = [
     status: 'UPCOMING',
     seatsAvailable: 40,
     tags: ['Smart Agriculture', 'Drones', 'IoT', 'Organic'],
-    image: 'https://images.unsplash.com/photo-1527977966376-1c8408f9f108?auto=format&fit=crop&w=800&q=80',
+    image: '/images/gallery/campus-landscape-g1.jpg',
     highlights: [
       'Live autonomous quadcopter flight over organic crops',
       'Real-time NDVI vegetation index heatmaps',
@@ -235,7 +235,7 @@ export const CAMPUS_SESSIONS: CampusSession[] = [
     status: 'UPCOMING',
     seatsAvailable: 75,
     tags: ['AI Future', 'Autonomous Driving', 'Neural Networks'],
-    image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80',
+    image: '/images/gallery/classroom-lab-session-2.jpg',
     highlights: [
       'Vision-Language-Action (VLA) foundation models',
       'Zero-shot robotics path planning and obstacle safety',
@@ -259,7 +259,7 @@ export const CAMPUS_SESSIONS: CampusSession[] = [
     status: 'UPCOMING',
     seatsAvailable: 200,
     tags: ['Orion', 'Culture', 'Music', 'Odissi Dance'],
-    image: 'https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=800&q=80',
+    image: '/images/gallery/university-gathering-event.jpg',
     highlights: [
       'Classical Odissi dance showcase under the open sky',
       'Live fusion musical performance by student bands',
@@ -285,7 +285,7 @@ export const CAMPUS_SESSIONS: CampusSession[] = [
     status: 'UPCOMING',
     seatsAvailable: 300,
     tags: ['Championship', 'National Event', 'Robotics Club'],
-    image: 'https://images.unsplash.com/photo-1563206767-5b18f218e8de?auto=format&fit=crop&w=800&q=80',
+    image: '/images/gallery/sports-ground-facilities.jpg',
     highlights: [
       '50+ national collegiate robotics teams competing',
       'Rover obstacle course & high-speed autonomous races',
@@ -309,7 +309,7 @@ export const CAMPUS_SESSIONS: CampusSession[] = [
     status: 'UPCOMING',
     seatsAvailable: 35,
     tags: ['Iconic Tower', 'Infrastructure', 'Flagship'],
-    image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80',
+    image: '/images/gallery/academic-architecture.jpg',
     highlights: [
       'Architectural 3D fly-through of the Iconic Tower',
       'High-performance computing & VR research lab spaces',

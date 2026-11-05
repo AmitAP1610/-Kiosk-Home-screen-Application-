@@ -163,3 +163,4 @@ export const SSU_GALLERY_PHOTOS: GalleryPhoto[] = [
     alt: 'Sri Sri University student cultural celebration'
   }
 ];
+

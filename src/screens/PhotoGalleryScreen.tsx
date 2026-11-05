@@ -14,16 +14,19 @@ import {
   Pause,
   Grid,
   X,
-  SlidersHorizontal
+  SlidersHorizontal,
+  Menu
 } from 'lucide-react';
 
 interface PhotoGalleryScreenProps {
   onNavigate: (screen: AppScreen) => void;
+  onOpenMenu?: () => void;
   onSpeakText?: (text: string) => void;
 }
 
 export const PhotoGalleryScreen: React.FC<PhotoGalleryScreenProps> = ({
   onNavigate,
+  onOpenMenu,
   onSpeakText
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<GalleryCategory>('all');
@@ -141,25 +144,38 @@ export const PhotoGalleryScreen: React.FC<PhotoGalleryScreenProps> = ({
       {/* 1. TOP HEADER: Navy Blue Bar (#263746)                   */}
       {/* ======================================================== */}
       <header className="relative z-20 flex items-center justify-between bg-[#263746] text-white px-3 sm:px-5 py-2.5 rounded-xl border border-[#E9EDF2]/20 shadow-sm shrink-0">
-        {/* Back Button to Campus Hub */}
-        <button
-          onClick={() => {
-            if (onSpeakText) onSpeakText("Returning to Campus Hub.");
-            onNavigate('hub');
-          }}
-          className="group flex items-center gap-2 px-3 sm:px-3.5 py-2 min-h-[44px] rounded-lg bg-[#30343B] hover:bg-[#202124] border border-white/10 text-white transition-all shadow-sm active:scale-98"
-          title="Return to Campus Hub"
-        >
-          <ArrowLeft className="w-4 h-4 text-[#C49A45]" />
-          <div className="text-left">
-            <span className="text-[10px] font-mono text-[#E9EDF2]/70 block uppercase tracking-wider">
-              Hub
-            </span>
-            <span className="text-xs sm:text-sm font-semibold text-white">
-              Campus Hub
-            </span>
-          </div>
-        </button>
+        {/* Left: Back Button & Menu Button */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => {
+              if (onSpeakText) onSpeakText("Returning to Campus Hub.");
+              onNavigate('hub');
+            }}
+            className="group flex items-center gap-2 px-3 sm:px-3.5 py-2 min-h-[44px] rounded-lg bg-[#30343B] hover:bg-[#202124] border border-white/10 text-white transition-all shadow-sm active:scale-98"
+            title="Return to Campus Hub"
+          >
+            <ArrowLeft className="w-4 h-4 text-[#C49A45]" />
+            <div className="text-left">
+              <span className="text-[10px] font-mono text-[#E9EDF2]/70 block uppercase tracking-wider">
+                Hub
+              </span>
+              <span className="text-xs sm:text-sm font-semibold text-white">
+                Campus Hub
+              </span>
+            </div>
+          </button>
+
+          {onOpenMenu && (
+            <button
+              onClick={onOpenMenu}
+              className="flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg bg-[#30343B] hover:bg-[#202124] border border-white/10 text-white transition-all shadow-sm active:scale-98"
+              title="Open Complete Navigation Menu"
+            >
+              <Menu className="w-4 h-4 text-[#C49A45]" />
+              <span className="text-xs font-semibold hidden md:inline">Menu</span>
+            </button>
+          )}
+        </div>
 
         {/* Center Title */}
         <div className="flex items-center gap-2 sm:gap-3 text-center">

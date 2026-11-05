@@ -52,6 +52,18 @@ export const CampusFacilitiesScreen: React.FC<CampusFacilitiesScreenProps> = ({
     }
   };
 
+  const getFacilityImage = (cat: string) => {
+    switch (cat) {
+      case 'academic': return '/images/gallery/central-library.jpg';
+      case 'residential': return '/images/gallery/hostels-residence.jpg';
+      case 'lifestyle': return '/images/gallery/cafeteria-vishwa-foods.jpg';
+      case 'sports': return '/images/gallery/sports-ground-facilities.jpg';
+      case 'healthcare': return '/images/gallery/university-infrastructure-g6.jpg';
+      case 'innovation': return '/images/gallery/laboratory-practical-3.jpg';
+      default: return '/images/gallery/campus-aerial-overview.jpg';
+    }
+  };
+
   return (
     <div className="w-full h-full bg-[#E9EDF2] text-[#30343B] flex flex-col p-4 sm:p-5 md:p-6 font-sans select-none overflow-y-auto">
       {/* Top Header: Navy Blue Structural Bar (#263746) */}
@@ -144,6 +156,20 @@ export const CampusFacilitiesScreen: React.FC<CampusFacilitiesScreenProps> = ({
 
         {/* Right Detail Pane: White Card */}
         <div className="md:col-span-2 p-5 sm:p-6 rounded-xl bg-white text-[#30343B] border border-[#E9EDF2] shadow-sm space-y-4">
+          {/* Authentic Campus Photograph Banner */}
+          <div className="w-full h-36 sm:h-44 rounded-lg overflow-hidden relative border border-[#D8DFE8]">
+            <img
+              src={getFacilityImage(activeFacility.category)}
+              alt={activeFacility.name}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex items-end p-3">
+              <span className="text-white text-xs font-mono font-semibold bg-black/60 px-2.5 py-1 rounded backdrop-blur-sm border border-white/20">
+                SSU Infrastructure • {activeFacility.category.toUpperCase()}
+              </span>
+            </div>
+          </div>
+
           <div className="flex items-start justify-between">
             <div>
               <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-[#263746] text-white font-semibold uppercase tracking-wider inline-block mb-1.5">

@@ -193,6 +193,25 @@ export const RoboInfoScreen: React.FC<RoboInfoScreenProps> = ({
             </div>
           </div>
 
+          {/* Authentic Campus Maker Space Photo Banner */}
+          <div className="relative w-full h-36 sm:h-44 rounded-xl overflow-hidden border border-[#D8DFE8] shadow-sm">
+            <img
+              src="/images/gallery/laboratory-practical-3.jpg"
+              alt="Robotics Club Laboratory & Maker Space"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex items-end p-4">
+              <div>
+                <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-[#C49A45] text-white font-bold uppercase tracking-wider inline-block mb-1">
+                  Research & Prototyping Lab
+                </span>
+                <h3 className="text-white text-base sm:text-lg font-bold">
+                  SSU Robotics Club Innovation & Prototyping Facility
+                </h3>
+              </div>
+            </div>
+          </div>
+
           {/* Club Pillars & What We Build: White Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
             <div

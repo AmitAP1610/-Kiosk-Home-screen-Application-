@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { AppScreen, FaceExpression, FaceConfig, HardwareMessage, SystemStatus } from './types/robot';
 import { DEFAULT_CONFIG } from './utils/expressionPresets';
 import { TopBar } from './components/navigation/TopBar';
+import { NavigationBar } from './components/navigation/NavigationBar';
 import { SettingsModal } from './components/SettingsModal';
 import { HardwareBridgeModal } from './components/HardwareBridgeModal';
 
@@ -32,6 +33,7 @@ import { useHardwareBridge } from './hooks/useHardwareBridge';
 export const App: React.FC = () => {
   // Navigation Screen State
   const [currentScreen, setCurrentScreen] = useState<AppScreen>('face');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Configuration with local storage cache
   const [config, setConfig] = useState<FaceConfig>(() => {
@@ -175,7 +177,7 @@ export const App: React.FC = () => {
       <TopBar
         currentScreen={currentScreen}
         onSelectScreen={setCurrentScreen}
-        onOpenMenu={() => {}}
+        onOpenMenu={() => setIsMenuOpen(true)}
         systemStatus={systemStatus}
         isFullscreen={isFullscreen}
         onToggleFullscreen={toggleFullscreen}
@@ -202,6 +204,7 @@ export const App: React.FC = () => {
           <HubScreen
             onNavigate={(scr) => setCurrentScreen(scr)}
             onOpenVoiceAssistant={() => setCurrentScreen('assistant')}
+            onOpenMenu={() => setIsMenuOpen(true)}
             onSpeakGreeting={(text) => speakDirect(text)}
             isSpeaking={isSpeaking}
           />
@@ -210,6 +213,7 @@ export const App: React.FC = () => {
         {currentScreen === 'gallery' && (
           <PhotoGalleryScreen
             onNavigate={(scr) => setCurrentScreen(scr)}
+            onOpenMenu={() => setIsMenuOpen(true)}
             onSpeakText={(text) => speakDirect(text)}
           />
         )}
@@ -350,6 +354,18 @@ export const App: React.FC = () => {
           />
         )}
       </main>
+
+      {/* Complete Application Navigation Drawer */}
+      <NavigationBar
+        currentScreen={currentScreen}
+        onSelectScreen={(screen) => {
+          setCurrentScreen(screen);
+          setIsMenuOpen(false);
+        }}
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+        systemStatus={systemStatus}
+      />
 
       {/* Face Customization Modal */}
       <SettingsModal

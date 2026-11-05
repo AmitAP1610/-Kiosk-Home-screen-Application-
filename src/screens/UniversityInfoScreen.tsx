@@ -96,6 +96,25 @@ export const UniversityInfoScreen: React.FC<UniversityInfoScreenProps> = ({
       {/* Tab 1: Overview */}
       {activeTab === 'overview' && (
         <div className="space-y-4">
+          {/* Authentic Campus Overview Banner */}
+          <div className="relative w-full h-40 sm:h-48 rounded-xl overflow-hidden border border-[#D8DFE8] shadow-sm">
+            <img
+              src="/images/gallery/academic-architecture.jpg"
+              alt="Sri Sri University Campus Architecture"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex items-end p-4 sm:p-5">
+              <div>
+                <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-[#C49A45] text-white font-bold uppercase tracking-wider inline-block mb-1">
+                  188-Acre Hilltop Campus
+                </span>
+                <h3 className="text-white text-base sm:text-lg font-bold">
+                  Sri Sri University • Cuttack, Odisha
+                </h3>
+              </div>
+            </div>
+          </div>
+
           <div className="p-5 sm:p-6 rounded-xl bg-white text-[#30343B] border border-[#E9EDF2] shadow-sm">
             <h2 className="text-[20px] font-semibold text-[#30343B] flex items-center gap-2 mb-2.5">
               <Sparkles className="w-4 h-4 text-[#C49A45]" />
@@ -230,6 +249,25 @@ export const UniversityInfoScreen: React.FC<UniversityInfoScreenProps> = ({
       {/* Tab 3: Vision & Mission */}
       {activeTab === 'vision' && (
         <div className="space-y-4">
+          {/* Authentic Campus Greenery Banner */}
+          <div className="relative w-full h-36 sm:h-44 rounded-xl overflow-hidden border border-[#D8DFE8] shadow-sm">
+            <img
+              src="/images/gallery/campus-greenery-lawns.jpg"
+              alt="Sri Sri University Green Lawns"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex items-end p-4">
+              <div>
+                <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-[#C49A45] text-white font-bold uppercase tracking-wider inline-block mb-1">
+                  Guiding Philosophy
+                </span>
+                <h3 className="text-white text-base sm:text-lg font-bold">
+                  Holistic Higher Education & Value-Based Leadership
+                </h3>
+              </div>
+            </div>
+          </div>
+
           <div className="p-5 sm:p-6 rounded-xl bg-white text-[#30343B] border border-[#E9EDF2] shadow-sm">
             <div className="inline-block px-2.5 py-0.5 rounded bg-[#263746] text-white text-xs font-semibold uppercase tracking-wider mb-2.5">
               Institutional Vision

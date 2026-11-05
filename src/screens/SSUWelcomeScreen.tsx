@@ -97,9 +97,15 @@ export const SSUWelcomeScreen: React.FC<SSUWelcomeScreenProps> = ({
         </span>
       </div>
 
-      {/* Top University Branding Banner: Navy Blue #263746 */}
-      <div className="rounded-xl bg-[#263746] text-white border border-white/10 p-6 shadow-sm mb-6">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+      {/* Top University Branding Banner: Authentic Campus Photo + Dark Overlay */}
+      <div className="relative rounded-xl overflow-hidden text-white border border-white/10 p-6 shadow-sm mb-6">
+        <img
+          src="/images/gallery/academic-shruti-complex.jpg"
+          alt="Sri Sri University Campus"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#17191C]/95 via-[#263746]/90 to-[#17191C]/92" />
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
             {/* Official University Logo */}
             <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-lg bg-white p-2.5 shadow-sm flex items-center justify-center flex-shrink-0 border border-[#E9EDF2]">

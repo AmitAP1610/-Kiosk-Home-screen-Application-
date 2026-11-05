@@ -45,6 +45,36 @@ export const TopBar: React.FC<TopBarProps> = ({
     }
   };
 
+  const getScreenCategory = (s: AppScreen): string => {
+    switch (s) {
+      case 'welcome':
+      case 'hub':
+      case 'gallery':
+        return 'HOME';
+      case 'university-info':
+      case 'map-info':
+      case 'facilities':
+      case 'sessions-agenda':
+      case 'robo-info':
+        return 'UNIVERSITY';
+      case 'navigation':
+        return 'CAMPUS';
+      case 'face':
+      case 'camera':
+      case 'control':
+      case 'mapping':
+      case 'monitor':
+        return 'ROBOT';
+      case 'assistant':
+      case 'diagnostics':
+        return 'ASSISTANT';
+      case 'settings':
+        return 'SETTINGS';
+      default:
+        return 'KIOSK';
+    }
+  };
+
   return (
     <header className="absolute top-0 left-0 right-0 h-11 z-30 flex items-center justify-between px-3 md:px-5 bg-[#263746] text-white border-b border-white/10 pointer-events-auto select-none font-mono text-xs shadow-sm">
       {/* Left: Menu & Screen Title */}
@@ -81,10 +111,10 @@ export const TopBar: React.FC<TopBarProps> = ({
         )}
 
         <div className="hidden lg:flex items-center gap-2 pl-2 border-l border-white/10">
-          <span className="font-bold text-white tracking-wide text-xs">{getScreenName(currentScreen)}</span>
           <span className="text-[10px] px-2 py-0.5 rounded bg-[#C49A45] text-white font-bold uppercase tracking-wider">
-            SSU ROBOTICS
+            {getScreenCategory(currentScreen)}
           </span>
+          <span className="font-bold text-white tracking-wide text-xs">{getScreenName(currentScreen)}</span>
         </div>
       </div>
 
