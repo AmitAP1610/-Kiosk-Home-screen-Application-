@@ -27,6 +27,7 @@ export const TopBar: React.FC<TopBarProps> = ({
     switch (s) {
       case 'face': return 'Robot Face';
       case 'hub': return 'Campus Robot Hub';
+      case 'gallery': return 'Explore Our Campus Gallery';
       case 'map-info': return 'Campus Highlights & Facilities';
       case 'sessions-agenda': return 'Sessions & Agenda';
       case 'robo-info': return 'Robot Information';

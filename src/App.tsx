@@ -8,6 +8,7 @@ import { HardwareBridgeModal } from './components/HardwareBridgeModal';
 // Screens
 import { FaceScreen } from './screens/FaceScreen';
 import { HubScreen } from './screens/HubScreen';
+import { PhotoGalleryScreen } from './screens/PhotoGalleryScreen';
 import { MapInfoScreen } from './screens/MapInfoScreen';
 import { SessionsAgendaScreen } from './screens/SessionsAgendaScreen';
 import { RoboInfoScreen } from './screens/RoboInfoScreen';
@@ -157,10 +158,11 @@ export const App: React.FC = () => {
     setExpression('idle');
   };
 
-  // On custom tablet flow screens (Face, Hub, Map, Sessions, Robo-info), keep clean immersion
+  // On custom tablet flow screens (Face, Hub, Gallery, Map, Sessions, Robo-info), keep clean immersion
   const isCustomTabletScreen =
     currentScreen === 'face' ||
     currentScreen === 'hub' ||
+    currentScreen === 'gallery' ||
     currentScreen === 'map-info' ||
     currentScreen === 'sessions-agenda' ||
     currentScreen === 'robo-info';
@@ -202,6 +204,13 @@ export const App: React.FC = () => {
             onOpenVoiceAssistant={() => setCurrentScreen('assistant')}
             onSpeakGreeting={(text) => speakDirect(text)}
             isSpeaking={isSpeaking}
+          />
+        )}
+
+        {currentScreen === 'gallery' && (
+          <PhotoGalleryScreen
+            onNavigate={(scr) => setCurrentScreen(scr)}
+            onSpeakText={(text) => speakDirect(text)}
           />
         )}
 

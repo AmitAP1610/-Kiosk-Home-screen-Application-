@@ -17,7 +17,8 @@ import {
   ExternalLink,
   LayoutGrid,
   Bot,
-  Calendar
+  Calendar,
+  Images
 } from 'lucide-react';
 
 interface NavigationBarProps {
@@ -58,6 +59,14 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
       icon: LayoutGrid,
       category: 'SSU Campus',
       badge: 'Screen 2'
+    },
+    {
+      id: 'gallery',
+      title: 'Explore Our Campus (Photo Gallery)',
+      description: 'Full-screen authentic Sri Sri University photography',
+      icon: Images,
+      category: 'SSU Campus',
+      badge: 'Gallery'
     },
     {
       id: 'robo-info',

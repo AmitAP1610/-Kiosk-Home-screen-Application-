@@ -11,7 +11,8 @@ import {
   Battery,
   Volume2,
   Settings,
-  ArrowRight
+  ArrowRight,
+  Images
 } from 'lucide-react';
 
 interface HubScreenProps {
@@ -125,18 +126,69 @@ export const HubScreen: React.FC<HubScreenProps> = ({
       {/* MAIN BODY: The 3 Expansive Navigation Modules */}
       <main className="relative z-10 flex-1 w-full flex flex-col justify-center py-2 sm:py-3">
         {/* Minimal Headline with Exact Typography Rules */}
-        <div className="text-center space-y-1 mb-2 sm:mb-3">
-          <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-white text-[#263746] text-[13px] font-medium border border-[#E9EDF2] shadow-sm">
+        <div className="text-center space-y-0.5 mb-2 sm:mb-2.5 shrink-0">
+          <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-white text-[#263746] text-[12px] sm:text-[13px] font-medium border border-[#E9EDF2] shadow-sm">
             <Sparkles className="w-3.5 h-3.5 text-[#C49A45]" />
             <span>Interactive Campus Assistance</span>
           </div>
-          <h1 className="text-[30px] font-bold text-[#30343B] tracking-tight">
+          <h1 className="text-[26px] sm:text-[28px] font-bold text-[#30343B] tracking-tight">
             How May I Assist You Today?
           </h1>
-          <p className="text-[15px] text-[#606B76] font-normal max-w-2xl mx-auto">
+          <p className="text-[13px] sm:text-[14px] text-[#606B76] font-normal max-w-2xl mx-auto">
             Select a service module below to inspect robot technology, explore campus highlights, or review daily event timetables.
           </p>
         </div>
+
+        {/* ======================================================== */}
+        {/* DEDICATED PROMINENT ENTRY: EXPLORE OUR CAMPUS GALLERY   */}
+        {/* ======================================================== */}
+        <button
+          onClick={() => {
+            if (onSpeakGreeting) onSpeakGreeting("Opening Sri Sri University photo gallery. Explore our authentic campus photographs.");
+            onNavigate('gallery');
+          }}
+          className="group relative w-full mb-3 rounded-xl overflow-hidden border border-[#D8DFE8] hover:border-[#263746] transition-all shadow-sm active:scale-99 text-left cursor-pointer flex items-center justify-between min-h-[68px] sm:min-h-[76px] shrink-0"
+        >
+          {/* Authentic Sri Sri University Campus Photograph Background */}
+          <img
+            src="/images/gallery/campus-aerial-overview.jpg"
+            alt="Sri Sri University Campus"
+            className="absolute inset-0 w-full h-full object-cover group-hover:scale-103 transition-transform duration-500 ease-out"
+          />
+
+          {/* Subtle Dark Overlay for Visual Clarity */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#17191C]/90 via-[#263746]/80 to-[#17191C]/90 group-hover:via-[#263746]/75 transition-colors" />
+
+          {/* Card Content */}
+          <div className="relative z-10 flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-2">
+            {/* Small Gallery Icon */}
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shrink-0 group-hover:border-[#C49A45] transition-colors">
+              <Images className="w-5 h-5 sm:w-6 sm:h-6 text-[#C49A45]" />
+            </div>
+
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-base sm:text-lg font-bold text-white tracking-tight">
+                  Explore Our Campus
+                </h2>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#C49A45] text-white font-semibold uppercase tracking-wider hidden sm:inline-block">
+                  Photo Gallery
+                </span>
+              </div>
+              <p className="text-[12px] sm:text-[13px] text-[#E9EDF2]/90 mt-0.5 font-normal">
+                Authentic photographs of aerial views, academic blocks, labs, library, and campus life
+              </p>
+            </div>
+          </div>
+
+          {/* Action Badge on Right */}
+          <div className="relative z-10 pr-4 sm:pr-6 hidden sm:flex items-center gap-2">
+            <span className="px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-all group-hover:border-[#C49A45]">
+              <span>View Gallery</span>
+              <ArrowRight className="w-3.5 h-3.5 text-[#C49A45] group-hover:translate-x-1 transition-transform" />
+            </span>
+          </div>
+        </button>
 
         {/* THE 3 EXPANSIVE TOUCH MODULES: White Cards (#FFFFFF) with Soft Grey Borders */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 w-full flex-1 items-stretch max-h-[450px]">

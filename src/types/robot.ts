@@ -16,6 +16,7 @@ export type FaceExpression =
 export type AppScreen =
   | 'face'            // Screen 1: Home / Pure Robot Face (Intro voice -> auto-shifts to hub)
   | 'hub'             // Screen 2: Tablet Main Hub (Back button + 3 circular buttons)
+  | 'gallery'         // Dedicated Full-Screen Sri Sri University Photo Gallery
   | 'map-info'        // Screen 3: SSU Campus Map & Basic Info
   | 'sessions-agenda' // Screen 4: Sessions & Agenda
   | 'robo-info'       // Screen 5: Robo Info (How made, who made, Mention Members)
