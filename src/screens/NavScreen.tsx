@@ -25,35 +25,35 @@ export const NavScreen: React.FC<NavScreenProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div className="w-full h-full bg-[#FFFFFF] text-[#30343B] flex flex-col p-4 sm:p-6 font-sans select-none overflow-hidden">
-      {/* Header: Industrial Primary Bar */}
-      <div className="flex items-center justify-between pb-3 bg-[#30343B] text-white p-3.5 rounded-xl mb-4 border border-[#B0B4B8]/30 shadow-sm">
+    <div className="w-full h-full bg-[#E9EDF2] text-[#30343B] flex flex-col p-4 sm:p-5 md:p-6 font-sans select-none overflow-hidden">
+      {/* Header: Navy Blue Structural Bar (#263746) */}
+      <div className="flex items-center justify-between pb-3 bg-[#263746] text-white p-3.5 rounded-xl mb-4 border border-white/10 shadow-sm">
         <div className="flex items-center gap-2.5">
           {onNavigate && (
             <button
               onClick={() => onNavigate('hub')}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#202124] hover:bg-[#17191C] border border-[#B0B4B8]/40 text-white transition-all text-xs font-bold mr-1"
+              className="flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg bg-[#30343B] hover:bg-[#202124] border border-white/10 text-white transition-all text-xs font-semibold mr-1"
               title="Return to Robot Hub"
             >
-              <ArrowLeft className="w-4 h-4 text-[#DCE8E1]" />
+              <ArrowLeft className="w-4 h-4 text-[#C49A45]" />
               <span>Back to Hub</span>
             </button>
           )}
 
-          <div className="p-2 rounded-lg bg-[#202124] border border-[#B0B4B8]/30 text-[#DCE8E1]">
-            <Navigation className="w-5 h-5 text-white" />
+          <div className="p-2 rounded-lg bg-[#30343B] border border-white/10 text-[#C49A45]">
+            <Navigation className="w-5 h-5 text-[#C49A45]" strokeWidth={1.75} />
           </div>
           <div>
-            <h1 className="text-sm sm:text-base font-bold text-white tracking-wide">AUTONOMOUS NAVIGATION</h1>
-            <p className="text-[11px] text-[#B0B4B8] font-mono">Jetson Nav2 Path Planner & Obstacle Avoidance</p>
+            <h1 className="text-[20px] sm:text-[22px] font-bold text-white tracking-tight">Autonomous Navigation</h1>
+            <p className="text-[12px] text-[#E9EDF2]/80 font-mono">Jetson Nav2 Path Planner & Obstacle Avoidance</p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 font-mono text-xs">
-          <span className={`px-2.5 py-1 rounded-md border text-[11px] font-bold ${
+          <span className={`px-2.5 py-1 rounded-md border text-[11px] font-semibold ${
             navActive
-              ? 'bg-[#174D3A] border-[#174D3A] text-white'
-              : 'bg-[#202124] border-[#B0B4B8]/30 text-[#B0B4B8]'
+              ? 'bg-[#C49A45] border-[#C49A45] text-white'
+              : 'bg-[#30343B] border-white/10 text-[#E9EDF2]/70'
           }`}>
             {navActive ? 'NAVIGATING...' : 'STANDBY'}
           </span>
@@ -63,34 +63,34 @@ export const NavScreen: React.FC<NavScreenProps> = ({ onNavigate }) => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col md:flex-row gap-4 py-2 min-h-0">
         {/* Navigation Map Visualizer Area: Dark Component #202124 */}
-        <div className="flex-1 bg-[#202124] rounded-xl border border-[#B0B4B8]/40 p-6 flex flex-col items-center justify-center relative overflow-hidden shadow-sm">
-          <div className="w-full max-w-md p-6 rounded-xl bg-[#FFFFFF] border border-[#B0B4B8]/60 font-mono text-xs space-y-4 shadow-sm text-[#30343B]">
-            <div className="flex items-center justify-between border-b border-[#B0B4B8]/30 pb-3">
-              <span className="text-[#5F666D]">Current Destination:</span>
+        <div className="flex-1 bg-[#202124] rounded-xl border border-[#30343B] p-6 flex flex-col items-center justify-center relative overflow-hidden shadow-sm">
+          <div className="w-full max-w-md p-6 rounded-xl bg-white border border-[#E9EDF2] font-mono text-xs space-y-4 shadow-sm text-[#30343B]">
+            <div className="flex items-center justify-between border-b border-[#E9EDF2] pb-3">
+              <span className="text-[#606B76]">Current Destination:</span>
               <span className="font-bold text-[#30343B] text-sm">{selectedTarget}</span>
             </div>
 
-            <div className="flex items-center justify-between border-b border-[#B0B4B8]/30 pb-3">
-              <span className="text-[#5F666D]">Path Status:</span>
+            <div className="flex items-center justify-between border-b border-[#E9EDF2] pb-3">
+              <span className="text-[#606B76]">Path Status:</span>
               <span className="flex items-center gap-1.5 text-emerald-600 font-bold">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Optimal Clear Route
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Optimal Clear Route
               </span>
             </div>
 
-            <div className="flex items-center justify-between border-b border-[#B0B4B8]/30 pb-3">
-              <span className="text-[#5F666D]">Obstacle Distance (LiDAR):</span>
+            <div className="flex items-center justify-between border-b border-[#E9EDF2] pb-3">
+              <span className="text-[#606B76]">Obstacle Distance (LiDAR):</span>
               <span className="text-[#30343B] font-semibold">2.4 meters (Safe)</span>
             </div>
 
             <div className="flex items-center justify-between">
-              <span className="text-[#5F666D]">ETA:</span>
+              <span className="text-[#606B76]">ETA:</span>
               <span className="text-[#30343B] font-bold">{navActive ? '18 seconds' : '--'}</span>
             </div>
           </div>
         </div>
 
-        {/* Destination Waypoint Selector Sidebar: Crisp White Card */}
-        <div className="w-full md:w-80 bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 rounded-xl p-4 flex flex-col gap-4 font-mono text-xs shadow-sm">
+        {/* Destination Waypoint Selector Sidebar: White Card */}
+        <div className="w-full md:w-80 bg-white text-[#30343B] border border-[#E9EDF2] rounded-xl p-4 flex flex-col gap-4 font-mono text-xs shadow-sm">
           <div>
             <h3 className="font-bold text-[#30343B] uppercase tracking-wider mb-2 text-xs">Saved Waypoints</h3>
             <div className="space-y-2">
@@ -98,17 +98,17 @@ export const NavScreen: React.FC<NavScreenProps> = ({ onNavigate }) => {
                 <button
                   key={wp.id}
                   onClick={() => setSelectedTarget(wp.name)}
-                  className={`w-full p-3 rounded-lg border text-left flex items-center justify-between transition-all ${
+                  className={`w-full p-3 min-h-[44px] rounded-lg border text-left flex items-center justify-between transition-all ${
                     selectedTarget === wp.name
-                      ? 'border-[#174D3A] bg-[#174D3A] text-white font-bold shadow-sm'
-                      : 'border-[#B0B4B8]/40 bg-[#FFFFFF] text-[#30343B] hover:border-[#174D3A]'
+                      ? 'border-[#263746] bg-[#263746] text-white font-semibold shadow-sm'
+                      : 'border-[#E9EDF2] bg-white text-[#30343B] hover:border-[#263746]'
                   }`}
                 >
                   <div className="flex items-center gap-2">
-                    <MapPin className={`w-4 h-4 ${selectedTarget === wp.name ? 'text-white' : 'text-[#174D3A]'}`} />
-                    <span className="font-semibold">{wp.name}</span>
+                    <MapPin className={`w-4 h-4 ${selectedTarget === wp.name ? 'text-[#C49A45]' : 'text-[#263746]'}`} strokeWidth={1.75} />
+                    <span className="font-medium">{wp.name}</span>
                   </div>
-                  <span className={`text-[10px] ${selectedTarget === wp.name ? 'text-emerald-200 font-bold' : 'text-[#5F666D]'}`}>
+                  <span className={`text-[11px] ${selectedTarget === wp.name ? 'text-white/80' : 'text-[#606B76]'}`}>
                     {wp.coords}
                   </span>
                 </button>
@@ -116,11 +116,11 @@ export const NavScreen: React.FC<NavScreenProps> = ({ onNavigate }) => {
             </div>
           </div>
 
-          <div className="mt-auto space-y-2 pt-2 border-t border-[#B0B4B8]/30">
+          <div className="mt-auto space-y-2 pt-2 border-t border-[#E9EDF2]">
             {navActive ? (
               <button
                 onClick={handleStopNav}
-                className="w-full py-2.5 rounded-lg bg-red-700 hover:bg-red-800 text-white font-bold flex items-center justify-center gap-2 shadow-sm transition-colors"
+                className="w-full min-h-[44px] py-2.5 rounded-lg bg-[#B42318] hover:bg-red-800 text-white font-semibold flex items-center justify-center gap-2 shadow-sm transition-colors"
               >
                 <StopCircle className="w-4 h-4" />
                 CANCEL NAVIGATION
@@ -128,7 +128,7 @@ export const NavScreen: React.FC<NavScreenProps> = ({ onNavigate }) => {
             ) : (
               <button
                 onClick={handleStartNav}
-                className="w-full py-2.5 rounded-lg bg-[#174D3A] hover:bg-[#134232] text-white font-bold flex items-center justify-center gap-2 shadow-sm transition-colors"
+                className="w-full min-h-[44px] py-2.5 rounded-lg bg-[#263746] hover:bg-[#1D2B37] text-white font-semibold flex items-center justify-center gap-2 shadow-sm transition-colors"
               >
                 <Play className="w-4 h-4 fill-current text-white" />
                 START NAVIGATION

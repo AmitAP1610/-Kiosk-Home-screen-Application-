@@ -160,11 +160,11 @@ export const FaceAnimationController: React.FC<FaceAnimationControllerProps> = (
                   isActive
                     ? item.id === 'error'
                       ? 'bg-red-700 text-white border border-red-500'
-                      : 'bg-[#174D3A] text-white font-bold border border-[#174D3A]'
-                    : 'text-[#B0B4B8] hover:text-white hover:bg-[#30343B]'
+                      : 'bg-[#263746] text-white font-bold border border-[#263746]'
+                    : 'text-[#E9EDF2]/70 hover:text-white hover:bg-[#30343B]'
                 }`}
               >
-                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-white' : 'text-[#B0B4B8]'}`} />
+                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-white' : 'text-[#E9EDF2]/70'}`} />
                 <span className="hidden lg:inline">{item.label.split(' ')[0]}</span>
               </button>
             );
@@ -172,7 +172,7 @@ export const FaceAnimationController: React.FC<FaceAnimationControllerProps> = (
         </div>
 
         {/* Separator */}
-        <div className="hidden sm:block h-4 w-px bg-[#B0B4B8]/30" />
+        <div className="hidden sm:block h-4 w-px bg-white/20" />
 
         {/* Interactive Toggles */}
         <div className="flex items-center gap-1">
@@ -182,8 +182,8 @@ export const FaceAnimationController: React.FC<FaceAnimationControllerProps> = (
             title={audioReactiveActive ? 'Disable Microphone Voice Reactivity' : 'Enable Live Mic Reactivity'}
             className={`p-2 rounded-lg text-xs border font-mono transition-all ${
               audioReactiveActive
-                ? 'bg-[#174D3A] text-white font-bold border-[#174D3A]'
-                : 'bg-[#202124] text-[#B0B4B8] border-transparent hover:text-white'
+                ? 'bg-[#263746] text-white font-bold border-[#263746]'
+                : 'bg-[#202124] text-[#E9EDF2]/70 border-transparent hover:text-white'
             }`}
           >
             <Mic className={`w-3.5 h-3.5 ${audioReactiveActive ? 'text-white' : ''}`} />
@@ -196,7 +196,7 @@ export const FaceAnimationController: React.FC<FaceAnimationControllerProps> = (
             className={`p-2 rounded-lg text-xs border font-mono transition-all ${
               speechRecognitionActive
                 ? 'bg-emerald-600 text-white border-emerald-500'
-                : 'bg-[#202124] text-[#B0B4B8] border-transparent hover:text-white'
+                : 'bg-[#202124] text-[#E9EDF2]/70 border-transparent hover:text-white'
             }`}
           >
             <Radio className={`w-3.5 h-3.5 ${speechRecognitionActive ? 'animate-spin text-emerald-400' : ''}`} />
@@ -208,8 +208,8 @@ export const FaceAnimationController: React.FC<FaceAnimationControllerProps> = (
             title={gazeTrackingActive ? 'Gaze Tracking: Cursor Active' : 'Gaze Tracking: Locked to Center'}
             className={`p-2 rounded-lg text-xs border font-mono transition-all ${
               gazeTrackingActive
-                ? 'bg-[#174D3A] text-white font-bold border-[#174D3A]'
-                : 'bg-[#202124] text-[#B0B4B8] border-transparent hover:text-white'
+                ? 'bg-[#263746] text-white font-bold border-[#263746]'
+                : 'bg-[#202124] text-[#E9EDF2]/70 border-transparent hover:text-white'
             }`}
           >
             <Eye className="w-3.5 h-3.5" />
@@ -219,18 +219,18 @@ export const FaceAnimationController: React.FC<FaceAnimationControllerProps> = (
           <button
             onClick={onOpenHardware}
             title="Robot Hardware / WebSocket IPC Bridge"
-            className="p-2 rounded-lg text-xs bg-[#202124] text-[#B0B4B8] hover:text-white hover:bg-[#17191C] transition-all font-mono"
+            className="p-2 rounded-lg text-xs bg-[#202124] text-[#E9EDF2]/70 hover:text-white hover:bg-[#17191C] transition-all font-mono"
           >
-            <Cpu className="w-3.5 h-3.5 text-[#DCE8E1]" />
+            <Cpu className="w-3.5 h-3.5 text-[#C49A45]" />
           </button>
 
           {/* Settings Customizer */}
           <button
             onClick={onOpenSettings}
             title="Face Configuration"
-            className="p-2 rounded-lg text-xs bg-[#202124] text-[#B0B4B8] hover:text-white hover:bg-[#17191C] transition-all font-mono"
+            className="p-2 rounded-lg text-xs bg-[#202124] text-[#E9EDF2]/70 hover:text-white hover:bg-[#17191C] transition-all font-mono"
           >
-            <Sliders className="w-3.5 h-3.5 text-[#DCE8E1]" />
+            <Sliders className="w-3.5 h-3.5 text-[#C49A45]" />
           </button>
 
           {/* Fullscreen / Kiosk Mode */}

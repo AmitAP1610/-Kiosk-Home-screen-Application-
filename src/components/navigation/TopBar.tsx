@@ -45,25 +45,25 @@ export const TopBar: React.FC<TopBarProps> = ({
   };
 
   return (
-    <header className="absolute top-0 left-0 right-0 h-11 z-30 flex items-center justify-between px-3 md:px-5 bg-[#30343B] text-white border-b border-[#B0B4B8]/30 pointer-events-auto select-none font-mono text-xs shadow-sm">
+    <header className="absolute top-0 left-0 right-0 h-11 z-30 flex items-center justify-between px-3 md:px-5 bg-[#263746] text-white border-b border-white/10 pointer-events-auto select-none font-mono text-xs shadow-sm">
       {/* Left: Menu & Screen Title */}
       <div className="flex items-center gap-2 sm:gap-2.5">
         <button
           onClick={onOpenMenu}
           title="Open Application Menu"
-          className="px-2.5 py-1 rounded bg-[#202124] hover:bg-[#1A1B1D] border border-[#B0B4B8]/40 text-white transition-colors flex items-center gap-1.5"
+          className="px-2.5 py-1 rounded bg-[#30343B] hover:bg-[#202124] border border-white/10 text-white transition-colors flex items-center gap-1.5"
         >
-          <Menu className="w-3.5 h-3.5 text-[#DCE8E1]" />
-          <span className="font-bold text-[11px] hidden sm:inline">MENU</span>
+          <Menu className="w-3.5 h-3.5 text-[#C49A45]" />
+          <span className="font-semibold text-[11px] hidden sm:inline">MENU</span>
         </button>
 
         {currentScreen !== 'face' && (
           <button
             onClick={() => onSelectScreen('face')}
             title="Return to Robot Face (Home)"
-            className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#202124] hover:bg-[#1A1B1D] border border-[#B0B4B8]/40 text-white transition-colors font-medium text-[11px]"
+            className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#30343B] hover:bg-[#202124] border border-white/10 text-white transition-colors font-medium text-[11px]"
           >
-            <Home className="w-3.5 h-3.5 text-[#DCE8E1]" />
+            <Home className="w-3.5 h-3.5 text-[#E9EDF2]" />
             <span className="hidden md:inline">FACE</span>
           </button>
         )}
@@ -72,16 +72,16 @@ export const TopBar: React.FC<TopBarProps> = ({
           <button
             onClick={() => onSelectScreen('welcome')}
             title="Sri Sri University Welcome Experience"
-            className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#202124] hover:bg-[#1A1B1D] border border-[#B0B4B8]/40 text-[#B0B4B8] hover:text-white transition-colors font-medium text-[11px]"
+            className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#30343B] hover:bg-[#202124] border border-white/10 text-[#E9EDF2]/70 hover:text-white transition-colors font-medium text-[11px]"
           >
-            <Sparkles className="w-3.5 h-3.5 text-[#DCE8E1]" />
+            <Sparkles className="w-3.5 h-3.5 text-[#C49A45]" />
             <span className="hidden md:inline">WELCOME</span>
           </button>
         )}
 
-        <div className="hidden lg:flex items-center gap-2 pl-2 border-l border-[#B0B4B8]/30">
+        <div className="hidden lg:flex items-center gap-2 pl-2 border-l border-white/10">
           <span className="font-bold text-white tracking-wide text-xs">{getScreenName(currentScreen)}</span>
-          <span className="text-[10px] px-2 py-0.5 rounded bg-[#174D3A] text-white font-bold uppercase tracking-wider">
+          <span className="text-[10px] px-2 py-0.5 rounded bg-[#C49A45] text-white font-bold uppercase tracking-wider">
             SSU ROBOTICS
           </span>
         </div>
@@ -92,11 +92,11 @@ export const TopBar: React.FC<TopBarProps> = ({
         {/* Jetson Robotics Status */}
         <div
           title={systemStatus.jetsonConnected ? 'Jetson Robotics: Connected' : 'Jetson Robotics: Disconnected'}
-          className="flex items-center gap-1 px-2 py-0.5 rounded bg-[#202124] border border-[#B0B4B8]/40 text-[11px]"
+          className="flex items-center gap-1 px-2 py-0.5 rounded bg-[#30343B] border border-white/10 text-[11px]"
         >
-          <Cpu className="w-3 h-3 text-[#DCE8E1]" />
-          <span className="hidden md:inline text-[#B0B4B8]">JETSON:</span>
-          <span className={systemStatus.jetsonConnected ? 'text-white font-bold' : 'text-[#B0B4B8]'}>
+          <Cpu className="w-3 h-3 text-[#C49A45]" />
+          <span className="hidden md:inline text-[#E9EDF2]/70">JETSON:</span>
+          <span className={systemStatus.jetsonConnected ? 'text-white font-bold' : 'text-[#E9EDF2]/60'}>
             {systemStatus.jetsonConnected ? 'ON' : 'OFF'}
           </span>
         </div>
@@ -104,21 +104,21 @@ export const TopBar: React.FC<TopBarProps> = ({
         {/* Arduino Motor Status */}
         <div
           title={systemStatus.arduinoConnected ? 'Arduino Motors: Ready' : 'Arduino Motors: Offline'}
-          className="flex items-center gap-1 px-2 py-0.5 rounded bg-[#202124] border border-[#B0B4B8]/40 text-[11px]"
+          className="flex items-center gap-1 px-2 py-0.5 rounded bg-[#30343B] border border-white/10 text-[11px]"
         >
-          <Wifi className="w-3 h-3 text-[#DCE8E1]" />
-          <span className="hidden md:inline text-[#B0B4B8]">ARDUINO:</span>
-          <span className={systemStatus.arduinoConnected ? 'text-white font-bold' : 'text-[#B0B4B8]'}>
+          <Wifi className="w-3 h-3 text-[#C49A45]" />
+          <span className="hidden md:inline text-[#E9EDF2]/70">ARDUINO:</span>
+          <span className={systemStatus.arduinoConnected ? 'text-white font-bold' : 'text-[#E9EDF2]/60'}>
             {systemStatus.arduinoConnected ? 'ON' : 'OFF'}
           </span>
         </div>
 
         {/* Tablet Battery Status */}
-        <div className="flex items-center gap-1 px-2 py-0.5 rounded bg-[#202124] border border-[#B0B4B8]/40 text-[11px] text-white">
+        <div className="flex items-center gap-1 px-2 py-0.5 rounded bg-[#30343B] border border-white/10 text-[11px] text-white">
           {systemStatus.isTabletCharging ? (
-            <BatteryCharging className="w-3 h-3 text-[#DCE8E1]" />
+            <BatteryCharging className="w-3 h-3 text-[#C49A45]" />
           ) : (
-            <Battery className="w-3 h-3 text-[#B0B4B8]" />
+            <Battery className="w-3 h-3 text-[#E9EDF2]" />
           )}
           <span>{systemStatus.tabletBattery}%</span>
         </div>
@@ -127,9 +127,9 @@ export const TopBar: React.FC<TopBarProps> = ({
         <button
           onClick={onToggleFullscreen}
           title={isFullscreen ? 'Exit Fullscreen' : 'Enter Kiosk Fullscreen'}
-          className="p-1 rounded bg-[#202124] hover:bg-[#1A1B1D] border border-[#B0B4B8]/40 text-white transition-colors"
+          className="p-1 rounded bg-[#30343B] hover:bg-[#202124] border border-white/10 text-white transition-colors"
         >
-          {isFullscreen ? <Minimize className="w-3.5 h-3.5" /> : <Maximize className="w-3.5 h-3.5 text-[#B0B4B8]" />}
+          {isFullscreen ? <Minimize className="w-3.5 h-3.5" /> : <Maximize className="w-3.5 h-3.5 text-[#E9EDF2]" />}
         </button>
       </div>
     </header>

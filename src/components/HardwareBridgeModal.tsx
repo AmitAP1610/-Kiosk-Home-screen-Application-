@@ -59,17 +59,17 @@ asyncio.run(send_robot_command())`;
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="relative w-full max-w-2xl max-h-[92vh] bg-[#30343B] border border-[#B0B4B8]/30 rounded-2xl p-6 shadow-xl flex flex-col text-white overflow-hidden font-mono text-xs">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
+      <div className="relative w-full max-w-2xl max-h-[92vh] bg-[#263746] border border-white/10 rounded-2xl p-6 shadow-xl flex flex-col text-white overflow-hidden font-mono text-xs">
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-[#B0B4B8]/30">
+        <div className="flex items-center justify-between pb-4 border-b border-white/10">
           <div className="flex items-center gap-2.5">
-            <Cpu className="w-5 h-5 text-[#DCE8E1]" />
+            <Cpu className="w-5 h-5 text-[#C49A45]" />
             <h2 className="text-base font-bold tracking-wide text-white">Robot Hardware & IPC Integration</h2>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-[#B0B4B8] hover:text-white hover:bg-[#202124] transition-colors"
+            className="p-1.5 rounded-lg text-[#E9EDF2] hover:text-white hover:bg-[#30343B] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -78,7 +78,7 @@ asyncio.run(send_robot_command())`;
         {/* Content */}
         <div className="overflow-y-auto space-y-5 py-4 pr-1">
           {/* WebSocket Server Connection */}
-          <div className="p-3.5 rounded-xl bg-[#202124] border border-[#B0B4B8]/30 space-y-3">
+          <div className="p-3.5 rounded-xl bg-[#30343B] border border-white/10 space-y-3">
             <div className="flex items-center justify-between">
               <span className="font-semibold text-white">WebSocket / Serial Daemon URL:</span>
               <div className="flex items-center gap-1.5">
@@ -87,11 +87,11 @@ asyncio.run(send_robot_command())`;
                     <CheckCircle2 className="w-3.5 h-3.5" /> ONLINE
                   </span>
                 ) : connectionStatus === 'connecting' ? (
-                  <span className="flex items-center gap-1 text-amber-400 font-bold">
+                  <span className="flex items-center gap-1 text-[#C49A45] font-bold">
                     <Wifi className="w-3.5 h-3.5 animate-pulse" /> CONNECTING...
                   </span>
                 ) : (
-                  <span className="flex items-center gap-1 text-[#B0B4B8] font-bold">
+                  <span className="flex items-center gap-1 text-[#E9EDF2]/70 font-bold">
                     <AlertCircle className="w-3.5 h-3.5" /> STANDALONE
                   </span>
                 )}
@@ -104,58 +104,58 @@ asyncio.run(send_robot_command())`;
                 value={wsUrl}
                 onChange={(e) => setWsUrl(e.target.value)}
                 placeholder="ws://172.17.0.1:8080/robot-face"
-                className="flex-1 bg-[#17191C] border border-[#B0B4B8]/30 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#174D3A]"
+                className="flex-1 bg-[#202124] border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#C49A45]"
               />
               {connectionStatus === 'connected' ? (
                 <button
                   onClick={onDisconnect}
-                  className="px-4 py-2 rounded-lg bg-red-700 hover:bg-red-800 text-white font-bold transition-colors shadow-sm"
+                  className="px-4 py-2 rounded-lg bg-[#B42318] hover:bg-red-800 text-white font-bold transition-colors shadow-sm"
                 >
                   Disconnect
                 </button>
               ) : (
                 <button
                   onClick={onConnect}
-                  className="px-4 py-2 rounded-lg bg-[#174D3A] hover:bg-[#134232] text-white font-bold transition-colors shadow-sm"
+                  className="px-4 py-2 rounded-lg bg-[#C49A45] hover:bg-[#b0883b] text-white font-bold transition-colors shadow-sm"
                 >
                   Connect
                 </button>
               )}
             </div>
-            <p className="text-[11px] text-[#B0B4B8]">
+            <p className="text-[11px] text-[#E9EDF2]/70">
               Tip: The UI can also be embedded in an electron/webview or iframe and controlled via standard <code className="text-white">window.postMessage()</code>.
             </p>
           </div>
 
           {/* Test IPC Commands Simulation */}
-          <div className="p-3.5 rounded-xl bg-[#202124] border border-[#B0B4B8]/30 space-y-3">
+          <div className="p-3.5 rounded-xl bg-[#30343B] border border-white/10 space-y-3">
             <div className="flex items-center gap-1.5 text-white font-semibold">
-              <Terminal className="w-4 h-4 text-[#DCE8E1]" />
+              <Terminal className="w-4 h-4 text-[#C49A45]" />
               <span>Simulate Hardware Commands:</span>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               <button
                 onClick={() => onSimulateCommand({ command: 'set_expression', expression: 'happy' })}
-                className="p-2 rounded-lg border border-[#B0B4B8]/30 bg-[#30343B] hover:border-[#174D3A] hover:text-white transition-colors"
+                className="p-2 rounded-lg border border-white/10 bg-[#202124] hover:border-[#C49A45] hover:text-white transition-colors"
               >
                 Cmd: Happy
               </button>
               <button
                 onClick={() => onSimulateCommand({ command: 'set_expression', expression: 'thinking' })}
-                className="p-2 rounded-lg border border-[#B0B4B8]/30 bg-[#30343B] hover:border-[#174D3A] hover:text-white transition-colors"
+                className="p-2 rounded-lg border border-white/10 bg-[#202124] hover:border-[#C49A45] hover:text-white transition-colors"
               >
                 Cmd: Thinking
               </button>
               <button
                 onClick={() => onSimulateCommand({ command: 'set_expression', expression: 'error' })}
-                className="p-2 rounded-lg border border-[#B0B4B8]/30 bg-[#30343B] hover:border-red-500 hover:text-red-300 transition-colors"
+                className="p-2 rounded-lg border border-white/10 bg-[#202124] hover:border-[#B42318] hover:text-red-300 transition-colors"
               >
                 Cmd: Fault
               </button>
               <button
                 onClick={() => onSimulateCommand({ command: 'set_expression', expression: 'wakeup' })}
-                className="p-2 rounded-lg border border-[#B0B4B8]/30 bg-[#30343B] hover:border-[#174D3A] hover:text-white transition-colors"
+                className="p-2 rounded-lg border border-white/10 bg-[#202124] hover:border-[#C49A45] hover:text-white transition-colors"
               >
                 Cmd: Wake-up
               </button>
@@ -167,11 +167,11 @@ asyncio.run(send_robot_command())`;
                 value={customText}
                 onChange={(e) => setCustomText(e.target.value)}
                 placeholder="Type robot speech..."
-                className="flex-1 bg-[#17191C] border border-[#B0B4B8]/30 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#174D3A]"
+                className="flex-1 bg-[#202124] border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#C49A45]"
               />
               <button
                 onClick={() => onSimulateCommand({ command: 'speak', text: customText })}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#174D3A] hover:bg-[#134232] text-white font-bold transition-colors shadow-sm"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#C49A45] hover:bg-[#b0883b] text-white font-bold transition-colors shadow-sm"
               >
                 <Send className="w-3.5 h-3.5" /> Speak
               </button>
@@ -179,27 +179,27 @@ asyncio.run(send_robot_command())`;
           </div>
 
           {/* Python ROS 2 / Pi Integration Code Sample */}
-          <div className="p-3.5 rounded-xl bg-[#202124] border border-[#B0B4B8]/30 space-y-2">
+          <div className="p-3.5 rounded-xl bg-[#30343B] border border-white/10 space-y-2">
             <div className="flex items-center justify-between">
               <span className="font-semibold text-white">Integration Protocol (Python / ROS 2):</span>
               <button
                 onClick={copyCode}
-                className="flex items-center gap-1 text-[11px] text-[#DCE8E1] hover:underline font-bold"
+                className="flex items-center gap-1 text-[11px] text-[#C49A45] hover:underline font-bold"
               >
-                <Copy className="w-3 h-3 text-[#DCE8E1]" /> {copiedCode ? 'Copied!' : 'Copy Code'}
+                <Copy className="w-3 h-3 text-[#C49A45]" /> {copiedCode ? 'Copied!' : 'Copy Code'}
               </button>
             </div>
-            <pre className="p-3 rounded-lg bg-[#17191C] border border-[#B0B4B8]/20 text-[#B0B4B8] text-[11px] overflow-x-auto leading-relaxed">
+            <pre className="p-3 rounded-lg bg-[#202124] border border-white/10 text-[#E9EDF2]/90 text-[11px] overflow-x-auto leading-relaxed">
               {pythonSnippet}
             </pre>
           </div>
 
           {/* Event Stream Log */}
-          <div className="p-3.5 rounded-xl bg-[#202124] border border-[#B0B4B8]/30 space-y-2">
+          <div className="p-3.5 rounded-xl bg-[#30343B] border border-white/10 space-y-2">
             <span className="font-semibold text-white">Live Hardware Message Log:</span>
-            <div className="h-28 overflow-y-auto bg-[#17191C] border border-[#B0B4B8]/20 rounded-lg p-2.5 text-[11px] text-[#B0B4B8] space-y-1">
+            <div className="h-28 overflow-y-auto bg-[#202124] border border-white/10 rounded-lg p-2.5 text-[11px] text-[#E9EDF2]/80 space-y-1">
               {logMessages.length === 0 ? (
-                <div className="text-[#B0B4B8]/60 italic">No events logged yet. Trigger a command above.</div>
+                <div className="text-[#E9EDF2]/50 italic">No events logged yet. Trigger a command above.</div>
               ) : (
                 logMessages.map((msg, i) => (
                   <div key={i} className="text-white font-mono">{msg}</div>
@@ -210,10 +210,10 @@ asyncio.run(send_robot_command())`;
         </div>
 
         {/* Footer */}
-        <div className="pt-3 border-t border-[#B0B4B8]/30 flex justify-end">
+        <div className="pt-3 border-t border-white/10 flex justify-end">
           <button
             onClick={onClose}
-            className="px-5 py-2 rounded-lg bg-[#174D3A] hover:bg-[#134232] text-white font-bold transition-colors shadow-sm"
+            className="px-5 py-2 rounded-lg bg-[#C49A45] hover:bg-[#b0883b] text-white font-bold transition-colors shadow-sm"
           >
             Close
           </button>

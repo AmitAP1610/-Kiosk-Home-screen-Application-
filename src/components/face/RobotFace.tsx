@@ -68,11 +68,11 @@ export const RobotFace: React.FC<RobotFaceProps> = ({
             <stop offset="100%" stopColor={config.primaryColor} stopOpacity="0" />
           </radialGradient>
 
-          {/* Forest Green Iris with Realistic Digital Depth */}
+          {/* Digital Iris with Realistic Depth */}
           <radialGradient id="darkTealIris" cx="44%" cy="40%" r="58%">
-            <stop offset="0%" stopColor="#174D3A" />
-            <stop offset="60%" stopColor="#0E3326" />
-            <stop offset="100%" stopColor="#071A13" />
+            <stop offset="0%" stopColor="#263746" />
+            <stop offset="60%" stopColor="#1A2732" />
+            <stop offset="100%" stopColor="#0E161C" />
           </radialGradient>
         </defs>
 

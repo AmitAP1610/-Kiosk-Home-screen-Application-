@@ -43,8 +43,8 @@ export const MappingScreen: React.FC<MappingScreenProps> = ({ onNavigate, lidarC
       ctx.lineTo(centerX, centerY + radius);
       ctx.stroke();
 
-      // Range Labels in Silver Grey (#B0B4B8)
-      ctx.fillStyle = '#B0B4B8';
+      // Range Labels in Soft Grey (#E9EDF2)
+      ctx.fillStyle = '#85909B';
       ctx.font = '10px monospace';
       ctx.fillText('1.0m', centerX + (radius / 4) - 10, centerY - 4);
       ctx.fillText('2.0m', centerX + (radius / 2) - 10, centerY - 4);
@@ -52,11 +52,11 @@ export const MappingScreen: React.FC<MappingScreenProps> = ({ onNavigate, lidarC
       ctx.fillText('4.0m', centerX + radius - 15, centerY - 4);
 
       if (lidarConnected) {
-        // Radar Sweep beam in Forest Green (#174D3A)
+        // Radar Sweep beam in Navy Blue (#263746) with Gold tint
         sweepAngle = (sweepAngle + 0.04) % (Math.PI * 2);
         const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius);
-        gradient.addColorStop(0, 'rgba(23, 77, 58, 0.55)');
-        gradient.addColorStop(1, 'rgba(23, 77, 58, 0.0)');
+        gradient.addColorStop(0, 'rgba(196, 154, 69, 0.45)');
+        gradient.addColorStop(1, 'rgba(38, 55, 70, 0.0)');
 
         ctx.fillStyle = gradient;
         ctx.beginPath();
@@ -65,7 +65,7 @@ export const MappingScreen: React.FC<MappingScreenProps> = ({ onNavigate, lidarC
         ctx.closePath();
         ctx.fill();
 
-        // Sample LiDAR points in White / Silver
+        // Sample LiDAR points in White
         ctx.fillStyle = '#FFFFFF';
         for (let i = 0; i < 360; i += 6) {
           const a = (i * Math.PI) / 180;
@@ -85,8 +85,8 @@ export const MappingScreen: React.FC<MappingScreenProps> = ({ onNavigate, lidarC
       ctx.arc(centerX, centerY, 5, 0, Math.PI * 2);
       ctx.fill();
 
-      // Heading arrow in Forest Green (#174D3A)
-      ctx.strokeStyle = '#174D3A';
+      // Heading arrow in Gold (#C49A45)
+      ctx.strokeStyle = '#C49A45';
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(centerX, centerY);
@@ -104,35 +104,35 @@ export const MappingScreen: React.FC<MappingScreenProps> = ({ onNavigate, lidarC
   }, [lidarConnected]);
 
   return (
-    <div className="w-full h-full bg-[#FFFFFF] text-[#30343B] flex flex-col p-4 sm:p-6 font-sans select-none overflow-hidden">
-      {/* Header: Industrial Primary Bar */}
-      <div className="flex items-center justify-between pb-3 bg-[#30343B] text-white p-3.5 rounded-xl mb-4 border border-[#B0B4B8]/30 shadow-sm">
+    <div className="w-full h-full bg-[#E9EDF2] text-[#30343B] flex flex-col p-4 sm:p-5 md:p-6 font-sans select-none overflow-hidden">
+      {/* Header: Navy Blue Structural Bar (#263746) */}
+      <div className="flex items-center justify-between pb-3 bg-[#263746] text-white p-3.5 rounded-xl mb-4 border border-white/10 shadow-sm">
         <div className="flex items-center gap-2.5">
           {onNavigate && (
             <button
               onClick={() => onNavigate('hub')}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#202124] hover:bg-[#17191C] border border-[#B0B4B8]/40 text-white transition-all text-xs font-bold mr-1"
+              className="flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg bg-[#30343B] hover:bg-[#202124] border border-white/10 text-white transition-all text-xs font-semibold mr-1"
               title="Return to Robot Hub"
             >
-              <ArrowLeft className="w-4 h-4 text-[#DCE8E1]" />
+              <ArrowLeft className="w-4 h-4 text-[#C49A45]" />
               <span>Back to Hub</span>
             </button>
           )}
 
-          <div className="p-2 rounded-lg bg-[#202124] border border-[#B0B4B8]/30 text-[#DCE8E1]">
-            <Radar className="w-5 h-5 text-white" />
+          <div className="p-2 rounded-lg bg-[#30343B] border border-white/10 text-[#C49A45]">
+            <Radar className="w-5 h-5 text-[#C49A45]" strokeWidth={1.75} />
           </div>
           <div>
-            <h1 className="text-sm sm:text-base font-bold text-white tracking-wide">LiDAR & MAPPING</h1>
-            <p className="text-[11px] text-[#B0B4B8] font-mono">Telemetry streamed from Jetson ROS 2 SLAM Toolbox</p>
+            <h1 className="text-[20px] sm:text-[22px] font-bold text-white tracking-tight">LiDAR & Mapping</h1>
+            <p className="text-[12px] text-[#E9EDF2]/80 font-mono">Telemetry streamed from Jetson ROS 2 SLAM Toolbox</p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 font-mono text-xs">
           <span className={`px-2.5 py-1 rounded-md border text-[11px] font-semibold ${
             lidarConnected
-              ? 'bg-emerald-950/40 border-emerald-600 text-emerald-300'
-              : 'bg-[#202124] border-[#B0B4B8]/30 text-[#B0B4B8]'
+              ? 'bg-emerald-950/40 border-emerald-500 text-emerald-300'
+              : 'bg-[#30343B] border-white/10 text-[#E9EDF2]/70'
           }`}>
             {lidarConnected ? 'LIDAR STREAM ACTIVE' : 'LIDAR STANDBY'}
           </span>
@@ -142,7 +142,7 @@ export const MappingScreen: React.FC<MappingScreenProps> = ({ onNavigate, lidarC
       {/* Main View Area */}
       <div className="flex-1 flex flex-col md:flex-row gap-4 py-2 min-h-0">
         {/* Canvas Display: Dark Component #202124 */}
-        <div className="flex-1 bg-[#202124] rounded-xl border border-[#B0B4B8]/40 flex items-center justify-center p-2 relative overflow-hidden shadow-sm">
+        <div className="flex-1 bg-[#202124] rounded-xl border border-[#30343B] flex items-center justify-center p-2 relative overflow-hidden shadow-sm">
           <canvas
             ref={canvasRef}
             width={600}
@@ -151,27 +151,27 @@ export const MappingScreen: React.FC<MappingScreenProps> = ({ onNavigate, lidarC
           />
         </div>
 
-        {/* Map Management Sidebar: Crisp White Card */}
-        <div className="w-full md:w-72 bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 rounded-xl p-4 flex flex-col gap-4 font-mono text-xs shadow-sm">
+        {/* Map Management Sidebar: White Card */}
+        <div className="w-full md:w-72 bg-white text-[#30343B] border border-[#E9EDF2] rounded-xl p-4 flex flex-col gap-4 font-mono text-xs shadow-sm">
           <div>
             <h3 className="font-bold text-[#30343B] uppercase tracking-wider mb-2 text-xs">Saved Maps</h3>
             <div className="space-y-1.5">
-              <button className="w-full p-2.5 rounded-lg border border-[#174D3A] bg-[#174D3A] text-white font-bold text-left flex items-center justify-between shadow-sm">
+              <button className="w-full p-2.5 min-h-[44px] rounded-lg border border-[#263746] bg-[#263746] text-white font-semibold text-left flex items-center justify-between shadow-sm">
                 <span>Living Room & Hall</span>
-                <span className="text-[10px] text-emerald-200 uppercase font-bold">Active</span>
+                <span className="text-[10px] text-[#C49A45] uppercase font-bold">Active</span>
               </button>
-              <button className="w-full p-2.5 rounded-lg border border-[#B0B4B8]/40 bg-[#FFFFFF] text-[#30343B] text-left hover:border-[#174D3A] transition-colors">
+              <button className="w-full p-2.5 min-h-[44px] rounded-lg border border-[#E9EDF2] bg-white text-[#30343B] text-left hover:border-[#263746] transition-colors">
                 <span>Office Floor 1</span>
               </button>
-              <button className="w-full p-2.5 rounded-lg border border-[#B0B4B8]/40 bg-[#FFFFFF] text-[#30343B] text-left hover:border-[#174D3A] transition-colors">
+              <button className="w-full p-2.5 min-h-[44px] rounded-lg border border-[#E9EDF2] bg-white text-[#30343B] text-left hover:border-[#263746] transition-colors">
                 <span>Lab Test Arena</span>
               </button>
             </div>
           </div>
 
           <div className="mt-auto space-y-2">
-            <button className="w-full py-2.5 rounded-lg border border-[#30343B] bg-[#30343B] hover:bg-[#202124] text-white font-bold flex items-center justify-center gap-1.5 transition-colors shadow-sm">
-              <Save className="w-4 h-4 text-[#DCE8E1]" />
+            <button className="w-full min-h-[44px] py-2.5 rounded-lg bg-[#263746] hover:bg-[#1D2B37] text-white font-medium flex items-center justify-center gap-1.5 transition-colors shadow-sm">
+              <Save className="w-4 h-4 text-[#C49A45]" strokeWidth={1.75} />
               <span>SAVE CURRENT MAP</span>
             </button>
           </div>

@@ -171,39 +171,39 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
     <>
       {/* Dimmed backdrop when open */}
       <div
-        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-200 ${
+        className={`fixed inset-0 bg-black/50 z-40 transition-opacity duration-200 ${
           isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
         onClick={onClose}
       />
 
-      {/* Slide-out Drawer: Charcoal Body (#30343B) */}
+      {/* Slide-out Drawer: Navy Blue Structural Drawer (#263746) */}
       <aside
-        className={`fixed top-0 left-0 bottom-0 w-80 sm:w-96 bg-[#30343B] text-white border-r border-[#B0B4B8]/30 z-50 transform transition-transform duration-200 ease-in-out flex flex-col shadow-modal ${
+        className={`fixed top-0 left-0 bottom-0 w-80 sm:w-96 bg-[#263746] text-white border-r border-white/10 z-50 transform transition-transform duration-200 ease-in-out flex flex-col shadow-lg ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        {/* Drawer Header: Rubber Black (#202124) */}
-        <div className="p-4 border-b border-[#B0B4B8]/30 bg-[#202124] flex items-center justify-between">
+        {/* Drawer Header: Charcoal (#30343B) */}
+        <div className="p-4 border-b border-white/10 bg-[#30343B] flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img
               src="/robotics-club-logo.jpg"
               alt="SSU Robotics Club Emblem"
-              className="w-9 h-9 rounded-full border border-[#B0B4B8]/40 object-cover"
+              className="w-9 h-9 rounded-full border border-white/20 object-cover"
             />
             <div>
-              <h2 className="text-sm font-extrabold text-white tracking-wide">
-                SRI SRI UNIVERSITY
+              <h2 className="text-sm font-bold text-white tracking-wide">
+                Sri Sri University
               </h2>
-              <p className="text-[11px] text-[#B0B4B8] font-mono">
-                AI Campus Navigator • Kiosk Robot
+              <p className="text-[11px] text-[#E9EDF2]/70 font-mono">
+                AI Campus Navigator • Kiosk AMR
               </p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-1 rounded-md bg-[#30343B] hover:bg-[#202124] text-[#B0B4B8] hover:text-white transition-colors"
+            className="p-1 rounded-md bg-[#263746] hover:bg-[#202124] text-[#E9EDF2] hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -213,7 +213,7 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
         <div className="flex-1 overflow-y-auto p-3 space-y-3.5">
           {/* Section 1: SSU Campus */}
           <div>
-            <span className="px-2 text-[10px] font-mono text-[#DCE8E1] uppercase tracking-wider font-bold block mb-1">
+            <span className="px-2 text-[11px] font-mono text-[#C49A45] uppercase tracking-wider font-semibold block mb-1">
               Sri Sri University Services
             </span>
             <div className="space-y-1">
@@ -229,29 +229,29 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
                     }}
                     className={`w-full p-2.5 rounded-lg text-left flex items-center gap-2.5 transition-all ${
                       isSelected
-                        ? 'bg-[#174D3A] text-white shadow-sm font-bold'
-                        : 'hover:bg-[#202124] text-white/90 hover:text-white border border-transparent'
+                        ? 'bg-[#30343B] text-white shadow-sm font-semibold border border-white/10'
+                        : 'hover:bg-[#30343B]/60 text-white/90 hover:text-white border border-transparent'
                     }`}
                   >
                     <div
                       className={`p-1.5 rounded-md ${
-                        isSelected ? 'bg-[#134232] text-[#DCE8E1]' : 'bg-[#202124] text-[#B0B4B8]'
+                        isSelected ? 'bg-[#263746] text-[#C49A45]' : 'bg-[#30343B] text-[#E9EDF2]'
                       }`}
                     >
                       <Icon className="w-4 h-4" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold truncate">{screen.title}</span>
+                        <span className="text-xs font-semibold truncate">{screen.title}</span>
                         {screen.badge && (
                           <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded font-semibold ${
-                            isSelected ? 'bg-[#134232] text-[#DCE8E1]' : 'bg-[#202124] text-[#B0B4B8] border border-[#B0B4B8]/30'
+                            isSelected ? 'bg-[#C49A45] text-white' : 'bg-[#30343B] text-[#E9EDF2]/80 border border-white/10'
                           }`}>
                             {screen.badge}
                           </span>
                         )}
                       </div>
-                      <p className={`text-[10px] truncate mt-0.5 ${isSelected ? 'text-white/80' : 'text-[#B0B4B8]'}`}>
+                      <p className={`text-[11px] truncate mt-0.5 ${isSelected ? 'text-white/80' : 'text-[#E9EDF2]/70'}`}>
                         {screen.description}
                       </p>
                     </div>
@@ -263,7 +263,7 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
 
           {/* Section 2: Robotics & Hardware */}
           <div>
-            <span className="px-2 text-[10px] font-mono text-[#DCE8E1] uppercase tracking-wider font-bold block mb-1">
+            <span className="px-2 text-[11px] font-mono text-[#C49A45] uppercase tracking-wider font-semibold block mb-1">
               Robotics, Jetson & Arduino
             </span>
             <div className="space-y-1">
@@ -279,27 +279,27 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
                     }}
                     className={`w-full p-2.5 rounded-lg text-left flex items-center gap-2.5 transition-all ${
                       isSelected
-                        ? 'bg-[#174D3A] text-white shadow-sm font-bold'
-                        : 'hover:bg-[#202124] text-white/90 hover:text-white border border-transparent'
+                        ? 'bg-[#30343B] text-white shadow-sm font-semibold border border-white/10'
+                        : 'hover:bg-[#30343B]/60 text-white/90 hover:text-white border border-transparent'
                     }`}
                   >
                     <div
                       className={`p-1.5 rounded-md ${
-                        isSelected ? 'bg-[#134232] text-[#DCE8E1]' : 'bg-[#202124] text-[#B0B4B8]'
+                        isSelected ? 'bg-[#263746] text-[#C49A45]' : 'bg-[#30343B] text-[#E9EDF2]'
                       }`}
                     >
                       <Icon className="w-4 h-4" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold truncate">{screen.title}</span>
+                        <span className="text-xs font-semibold truncate">{screen.title}</span>
                         {screen.badge && (
-                          <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#202124] text-[#B0B4B8] border border-[#B0B4B8]/30">
+                          <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#30343B] text-[#E9EDF2]/80 border border-white/10">
                             {screen.badge}
                           </span>
                         )}
                       </div>
-                      <p className={`text-[10px] truncate mt-0.5 ${isSelected ? 'text-white/80' : 'text-[#B0B4B8]'}`}>
+                      <p className={`text-[11px] truncate mt-0.5 ${isSelected ? 'text-white/80' : 'text-[#E9EDF2]/70'}`}>
                         {screen.description}
                       </p>
                     </div>
@@ -311,14 +311,14 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
         </div>
 
         {/* Drawer Footer with Hardware Telemetry */}
-        <div className="p-3.5 border-t border-[#B0B4B8]/30 bg-[#202124] font-mono text-[11px] text-[#B0B4B8] space-y-1.5">
+        <div className="p-3.5 border-t border-white/10 bg-[#30343B] font-mono text-[11px] text-[#E9EDF2]/80 space-y-1.5">
           <div className="flex items-center justify-between">
             <span>Tablet Audio Engine:</span>
             <span className="text-white font-bold">Online</span>
           </div>
           <div className="flex items-center justify-between">
             <span>Jetson Robotics Link:</span>
-            <span className={systemStatus.jetsonConnected ? 'text-white font-bold' : 'text-[#B0B4B8]'}>
+            <span className={systemStatus.jetsonConnected ? 'text-white font-bold' : 'text-[#E9EDF2]/70'}>
               {systemStatus.jetsonConnected ? 'Connected' : 'Standalone'}
             </span>
           </div>
@@ -327,10 +327,10 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
               href="https://srisriuniversity.edu.in"
               target="_blank"
               rel="noreferrer"
-              className="text-white hover:text-[#DCE8E1] text-[10px] inline-flex items-center gap-1 transition-colors"
+              className="text-[#E9EDF2] hover:text-white text-[11px] inline-flex items-center gap-1 transition-colors"
             >
               <span>srisriuniversity.edu.in</span>
-              <ExternalLink className="w-2.5 h-2.5 text-[#DCE8E1]" />
+              <ExternalLink className="w-3 h-3 text-[#C49A45]" />
             </a>
           </div>
         </div>

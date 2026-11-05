@@ -50,17 +50,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="relative w-full max-w-xl max-h-[90vh] bg-[#30343B] border border-[#B0B4B8]/30 rounded-2xl p-6 shadow-xl flex flex-col text-white overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
+      <div className="relative w-full max-w-xl max-h-[90vh] bg-[#263746] border border-white/10 rounded-2xl p-6 shadow-xl flex flex-col text-white overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-[#B0B4B8]/30">
+        <div className="flex items-center justify-between pb-4 border-b border-white/10">
           <div className="flex items-center gap-2.5">
-            <Sliders className="w-5 h-5 text-[#DCE8E1]" />
+            <Sliders className="w-5 h-5 text-[#C49A45]" />
             <h2 className="text-base font-bold tracking-wide text-white">Face UI Configuration</h2>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-[#B0B4B8] hover:text-white hover:bg-[#202124] transition-colors"
+            className="p-1.5 rounded-lg text-[#E9EDF2] hover:text-white hover:bg-[#30343B] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -70,10 +70,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         <div className="overflow-y-auto space-y-6 py-4 pr-1 text-sm font-mono">
           {/* Theme Presets */}
           <div>
-            <label className="block text-xs uppercase tracking-wider text-[#B0B4B8] mb-2.5 font-bold">
+            <label className="block text-xs uppercase tracking-wider text-[#E9EDF2]/70 mb-2.5 font-bold">
               Color Theme Preset
             </label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {COLOR_THEMES.map((theme) => {
                 const isSelected = config.primaryColor === theme.primary;
                 return (
@@ -82,8 +82,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     onClick={() => update({ primaryColor: theme.primary })}
                     className={`flex items-center gap-2 p-2 rounded-lg border text-xs font-medium transition-all ${
                       isSelected
-                        ? 'border-[#174D3A] bg-[#174D3A] text-white font-bold shadow-sm'
-                        : 'border-[#B0B4B8]/30 bg-[#202124] text-[#B0B4B8] hover:text-white hover:border-[#174D3A]'
+                        ? 'border-[#C49A45] bg-[#30343B] text-white font-semibold shadow-sm'
+                        : 'border-white/10 bg-[#30343B]/60 text-[#E9EDF2]/80 hover:text-white hover:border-white/30'
                     }`}
                   >
                     <span
@@ -98,11 +98,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           </div>
 
           {/* Eye Proportions */}
-          <div className="space-y-4 pt-2 border-t border-[#B0B4B8]/20">
-            <h3 className="text-xs uppercase tracking-wider text-[#DCE8E1] font-bold">Eye Proportions</h3>
+          <div className="space-y-4 pt-2 border-t border-white/10">
+            <h3 className="text-xs uppercase tracking-wider text-[#C49A45] font-bold">Eye Proportions</h3>
 
             <div>
-              <div className="flex justify-between text-xs text-[#B0B4B8] mb-1">
+              <div className="flex justify-between text-xs text-[#E9EDF2]/70 mb-1">
                 <span>Eye Size (Radius)</span>
                 <span>{config.eyeSize}px</span>
               </div>
@@ -112,12 +112,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 max="75"
                 value={config.eyeSize}
                 onChange={(e) => update({ eyeSize: Number(e.target.value) })}
-                className="w-full accent-[#174D3A] cursor-pointer"
+                className="w-full accent-[#C49A45] cursor-pointer"
               />
             </div>
 
             <div>
-              <div className="flex justify-between text-xs text-[#B0B4B8] mb-1">
+              <div className="flex justify-between text-xs text-[#E9EDF2]/70 mb-1">
                 <span>Interocular Distance (Spacing)</span>
                 <span>{config.eyeSpacing}px</span>
               </div>
@@ -127,12 +127,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 max="300"
                 value={config.eyeSpacing}
                 onChange={(e) => update({ eyeSpacing: Number(e.target.value) })}
-                className="w-full accent-[#174D3A] cursor-pointer"
+                className="w-full accent-[#C49A45] cursor-pointer"
               />
             </div>
 
             <div>
-              <div className="flex justify-between text-xs text-[#B0B4B8] mb-1">
+              <div className="flex justify-between text-xs text-[#E9EDF2]/70 mb-1">
                 <span>Vertical Offset</span>
                 <span>{config.eyeOffsetY}px</span>
               </div>
@@ -142,17 +142,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 max="40"
                 value={config.eyeOffsetY}
                 onChange={(e) => update({ eyeOffsetY: Number(e.target.value) })}
-                className="w-full accent-[#174D3A] cursor-pointer"
+                className="w-full accent-[#C49A45] cursor-pointer"
               />
             </div>
           </div>
 
           {/* Mouth Proportions */}
-          <div className="space-y-4 pt-2 border-t border-[#B0B4B8]/20">
-            <h3 className="text-xs uppercase tracking-wider text-[#DCE8E1] font-bold">Mouth Proportions</h3>
+          <div className="space-y-4 pt-2 border-t border-white/10">
+            <h3 className="text-xs uppercase tracking-wider text-[#C49A45] font-bold">Mouth Proportions</h3>
 
             <div>
-              <div className="flex justify-between text-xs text-[#B0B4B8] mb-1">
+              <div className="flex justify-between text-xs text-[#E9EDF2]/70 mb-1">
                 <span>Mouth Width</span>
                 <span>{config.mouthWidth}px</span>
               </div>
@@ -162,12 +162,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 max="90"
                 value={config.mouthWidth}
                 onChange={(e) => update({ mouthWidth: Number(e.target.value) })}
-                className="w-full accent-[#174D3A] cursor-pointer"
+                className="w-full accent-[#C49A45] cursor-pointer"
               />
             </div>
 
             <div>
-              <div className="flex justify-between text-xs text-[#B0B4B8] mb-1">
+              <div className="flex justify-between text-xs text-[#E9EDF2]/70 mb-1">
                 <span>Smile Curvature Depth</span>
                 <span>{config.mouthCurve}px</span>
               </div>
@@ -177,12 +177,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 max="30"
                 value={config.mouthCurve}
                 onChange={(e) => update({ mouthCurve: Number(e.target.value) })}
-                className="w-full accent-[#174D3A] cursor-pointer"
+                className="w-full accent-[#C49A45] cursor-pointer"
               />
             </div>
 
             <div>
-              <div className="flex justify-between text-xs text-[#B0B4B8] mb-1">
+              <div className="flex justify-between text-xs text-[#E9EDF2]/70 mb-1">
                 <span>Mouth Vertical Offset</span>
                 <span>{config.mouthOffsetY}px</span>
               </div>
@@ -192,17 +192,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 max="120"
                 value={config.mouthOffsetY}
                 onChange={(e) => update({ mouthOffsetY: Number(e.target.value) })}
-                className="w-full accent-[#174D3A] cursor-pointer"
+                className="w-full accent-[#C49A45] cursor-pointer"
               />
             </div>
           </div>
 
           {/* Glow & Animation Dynamics */}
-          <div className="space-y-4 pt-2 border-t border-[#B0B4B8]/20">
-            <h3 className="text-xs uppercase tracking-wider text-[#DCE8E1] font-bold">Glow & Behavior</h3>
+          <div className="space-y-4 pt-2 border-t border-white/10">
+            <h3 className="text-xs uppercase tracking-wider text-[#C49A45] font-bold">Glow & Behavior</h3>
 
             <div>
-              <div className="flex justify-between text-xs text-[#B0B4B8] mb-1">
+              <div className="flex justify-between text-xs text-[#E9EDF2]/70 mb-1">
                 <span>Glow Intensity</span>
                 <span>{config.glowIntensity.toFixed(2)}x</span>
               </div>
@@ -213,12 +213,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 step="0.05"
                 value={config.glowIntensity}
                 onChange={(e) => update({ glowIntensity: Number(e.target.value) })}
-                className="w-full accent-[#174D3A] cursor-pointer"
+                className="w-full accent-[#C49A45] cursor-pointer"
               />
             </div>
 
             <div>
-              <div className="flex justify-between text-xs text-[#B0B4B8] mb-1">
+              <div className="flex justify-between text-xs text-[#E9EDF2]/70 mb-1">
                 <span>Blink Interval (Avg)</span>
                 <span>{config.blinkIntervalMin}s - {config.blinkIntervalMax}s</span>
               </div>
@@ -232,32 +232,32 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   blinkIntervalMin: Number(e.target.value),
                   blinkIntervalMax: Number(e.target.value) + 2.5
                 })}
-                className="w-full accent-[#174D3A] cursor-pointer"
+                className="w-full accent-[#C49A45] cursor-pointer"
               />
             </div>
           </div>
         </div>
 
         {/* Footer Actions */}
-        <div className="flex flex-wrap items-center justify-between gap-2 pt-4 border-t border-[#B0B4B8]/30 mt-2 font-mono text-xs">
+        <div className="flex flex-wrap items-center justify-between gap-2 pt-4 border-t border-white/10 mt-2 font-mono text-xs">
           <button
             onClick={resetDefaults}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-[#B0B4B8]/30 bg-[#202124] text-[#B0B4B8] hover:text-white hover:bg-[#17191C] transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-white/10 bg-[#30343B] text-[#E9EDF2] hover:text-white hover:bg-[#202124] transition-colors"
           >
-            <RotateCcw className="w-3.5 h-3.5 text-[#DCE8E1]" />
+            <RotateCcw className="w-3.5 h-3.5 text-[#C49A45]" />
             <span>Reset to Reference</span>
           </button>
 
           <div className="flex items-center gap-2">
             <button
               onClick={exportConfig}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-[#B0B4B8]/30 bg-[#202124] text-[#B0B4B8] hover:text-white hover:bg-[#17191C] transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-white/10 bg-[#30343B] text-[#E9EDF2] hover:text-white hover:bg-[#202124] transition-colors"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Export</span>
             </button>
 
-            <label className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-[#B0B4B8]/30 bg-[#202124] text-[#B0B4B8] hover:text-white hover:bg-[#17191C] cursor-pointer transition-colors">
+            <label className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-white/10 bg-[#30343B] text-[#E9EDF2] hover:text-white hover:bg-[#202124] cursor-pointer transition-colors">
               <Upload className="w-3.5 h-3.5" />
               <span>Import</span>
               <input
@@ -270,7 +270,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
             <button
               onClick={onClose}
-              className="px-4 py-2 rounded-lg bg-[#174D3A] hover:bg-[#134232] text-white font-bold transition-colors shadow-sm"
+              className="px-4 py-2 rounded-lg bg-[#C49A45] hover:bg-[#b0883b] text-white font-semibold transition-colors shadow-sm"
             >
               Done
             </button>

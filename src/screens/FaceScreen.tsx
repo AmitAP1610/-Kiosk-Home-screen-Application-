@@ -105,14 +105,14 @@ export const FaceScreen: React.FC<FaceScreenProps> = ({
             e.stopPropagation();
             if (onSpeakIntro) onSpeakIntro("Hardware network static IP is 172.17.0.1 on the internal robot communication bus.");
           }}
-          className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-[#30343B] border border-[#DDE3DE]/20 text-sm font-mono shadow-card cursor-pointer hover:border-[#174D3A] transition-all"
+          className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-[#30343B] border border-[#E9EDF2]/20 text-sm font-mono shadow-sm cursor-pointer hover:border-[#C49A45] transition-all"
           title="Internal Bus Static IP"
         >
           <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <Wifi className="w-4 h-4 text-[#DCE8E1]" />
+            <span className="w-2 h-2 rounded-full bg-[#C49A45] animate-pulse" />
+            <Wifi className="w-4 h-4 text-[#E9EDF2]" />
           </div>
-          <span className="text-[#B0B4B8] font-semibold text-xs uppercase">IP:</span>
+          <span className="text-[#E9EDF2]/70 font-semibold text-xs uppercase">IP:</span>
           <span className="text-white font-bold tracking-wider text-sm">172.17.0.1</span>
         </div>
       </div>
@@ -120,31 +120,30 @@ export const FaceScreen: React.FC<FaceScreenProps> = ({
       {/* TOP RIGHT: Voice prompt notice if not speaking */}
       {!isSpeaking && (
         <div className="absolute top-0 right-0 z-30 p-4 sm:p-6 pointer-events-auto">
-          <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#30343B] border border-[#DDE3DE]/20 text-white font-mono text-xs shadow-card">
-            <Volume2 className="w-3.5 h-3.5 text-[#DCE8E1]" />
-            <span className="text-[#DCE8E1]">Tap screen for voice guide</span>
+          <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#30343B] border border-[#E9EDF2]/20 text-white font-mono text-xs shadow-sm">
+            <Volume2 className="w-3.5 h-3.5 text-[#C49A45]" />
+            <span className="text-[#E9EDF2]">Tap screen for voice guide</span>
           </div>
         </div>
       )}
-
 
       {/* BOTTOM OVERLAY: Clean Engineering Navigation Control */}
       <div className="absolute bottom-6 left-0 right-0 z-30 px-4 sm:px-8 flex flex-col items-center justify-center space-y-3 pointer-events-auto">
         <div className="flex items-center gap-3">
           <button
             onClick={handleSkipOrExplore}
-            className="min-h-[48px] px-8 py-3 rounded-xl bg-[#174D3A] hover:bg-[#134232] text-white font-bold text-sm sm:text-base flex items-center gap-2.5 shadow-card transition-all active:scale-98 border border-[#174D3A]"
+            className="min-h-[48px] px-8 py-3 rounded-xl bg-[#263746] hover:bg-[#1D2B37] text-white font-bold text-sm sm:text-base flex items-center gap-2.5 shadow-sm transition-all active:scale-98 border border-[#263746]"
           >
             <span>{isSpeaking ? 'Skip Intro & Enter Hub' : 'Enter Campus Hub'}</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4 text-[#C49A45]" />
           </button>
 
           {!isSpeaking && !hasStartedIntro && (
             <button
               onClick={startIntro}
-              className="min-h-[48px] px-6 py-3 rounded-xl bg-[#30343B] hover:bg-[#202124] border border-[#DDE3DE]/30 text-white font-bold text-sm sm:text-base flex items-center gap-2 transition-all shadow-card active:scale-98"
+              className="min-h-[48px] px-6 py-3 rounded-xl bg-[#30343B] hover:bg-[#202124] border border-[#E9EDF2]/30 text-white font-bold text-sm sm:text-base flex items-center gap-2 transition-all shadow-sm active:scale-98"
             >
-              <Volume2 className="w-4 h-4 text-[#DCE8E1]" />
+              <Volume2 className="w-4 h-4 text-[#E9EDF2]" />
               <span>Hear Intro Speech</span>
             </button>
           )}

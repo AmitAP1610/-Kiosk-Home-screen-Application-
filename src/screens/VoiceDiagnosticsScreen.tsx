@@ -99,42 +99,36 @@ export const VoiceDiagnosticsScreen: React.FC<VoiceDiagnosticsScreenProps> = ({
       onStart: () => {
         addLog('STT Test: onstart fired - audio capture active.');
       },
-      onResult: (text: string, isFinal: boolean) => {
-        setSttLiveTranscript(text);
-        addLog(`STT Test: onresult (${isFinal ? 'FINAL' : 'interim'}): "${text}"`);
+      onResult: (transcript: string, isFinal: boolean) => {
+        setSttLiveTranscript(transcript);
+        if (isFinal) {
+          addLog(`STT Final Recognized: "${transcript}"`);
+        }
       },
-      onError: (errMsg: string, code: STTErrorType) => {
+      onError: (message: string, code: STTErrorType) => {
+        setSttTestError(message);
+        addLog(`STT Error: [${code}] ${message}`);
         setSttTestActive(false);
-        setSttTestError(`[${code}] ${errMsg}`);
-        addLog(`STT Test ERROR [${code}]: ${errMsg}`);
       },
       onEnd: () => {
         setSttTestActive(false);
-        addLog('STT Test: onend event dispatched.');
+        addLog('STT Test: onend fired.');
       }
     });
 
-    const success = speechToText.start('en-IN');
-    if (!success) {
-      setSttTestActive(false);
-      setSttTestError('Failed to start speech recognition session.');
-      addLog('STT Test: Failed to start session.');
-    }
+    speechToText.start('en-IN');
   };
 
   const handleStopSTTTest = () => {
     speechToText.stop();
     setSttTestActive(false);
-    addLog('STT Test: Manually stopped.');
+    addLog('STT Test: Stopped by user.');
   };
 
   const handleTestTTS = async () => {
-    if (!textToSpeech.isSupported()) {
-      addLog('TTS Error: SpeechSynthesis is unsupported.');
-      return;
-    }
+    if (!testSpeechText.trim()) return;
     setIsSpeakingTest(true);
-    addLog(`TTS Test: Speaking "${testSpeechText}"...`);
+    addLog(`TTS Test: Speaking phrase "${testSpeechText.slice(0, 30)}..."`);
 
     try {
       await textToSpeech.speak(
@@ -165,62 +159,62 @@ export const VoiceDiagnosticsScreen: React.FC<VoiceDiagnosticsScreenProps> = ({
   };
 
   return (
-    <div className="w-full h-full bg-[#FFFFFF] text-[#30343B] flex flex-col p-4 sm:p-6 font-sans select-none overflow-y-auto">
-      {/* Header: Industrial Primary Bar */}
-      <div className="flex items-center justify-between pb-3 bg-[#30343B] text-white p-3.5 rounded-xl mb-6 border border-[#B0B4B8]/30 shadow-sm">
+    <div className="w-full h-full bg-[#E9EDF2] text-[#30343B] flex flex-col p-4 sm:p-5 md:p-6 font-sans select-none overflow-y-auto">
+      {/* Header: Navy Blue Structural Bar (#263746) */}
+      <div className="flex items-center justify-between pb-3 bg-[#263746] text-white p-3.5 rounded-xl mb-6 border border-white/10 shadow-sm">
         <div className="flex items-center gap-2.5">
           {onNavigate && (
             <button
               onClick={() => onNavigate('hub')}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#202124] hover:bg-[#17191C] border border-[#B0B4B8]/40 text-white transition-all text-xs font-bold mr-1"
+              className="flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg bg-[#30343B] hover:bg-[#202124] border border-white/10 text-white transition-all text-xs font-semibold mr-1"
               title="Return to Robot Hub"
             >
-              <ArrowLeft className="w-4 h-4 text-[#DCE8E1]" />
+              <ArrowLeft className="w-4 h-4 text-[#C49A45]" />
               <span>Back to Hub</span>
             </button>
           )}
 
-          <div className="p-2 rounded-lg bg-[#202124] border border-[#B0B4B8]/30 text-[#DCE8E1]">
-            <Wrench className="w-5 h-5 text-white" />
+          <div className="p-2 rounded-lg bg-[#30343B] border border-white/10 text-[#C49A45]">
+            <Wrench className="w-5 h-5 text-[#C49A45]" strokeWidth={1.75} />
           </div>
           <div>
-            <h1 className="text-sm sm:text-base font-bold text-white tracking-wide">VOICE & HARDWARE DIAGNOSTICS</h1>
-            <p className="text-[11px] text-[#B0B4B8] font-mono">Real-time Web Speech API & Microphone Hardware Audit</p>
+            <h1 className="text-[20px] sm:text-[22px] font-bold text-white tracking-tight">Voice & Hardware Diagnostics</h1>
+            <p className="text-[12px] text-[#E9EDF2]/80 font-mono">Real-time Web Speech API & Microphone Hardware Audit</p>
           </div>
         </div>
 
         <button
           onClick={runDiagnostics}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#202124] hover:bg-[#17191C] border border-[#B0B4B8]/30 text-white hover:border-[#174D3A] text-xs font-mono transition-colors shadow-sm"
+          className="flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg bg-[#30343B] hover:bg-[#202124] border border-white/10 text-white text-xs font-mono transition-colors shadow-sm"
         >
-          <RefreshCw className="w-4 h-4 text-[#DCE8E1]" />
+          <RefreshCw className="w-4 h-4 text-[#C49A45]" />
           <span>Re-run Audit</span>
         </button>
       </div>
 
-      {/* Security Context Notice (Crucial for Chrome on Android) */}
+      {/* Security Context Notice */}
       {!isSecureContext && (
-        <div className="p-4 rounded-xl bg-[#FFFFFF] text-[#30343B] border border-red-500/50 mb-6 flex items-start gap-3 text-xs shadow-sm">
+        <div className="p-4 rounded-xl bg-white text-[#30343B] border border-red-300 mb-6 flex items-start gap-3 text-xs shadow-sm">
           <ShieldAlert className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
           <div className="space-y-1">
-            <span className="font-bold text-[#30343B] block">Insecure Origin Detected (HTTP on LAN IP)</span>
-            <p className="text-[#5F666D]">
+            <span className="font-bold text-[#30343B] block text-sm">Insecure Origin Detected (HTTP on LAN IP)</span>
+            <p className="text-[#606B76]">
               Google Chrome strictly restricts the <strong>Web Speech API</strong> and microphone capture on insecure origins. When testing via tablet IP over Wi-Fi, Chrome treats plain HTTP as insecure.
             </p>
-            <div className="p-2.5 rounded-lg bg-[#DCE8E1]/20 font-mono text-[11px] text-[#30343B] mt-2 border border-[#B0B4B8]/50">
-              Fix: Open Chrome on your tablet, go to <span className="font-bold text-[#174D3A]">chrome://flags/#unsafely-treat-insecure-origin-as-secure</span>, enable it, add your computer's IP (e.g. <span className="font-bold text-[#30343B]">http://192.168.1.X:5173</span>), and relaunch Chrome.
+            <div className="p-2.5 rounded-lg bg-[#E9EDF2] font-mono text-[11px] text-[#30343B] mt-2 border border-[#D8DFE8]">
+              Fix: Open Chrome on your tablet, go to <span className="font-bold text-[#263746]">chrome://flags/#unsafely-treat-insecure-origin-as-secure</span>, enable it, add your computer's IP (e.g. <span className="font-bold text-[#30343B]">http://192.168.1.X:5173</span>), and relaunch Chrome.
             </div>
           </div>
         </div>
       )}
 
-      {/* Status Cards: Crisp White Cards */}
+      {/* Status Cards: White Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         {/* Card 1: Web Speech API */}
-        <div className="p-4 rounded-xl bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 flex items-center justify-between shadow-sm">
+        <div className="p-4 rounded-xl bg-white text-[#30343B] border border-[#E9EDF2] flex items-center justify-between shadow-sm">
           <div>
-            <span className="text-xs text-[#5F666D] block mb-1">STT API Availability</span>
-            <span className="text-sm font-bold text-[#30343B]">
+            <span className="text-xs text-[#606B76] block mb-1">STT API Availability</span>
+            <span className="text-[15px] font-semibold text-[#30343B]">
               {sttSupported ? 'SpeechRecognition Ready' : 'Unavailable'}
             </span>
           </div>
@@ -232,10 +226,10 @@ export const VoiceDiagnosticsScreen: React.FC<VoiceDiagnosticsScreenProps> = ({
         </div>
 
         {/* Card 2: Speech Synthesis */}
-        <div className="p-4 rounded-xl bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 flex items-center justify-between shadow-sm">
+        <div className="p-4 rounded-xl bg-white text-[#30343B] border border-[#E9EDF2] flex items-center justify-between shadow-sm">
           <div>
-            <span className="text-xs text-[#5F666D] block mb-1">TTS API Availability</span>
-            <span className="text-sm font-bold text-[#30343B]">
+            <span className="text-xs text-[#606B76] block mb-1">TTS API Availability</span>
+            <span className="text-[15px] font-semibold text-[#30343B]">
               {ttsSupported ? 'SpeechSynthesis Ready' : 'Unavailable'}
             </span>
           </div>
@@ -247,11 +241,11 @@ export const VoiceDiagnosticsScreen: React.FC<VoiceDiagnosticsScreenProps> = ({
         </div>
 
         {/* Card 3: Mic Permission */}
-        <div className="p-4 rounded-xl bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 flex items-center justify-between shadow-sm">
+        <div className="p-4 rounded-xl bg-white text-[#30343B] border border-[#E9EDF2] flex items-center justify-between shadow-sm">
           <div>
-            <span className="text-xs text-[#5F666D] block mb-1">Microphone Access</span>
-            <span className={`text-sm font-bold capitalize ${
-              micPermission === 'granted' ? 'text-emerald-700' : 'text-amber-600'
+            <span className="text-xs text-[#606B76] block mb-1">Microphone Access</span>
+            <span className={`text-[15px] font-semibold capitalize ${
+              micPermission === 'granted' ? 'text-emerald-700' : 'text-[#C49A45]'
             }`}>
               {micPermission}
             </span>
@@ -261,7 +255,7 @@ export const VoiceDiagnosticsScreen: React.FC<VoiceDiagnosticsScreenProps> = ({
           ) : (
             <button
               onClick={handleRequestMic}
-              className="px-2.5 py-1 rounded-md bg-[#174D3A] hover:bg-[#134232] text-white font-bold text-[10px]"
+              className="px-2.5 py-1 rounded-md bg-[#263746] hover:bg-[#1D2B37] text-white font-medium text-xs"
             >
               Request
             </button>
@@ -269,22 +263,22 @@ export const VoiceDiagnosticsScreen: React.FC<VoiceDiagnosticsScreenProps> = ({
         </div>
 
         {/* Card 4: Voice Assistant State */}
-        <div className="p-4 rounded-xl bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 flex items-center justify-between shadow-sm">
+        <div className="p-4 rounded-xl bg-white text-[#30343B] border border-[#E9EDF2] flex items-center justify-between shadow-sm">
           <div>
-            <span className="text-xs text-[#5F666D] block mb-1">Controller State</span>
-            <span className="text-sm font-bold text-[#30343B] font-mono">{assistantState}</span>
+            <span className="text-xs text-[#606B76] block mb-1">Controller State</span>
+            <span className="text-[15px] font-semibold text-[#30343B] font-mono">{assistantState}</span>
           </div>
-          <div className="w-3 h-3 rounded-full bg-[#174D3A] animate-pulse" />
+          <div className="w-3 h-3 rounded-full bg-[#C49A45] animate-pulse" />
         </div>
       </div>
 
-      {/* Browser Environment Info: Crisp White Card */}
-      <div className="p-3.5 rounded-xl bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 text-xs font-mono mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 shadow-sm">
-        <span className="truncate max-w-xl text-[11px] text-[#5F666D]">
-          <span className="text-[#30343B] font-bold">Browser Environment: </span>
+      {/* Browser Environment Info: White Card */}
+      <div className="p-3.5 rounded-xl bg-white text-[#30343B] border border-[#E9EDF2] text-xs font-mono mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 shadow-sm">
+        <span className="truncate max-w-xl text-[12px] text-[#606B76]">
+          <span className="text-[#30343B] font-semibold">Browser Environment: </span>
           {userAgent || 'Detecting...'}
         </span>
-        <span className="px-2 py-0.5 rounded bg-[#DCE8E1]/30 border border-[#B0B4B8]/50 text-[#30343B] text-[10px]">
+        <span className="px-2 py-0.5 rounded bg-[#E9EDF2] text-[#30343B] text-[11px]">
           Secure Context: {isSecureContext ? 'YES (https/local)' : 'NO (insecure origin)'}
         </span>
       </div>
@@ -292,16 +286,16 @@ export const VoiceDiagnosticsScreen: React.FC<VoiceDiagnosticsScreenProps> = ({
       {/* Interactive Testing Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         {/* Left: STT Live Test */}
-        <div className="p-5 rounded-xl bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 space-y-4 shadow-sm">
+        <div className="p-5 rounded-xl bg-white text-[#30343B] border border-[#E9EDF2] space-y-4 shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Mic className="w-5 h-5 text-[#174D3A]" />
-              <h2 className="text-sm font-bold text-[#30343B]">Speech Recognition (STT) Test</h2>
+              <Mic className="w-5 h-5 text-[#263746]" strokeWidth={1.75} />
+              <h2 className="text-[16px] font-semibold text-[#30343B]">Speech Recognition (STT) Test</h2>
             </div>
             {sttTestActive ? (
               <button
                 onClick={handleStopSTTTest}
-                className="px-3 py-1.5 rounded-lg bg-red-700 text-white font-bold text-xs flex items-center gap-1.5 animate-pulse"
+                className="px-3 py-1.5 min-h-[44px] rounded-lg bg-[#B42318] text-white font-semibold text-xs flex items-center gap-1.5 animate-pulse"
               >
                 <Square className="w-3.5 h-3.5 fill-current" />
                 <span>Stop Listening</span>
@@ -309,7 +303,7 @@ export const VoiceDiagnosticsScreen: React.FC<VoiceDiagnosticsScreenProps> = ({
             ) : (
               <button
                 onClick={handleStartSTTTest}
-                className="px-4 py-1.5 rounded-lg bg-[#174D3A] hover:bg-[#134232] text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition-colors"
+                className="px-4 py-1.5 min-h-[44px] rounded-lg bg-[#263746] hover:bg-[#1D2B37] text-white font-medium text-xs flex items-center gap-1.5 shadow-sm transition-colors"
               >
                 <Play className="w-3.5 h-3.5 fill-current text-white" />
                 <span>Test Microphone</span>
@@ -317,47 +311,47 @@ export const VoiceDiagnosticsScreen: React.FC<VoiceDiagnosticsScreenProps> = ({
             )}
           </div>
 
-          <div className="p-4 rounded-xl bg-[#FFFFFF] border border-[#B0B4B8]/50 min-h-[90px] flex flex-col justify-center">
+          <div className="p-4 rounded-xl bg-[#E9EDF2]/40 border border-[#D8DFE8] min-h-[90px] flex flex-col justify-center">
             {sttTestActive ? (
               <div className="space-y-1">
-                <span className="text-[10px] text-[#174D3A] font-mono flex items-center gap-1.5 font-bold">
-                  <span className="w-2 h-2 rounded-full bg-[#174D3A] animate-pulse" />
+                <span className="text-[11px] text-[#263746] font-mono flex items-center gap-1.5 font-semibold">
+                  <span className="w-2 h-2 rounded-full bg-[#C49A45] animate-pulse" />
                   Listening live in English (India)...
                 </span>
-                <p className="text-xs text-[#30343B] italic">
+                <p className="text-[14px] text-[#30343B] italic">
                   {sttLiveTranscript || 'Speak something into the microphone...'}
                 </p>
               </div>
             ) : sttLiveTranscript ? (
               <div>
-                <span className="text-[10px] text-[#5F666D] font-mono block mb-1">Captured Transcript:</span>
-                <p className="text-xs text-emerald-700 font-bold">"{sttLiveTranscript}"</p>
+                <span className="text-[11px] text-[#606B76] font-mono block mb-1">Captured Transcript:</span>
+                <p className="text-[14px] text-emerald-700 font-bold">"{sttLiveTranscript}"</p>
               </div>
             ) : (
-              <p className="text-xs text-[#5F666D] text-center">
+              <p className="text-[13px] text-[#606B76] text-center">
                 Tap 'Test Microphone' and speak into your tablet microphone.
               </p>
             )}
           </div>
 
           {sttTestError && (
-            <div className="p-3 rounded-lg bg-red-50 border border-red-500/40 text-xs text-red-700 font-mono">
+            <div className="p-3 rounded-lg bg-red-50 border border-red-300 text-xs text-red-700 font-mono">
               {sttTestError}
             </div>
           )}
         </div>
 
         {/* Right: TTS Speech Test */}
-        <div className="p-5 rounded-xl bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 space-y-4 shadow-sm">
+        <div className="p-5 rounded-xl bg-white text-[#30343B] border border-[#E9EDF2] space-y-4 shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Volume2 className="w-5 h-5 text-[#174D3A]" />
-              <h2 className="text-sm font-bold text-[#30343B]">Text-to-Speech (TTS) Test</h2>
+              <Volume2 className="w-5 h-5 text-[#263746]" strokeWidth={1.75} />
+              <h2 className="text-[16px] font-semibold text-[#30343B]">Text-to-Speech (TTS) Test</h2>
             </div>
             {isSpeakingTest ? (
               <button
                 onClick={handleStopTTS}
-                className="px-3 py-1.5 rounded-lg bg-red-700 text-white font-bold text-xs flex items-center gap-1.5 animate-pulse"
+                className="px-3 py-1.5 min-h-[44px] rounded-lg bg-[#B42318] text-white font-semibold text-xs flex items-center gap-1.5 animate-pulse"
               >
                 <Square className="w-3.5 h-3.5 fill-current" />
                 <span>Stop Audio</span>
@@ -365,7 +359,7 @@ export const VoiceDiagnosticsScreen: React.FC<VoiceDiagnosticsScreenProps> = ({
             ) : (
               <button
                 onClick={handleTestTTS}
-                className="px-4 py-1.5 rounded-lg bg-[#174D3A] hover:bg-[#134232] text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition-colors"
+                className="px-4 py-1.5 min-h-[44px] rounded-lg bg-[#263746] hover:bg-[#1D2B37] text-white font-medium text-xs flex items-center gap-1.5 shadow-sm transition-colors"
               >
                 <Play className="w-3.5 h-3.5 fill-current text-white" />
                 <span>Test Speaker</span>
@@ -378,16 +372,16 @@ export const VoiceDiagnosticsScreen: React.FC<VoiceDiagnosticsScreenProps> = ({
               type="text"
               value={testSpeechText}
               onChange={(e) => setTestSpeechText(e.target.value)}
-              className="w-full bg-[#FFFFFF] border border-[#B0B4B8]/50 rounded-lg px-3 py-2 text-xs text-[#30343B] focus:outline-none focus:border-[#174D3A]"
+              className="w-full bg-white border border-[#E9EDF2] rounded-lg px-3 py-2 text-xs text-[#30343B] focus:outline-none focus:border-[#263746]"
               placeholder="Enter phrase to speak..."
             />
 
             <div className="flex items-center gap-2 text-xs">
-              <span className="text-[#5F666D] font-mono text-[11px] whitespace-nowrap">Voice:</span>
+              <span className="text-[#606B76] font-mono text-[11px] whitespace-nowrap">Voice:</span>
               <select
                 value={selectedTestVoice}
                 onChange={(e) => setSelectedTestVoice(e.target.value)}
-                className="w-full bg-[#FFFFFF] border border-[#B0B4B8]/50 rounded-lg px-2 py-1.5 text-xs text-[#30343B] focus:outline-none focus:border-[#174D3A] font-mono"
+                className="w-full bg-white border border-[#E9EDF2] rounded-lg px-2 py-1.5 text-xs text-[#30343B] focus:outline-none focus:border-[#263746] font-mono"
               >
                 <option value="">Default System Voice</option>
                 {voices.map((v) => (
@@ -402,23 +396,23 @@ export const VoiceDiagnosticsScreen: React.FC<VoiceDiagnosticsScreenProps> = ({
       </div>
 
       {/* Diagnostics Event Log: Dark Component #202124 */}
-      <div className="p-5 rounded-xl bg-[#202124] text-white border border-[#B0B4B8]/40 font-mono text-xs shadow-sm">
-        <div className="flex items-center justify-between pb-2 mb-3 border-b border-[#B0B4B8]/20">
-          <div className="flex items-center gap-2 text-[#DCE8E1]">
-            <Terminal className="w-4 h-4" />
-            <span className="font-bold text-white">Real-Time Audio Diagnostics Console</span>
+      <div className="p-5 rounded-xl bg-[#202124] text-white border border-[#30343B] font-mono text-xs shadow-sm">
+        <div className="flex items-center justify-between pb-2 mb-3 border-b border-white/10">
+          <div className="flex items-center gap-2 text-[#E9EDF2]">
+            <Terminal className="w-4 h-4 text-[#C49A45]" />
+            <span className="font-semibold text-white">Real-Time Audio Diagnostics Console</span>
           </div>
           <button
             onClick={() => setLogs([])}
-            className="text-[11px] text-[#B0B4B8] hover:text-white transition-colors"
+            className="text-[11px] text-[#E9EDF2]/70 hover:text-white transition-colors"
           >
             Clear Log
           </button>
         </div>
 
-        <div className="max-h-40 overflow-y-auto space-y-1 text-[11px] text-[#B0B4B8] pr-1">
+        <div className="max-h-40 overflow-y-auto space-y-1 text-[11px] text-[#E9EDF2]/80 pr-1">
           {logs.length === 0 ? (
-            <span className="text-[#B0B4B8]/60 italic">No events logged yet.</span>
+            <span className="text-[#E9EDF2]/50 italic">No events logged yet.</span>
           ) : (
             logs.map((log, i) => (
               <div key={i} className="leading-snug">{log}</div>

@@ -76,7 +76,7 @@ export const SSUWelcomeScreen: React.FC<SSUWelcomeScreenProps> = ({
   return (
     <div
       onClick={handleContainerClick}
-      className="w-full h-full bg-[#FFFFFF] text-[#30343B] flex flex-col p-4 sm:p-6 md:p-8 font-sans select-none overflow-y-auto"
+      className="w-full h-full bg-[#E9EDF2] text-[#30343B] flex flex-col p-4 sm:p-6 md:p-8 font-sans select-none overflow-y-auto"
     >
       {/* Back to Hub Header Button */}
       <div className="flex items-center justify-between mb-4">
@@ -85,24 +85,24 @@ export const SSUWelcomeScreen: React.FC<SSUWelcomeScreenProps> = ({
             e.stopPropagation();
             onSelectScreen('hub');
           }}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#30343B] hover:bg-[#202124] border border-[#B0B4B8]/40 text-white transition-all shadow-sm active:scale-95 text-xs sm:text-sm font-bold"
+          className="flex items-center gap-2 px-4 py-2.5 min-h-[44px] rounded-lg bg-[#30343B] hover:bg-[#202124] border border-white/10 text-white transition-all shadow-sm active:scale-95 text-xs sm:text-sm font-semibold"
           title="Return to Robot Hub"
         >
-          <ArrowLeft className="w-4 h-4 text-[#DCE8E1]" />
+          <ArrowLeft className="w-4 h-4 text-[#C49A45]" />
           <span>Back to Hub</span>
         </button>
 
-        <span className="text-xs font-mono text-[#30343B] font-bold tracking-wider">
+        <span className="text-xs font-mono text-[#606B76] font-semibold tracking-wider">
           SSU WELCOME PORTAL
         </span>
       </div>
 
-      {/* Top University Branding Banner */}
-      <div className="rounded-xl bg-[#30343B] text-white border border-[#B0B4B8]/30 p-6 shadow-sm mb-6">
+      {/* Top University Branding Banner: Navy Blue #263746 */}
+      <div className="rounded-xl bg-[#263746] text-white border border-white/10 p-6 shadow-sm mb-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
             {/* Official University Logo */}
-            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-lg bg-[#FFFFFF] p-2.5 shadow-sm flex items-center justify-center flex-shrink-0 border border-[#B0B4B8]/40">
+            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-lg bg-white p-2.5 shadow-sm flex items-center justify-center flex-shrink-0 border border-[#E9EDF2]">
               <img
                 src="/assets/ssu-logo.png"
                 alt="Sri Sri University Logo"
@@ -114,18 +114,18 @@ export const SSUWelcomeScreen: React.FC<SSUWelcomeScreenProps> = ({
             </div>
 
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#202124] border border-[#B0B4B8]/30 text-[#B0B4B8] text-xs font-semibold tracking-wider uppercase mb-2">
-                <Sparkles className="w-3.5 h-3.5 text-[#DCE8E1]" />
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#30343B] border border-white/10 text-[#E9EDF2] text-xs font-semibold tracking-wider uppercase mb-2">
+                <Sparkles className="w-3.5 h-3.5 text-[#C49A45]" />
                 <span className="text-white">Official AI Campus Assistant</span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                SRI SRI UNIVERSITY
+              <h1 className="text-[26px] sm:text-[30px] font-bold text-white tracking-tight">
+                Sri Sri University
               </h1>
-              <p className="text-xs sm:text-sm font-semibold text-[#B0B4B8] italic mt-0.5">
+              <p className="text-[14px] font-medium text-[#E9EDF2]/90 mt-0.5">
                 "Learn, Lead, Serve" • Cuttack, Odisha
               </p>
-              <p className="text-xs text-[#B0B4B8] max-w-xl mt-1.5 leading-relaxed">
-                Founded by Poojya Gurudev Sri Sri Ravi Shankar. Blending the best of the East and modern innovation on a scenic 188-acre green campus.
+              <p className="text-[14px] text-[#E9EDF2]/80 max-w-xl mt-1.5 leading-relaxed">
+                Founded by Poojya Gurudev Sri Sri Ravi Shankar. Blending holistic Indian heritage with modern technological innovation on a 188-acre green hilltop campus.
               </p>
             </div>
           </div>
@@ -137,15 +137,15 @@ export const SSUWelcomeScreen: React.FC<SSUWelcomeScreenProps> = ({
                 e.stopPropagation();
                 handlePlayWelcome();
               }}
-              className={`px-5 py-3 rounded-lg font-bold text-xs sm:text-sm flex items-center gap-2.5 transition-all shadow-sm active:scale-95 border ${
+              className={`px-5 py-3 min-h-[44px] rounded-lg font-medium text-xs sm:text-sm flex items-center gap-2.5 transition-all shadow-sm active:scale-95 border ${
                 isSpeaking
-                  ? 'bg-[#202124] text-[#DCE8E1] border-[#174D3A]'
-                  : 'bg-[#174D3A] hover:bg-[#134232] text-white border-[#174D3A]'
+                  ? 'bg-[#30343B] text-white border-white/20'
+                  : 'bg-[#C49A45] hover:bg-[#b0883b] text-white border-[#C49A45]'
               }`}
             >
               {isSpeaking ? (
                 <>
-                  <Volume2 className="w-4 h-4 text-[#DCE8E1]" />
+                  <Volume2 className="w-4 h-4 text-white" />
                   <span>Stop Welcome Speech</span>
                 </>
               ) : (
@@ -159,13 +159,13 @@ export const SSUWelcomeScreen: React.FC<SSUWelcomeScreenProps> = ({
             {/* Greeting mode selector */}
             <div
               onClick={(e) => e.stopPropagation()}
-              className="flex items-center gap-1 bg-[#202124] border border-[#B0B4B8]/30 rounded-lg p-1 text-[11px] font-mono text-white"
+              className="flex items-center gap-1 bg-[#30343B] border border-white/10 rounded-lg p-1 text-[11px] font-mono text-white"
             >
-              <span className="text-[#B0B4B8] px-1.5">Greeting:</span>
+              <span className="text-[#E9EDF2]/70 px-1.5">Greeting:</span>
               <button
                 onClick={() => handleModeChange('interaction')}
                 className={`px-2 py-0.5 rounded transition-colors ${
-                  greetingMode === 'interaction' ? 'bg-[#174D3A] text-white font-bold' : 'text-[#B0B4B8] hover:text-white'
+                  greetingMode === 'interaction' ? 'bg-[#263746] text-white font-semibold' : 'text-[#E9EDF2]/70 hover:text-white'
                 }`}
                 title="Greets on first screen tap"
               >
@@ -174,7 +174,7 @@ export const SSUWelcomeScreen: React.FC<SSUWelcomeScreenProps> = ({
               <button
                 onClick={() => handleModeChange('auto')}
                 className={`px-2 py-0.5 rounded transition-colors ${
-                  greetingMode === 'auto' ? 'bg-[#174D3A] text-white font-bold' : 'text-[#B0B4B8] hover:text-white'
+                  greetingMode === 'auto' ? 'bg-[#263746] text-white font-semibold' : 'text-[#E9EDF2]/70 hover:text-white'
                 }`}
                 title="Plays automatically on startup"
               >
@@ -183,7 +183,7 @@ export const SSUWelcomeScreen: React.FC<SSUWelcomeScreenProps> = ({
               <button
                 onClick={() => handleModeChange('manual')}
                 className={`px-2 py-0.5 rounded transition-colors ${
-                  greetingMode === 'manual' ? 'bg-[#174D3A] text-white font-bold' : 'text-[#B0B4B8] hover:text-white'
+                  greetingMode === 'manual' ? 'bg-[#263746] text-white font-semibold' : 'text-[#E9EDF2]/70 hover:text-white'
                 }`}
                 title="Only plays when you tap the button"
               >
@@ -194,7 +194,7 @@ export const SSUWelcomeScreen: React.FC<SSUWelcomeScreenProps> = ({
         </div>
       </div>
 
-      {/* Main Feature Cards - Crisp White Cards */}
+      {/* Main Feature Cards - White Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         {/* Card 1: AI Assistant */}
         <div
@@ -202,16 +202,16 @@ export const SSUWelcomeScreen: React.FC<SSUWelcomeScreenProps> = ({
             e.stopPropagation();
             onSelectScreen('assistant');
           }}
-          className="group p-5 rounded-xl bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 hover:border-[#174D3A] transition-all cursor-pointer shadow-sm hover:shadow"
+          className="group p-5 rounded-xl bg-white text-[#30343B] border border-[#E9EDF2] hover:border-[#263746] transition-all cursor-pointer shadow-sm"
         >
-          <div className="w-11 h-11 rounded-lg bg-[#DCE8E1]/40 border border-[#B0B4B8]/50 flex items-center justify-center text-[#174D3A] mb-3">
-            <MessageSquare className="w-5 h-5 text-[#174D3A]" />
+          <div className="w-11 h-11 rounded-lg bg-[#E9EDF2] border border-[#D8DFE8] flex items-center justify-center text-[#263746] mb-3">
+            <MessageSquare className="w-5 h-5 text-[#263746]" strokeWidth={1.75} />
           </div>
-          <h2 className="text-base font-bold text-[#30343B] flex items-center justify-between">
+          <h2 className="text-[18px] font-semibold text-[#30343B] flex items-center justify-between">
             <span>AI Campus Assistant</span>
-            <ArrowRight className="w-4 h-4 text-[#174D3A] group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-4 h-4 text-[#C49A45] group-hover:translate-x-1 transition-transform" />
           </h2>
-          <p className="text-xs text-[#5F666D] mt-1.5 leading-relaxed">
+          <p className="text-[14px] text-[#606B76] mt-1.5 leading-relaxed">
             Speak in English or Hindi to inquire about courses, facilities, admissions, or get campus directions.
           </p>
         </div>
@@ -222,16 +222,16 @@ export const SSUWelcomeScreen: React.FC<SSUWelcomeScreenProps> = ({
             e.stopPropagation();
             onSelectScreen('university-info');
           }}
-          className="group p-5 rounded-xl bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 hover:border-[#174D3A] transition-all cursor-pointer shadow-sm hover:shadow"
+          className="group p-5 rounded-xl bg-white text-[#30343B] border border-[#E9EDF2] hover:border-[#263746] transition-all cursor-pointer shadow-sm"
         >
-          <div className="w-11 h-11 rounded-lg bg-[#DCE8E1]/40 border border-[#B0B4B8]/50 flex items-center justify-center text-[#174D3A] mb-3">
-            <BookOpen className="w-5 h-5 text-[#174D3A]" />
+          <div className="w-11 h-11 rounded-lg bg-[#E9EDF2] border border-[#D8DFE8] flex items-center justify-center text-[#263746] mb-3">
+            <BookOpen className="w-5 h-5 text-[#263746]" strokeWidth={1.75} />
           </div>
-          <h2 className="text-base font-bold text-[#30343B] flex items-center justify-between">
+          <h2 className="text-[18px] font-semibold text-[#30343B] flex items-center justify-between">
             <span>University Information</span>
-            <ArrowRight className="w-4 h-4 text-[#174D3A] group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-4 h-4 text-[#C49A45] group-hover:translate-x-1 transition-transform" />
           </h2>
-          <p className="text-xs text-[#5F666D] mt-1.5 leading-relaxed">
+          <p className="text-[14px] text-[#606B76] mt-1.5 leading-relaxed">
             Explore our 11 academic faculties, B.Tech, MBA, BAMS, Agriculture programmes, and history.
           </p>
         </div>
@@ -242,26 +242,26 @@ export const SSUWelcomeScreen: React.FC<SSUWelcomeScreenProps> = ({
             e.stopPropagation();
             onSelectScreen('facilities');
           }}
-          className="group p-5 rounded-xl bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 hover:border-[#174D3A] transition-all cursor-pointer shadow-sm hover:shadow"
+          className="group p-5 rounded-xl bg-white text-[#30343B] border border-[#E9EDF2] hover:border-[#263746] transition-all cursor-pointer shadow-sm"
         >
-          <div className="w-11 h-11 rounded-lg bg-[#DCE8E1]/40 border border-[#B0B4B8]/50 flex items-center justify-center text-[#174D3A] mb-3">
-            <Building className="w-5 h-5 text-[#174D3A]" />
+          <div className="w-11 h-11 rounded-lg bg-[#E9EDF2] border border-[#D8DFE8] flex items-center justify-center text-[#263746] mb-3">
+            <Building className="w-5 h-5 text-[#263746]" strokeWidth={1.75} />
           </div>
-          <h2 className="text-base font-bold text-[#30343B] flex items-center justify-between">
+          <h2 className="text-[18px] font-semibold text-[#30343B] flex items-center justify-between">
             <span>Campus Facilities</span>
-            <ArrowRight className="w-4 h-4 text-[#174D3A] group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-4 h-4 text-[#C49A45] group-hover:translate-x-1 transition-transform" />
           </h2>
-          <p className="text-xs text-[#5F666D] mt-1.5 leading-relaxed">
+          <p className="text-[14px] text-[#606B76] mt-1.5 leading-relaxed">
             Central Library (Shruti), 100+ Bed Ayurveda Hospital, hostels, sports arena, and Annapurna mess.
           </p>
         </div>
       </div>
 
-      {/* Quick Visitor Query Chips - Crisp White Card */}
-      <div className="p-5 rounded-xl bg-[#FFFFFF] text-[#30343B] border border-[#B0B4B8]/60 mb-6 shadow-sm">
+      {/* Quick Visitor Query Chips - White Card */}
+      <div className="p-5 rounded-xl bg-white text-[#30343B] border border-[#E9EDF2] mb-6 shadow-sm">
         <div className="flex items-center gap-2 mb-3">
-          <Sparkles className="w-4 h-4 text-[#174D3A]" />
-          <span className="text-xs font-bold text-[#30343B] uppercase tracking-wider">
+          <Sparkles className="w-4 h-4 text-[#C49A45]" />
+          <span className="text-[13px] font-semibold text-[#30343B] uppercase tracking-wider">
             Popular Visitor Questions (Tap to Ask)
           </span>
         </div>
@@ -275,32 +275,32 @@ export const SSUWelcomeScreen: React.FC<SSUWelcomeScreenProps> = ({
                 onSelectScreen('assistant');
                 onSpeakText(item.query);
               }}
-              className="px-3.5 py-2 rounded-lg bg-[#FFFFFF] hover:bg-[#DCE8E1]/30 border border-[#B0B4B8]/50 hover:border-[#174D3A] text-xs text-[#30343B] font-medium transition-all flex items-center gap-1.5 shadow-sm active:scale-95"
+              className="px-3.5 py-2 min-h-[40px] rounded-lg bg-white hover:bg-[#E9EDF2] border border-[#E9EDF2] hover:border-[#263746] text-xs text-[#30343B] font-medium transition-all flex items-center gap-1.5 shadow-sm active:scale-95"
             >
               <span>{item.label}</span>
-              <ArrowRight className="w-3 h-3 text-[#174D3A]" />
+              <ArrowRight className="w-3.5 h-3.5 text-[#263746]" />
             </button>
           ))}
         </div>
       </div>
 
-      {/* Campus Quick Facts Bar - Crisp White Cards */}
+      {/* Campus Quick Facts Bar - White Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-        <div className="p-3.5 rounded-xl bg-[#FFFFFF] border border-[#B0B4B8]/60 text-[#30343B] shadow-sm">
-          <div className="text-xl font-extrabold text-[#174D3A]">188 Acres</div>
-          <div className="text-[11px] text-[#5F666D] mt-0.5 font-medium">Green Hilltop Campus</div>
+        <div className="p-3.5 rounded-xl bg-white border border-[#E9EDF2] text-[#30343B] shadow-sm">
+          <div className="text-[22px] font-bold text-[#263746]">188 Acres</div>
+          <div className="text-[13px] text-[#606B76] mt-0.5">Green Hilltop Campus</div>
         </div>
-        <div className="p-3.5 rounded-xl bg-[#FFFFFF] border border-[#B0B4B8]/60 text-[#30343B] shadow-sm">
-          <div className="text-xl font-extrabold text-[#174D3A]">11 Faculties</div>
-          <div className="text-[11px] text-[#5F666D] mt-0.5 font-medium">Interdisciplinary Study</div>
+        <div className="p-3.5 rounded-xl bg-white border border-[#E9EDF2] text-[#30343B] shadow-sm">
+          <div className="text-[22px] font-bold text-[#263746]">11 Faculties</div>
+          <div className="text-[13px] text-[#606B76] mt-0.5">Interdisciplinary Study</div>
         </div>
-        <div className="p-3.5 rounded-xl bg-[#FFFFFF] border border-[#B0B4B8]/60 text-[#30343B] shadow-sm">
-          <div className="text-xl font-extrabold text-[#174D3A]">100+ Beds</div>
-          <div className="text-[11px] text-[#5F666D] mt-0.5 font-medium">Ayurveda Hospital</div>
+        <div className="p-3.5 rounded-xl bg-white border border-[#E9EDF2] text-[#30343B] shadow-sm">
+          <div className="text-[22px] font-bold text-[#263746]">100+ Beds</div>
+          <div className="text-[13px] text-[#606B76] mt-0.5">Ayurveda Hospital</div>
         </div>
-        <div className="p-3.5 rounded-xl bg-[#FFFFFF] border border-[#B0B4B8]/60 text-[#30343B] shadow-sm">
-          <div className="text-xl font-extrabold text-[#174D3A]">100% Vegetarian</div>
-          <div className="text-[11px] text-[#5F666D] mt-0.5 font-medium">Sattvic Healthy Living</div>
+        <div className="p-3.5 rounded-xl bg-white border border-[#E9EDF2] text-[#30343B] shadow-sm">
+          <div className="text-[22px] font-bold text-[#263746]">100% Vegetarian</div>
+          <div className="text-[13px] text-[#606B76] mt-0.5">Sattvic Healthy Living</div>
         </div>
       </div>
     </div>
