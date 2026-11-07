@@ -168,12 +168,12 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
               <button
                 type="button"
                 onClick={() => {
-                  onUpdateSpeechPitch(0.82);
-                  onUpdateSpeechRate(0.90);
+                  onUpdateSpeechPitch(0.80);
+                  onUpdateSpeechRate(0.88);
                 }}
                 className="px-3 py-1.5 rounded-lg bg-[#263746] hover:bg-[#1D2B37] text-white text-xs font-medium font-mono flex items-center gap-1.5 transition-all shadow-sm"
               >
-                <span>✓ Match Reference Tone (Pitch: 0.82, Rate: 0.90)</span>
+                <span>✓ Match Reference Tone (Pitch: 0.80, Rate: 0.88)</span>
               </button>
             </div>
           </div>
@@ -186,7 +186,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
                 onChange={(e) => onSelectVoice(e.target.value)}
                 className="flex-1 bg-white border border-[#E9EDF2] rounded-lg px-3 py-2 text-[#30343B] focus:outline-none focus:border-[#263746] cursor-pointer text-xs"
               >
-                <option value="">Default Male AI Voice (Auto-selected natural male)</option>
+                <option value="">Default Baritone Voice (Auto-selected deep male matching sample)</option>
                 {availableVoices.map((v) => (
                   <option key={v.voiceURI} value={v.voiceURI}>
                     {v.name} ({v.lang}) {v.default ? '— Default' : ''}

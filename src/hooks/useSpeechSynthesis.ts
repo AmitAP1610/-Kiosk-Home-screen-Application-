@@ -7,6 +7,13 @@ interface UseSpeechSynthesisProps {
   onError?: (err: any) => void;
 }
 
+export const DEFAULT_BARITONE_CONFIG = {
+  pitch: 0.80, // Deep baritone pitch matching uploaded sample ("I fear darkness hunts us...")
+  rate: 0.88,  // Measured authoritative pace
+  volume: 1.0,
+  version: 'baritone_default_v3'
+};
+
 export function useSpeechSynthesis({
   onStart,
   onEnd,
@@ -15,12 +22,60 @@ export function useSpeechSynthesis({
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [visemeLevel, setVisemeLevel] = useState(0);
   const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
-  const [selectedVoice, setSelectedVoice] = useState<string>(() => localStorage.getItem('kiosk_tts_voice') || '');
-  const [rate, setRateState] = useState<number>(() => parseFloat(localStorage.getItem('kiosk_tts_rate') || '0.90'));
-  const [pitch, setPitchState] = useState<number>(() => parseFloat(localStorage.getItem('kiosk_tts_pitch') || '0.82'));
-  const [volume, setVolumeState] = useState<number>(() => parseFloat(localStorage.getItem('kiosk_tts_volume') || '1.0'));
+
+  // Default to Baritone Voice matching uploaded sample
+  const [selectedVoice, setSelectedVoice] = useState<string>(() => {
+    const version = localStorage.getItem('kiosk_voice_version');
+    if (version === DEFAULT_BARITONE_CONFIG.version) {
+      return localStorage.getItem('kiosk_tts_voice') || '';
+    }
+    return '';
+  });
+
+  const [rate, setRateState] = useState<number>(() => {
+    const version = localStorage.getItem('kiosk_voice_version');
+    if (version === DEFAULT_BARITONE_CONFIG.version) {
+      const saved = localStorage.getItem('kiosk_tts_rate');
+      if (saved) return parseFloat(saved);
+    }
+    return DEFAULT_BARITONE_CONFIG.rate;
+  });
+
+  const [pitch, setPitchState] = useState<number>(() => {
+    const version = localStorage.getItem('kiosk_voice_version');
+    if (version === DEFAULT_BARITONE_CONFIG.version) {
+      const saved = localStorage.getItem('kiosk_tts_pitch');
+      if (saved) return parseFloat(saved);
+    }
+    return DEFAULT_BARITONE_CONFIG.pitch;
+  });
+
+  const [volume, setVolumeState] = useState<number>(() => {
+    const version = localStorage.getItem('kiosk_voice_version');
+    if (version === DEFAULT_BARITONE_CONFIG.version) {
+      const saved = localStorage.getItem('kiosk_tts_volume');
+      if (saved) return parseFloat(saved);
+    }
+    return DEFAULT_BARITONE_CONFIG.volume;
+  });
 
   const isSupported = textToSpeech.isSupported();
+
+  useEffect(() => {
+    // Migration: enforce the default baritone voice settings across all client devices
+    const version = localStorage.getItem('kiosk_voice_version');
+    if (version !== DEFAULT_BARITONE_CONFIG.version) {
+      localStorage.setItem('kiosk_voice_version', DEFAULT_BARITONE_CONFIG.version);
+      localStorage.setItem('kiosk_tts_pitch', DEFAULT_BARITONE_CONFIG.pitch.toString());
+      localStorage.setItem('kiosk_tts_rate', DEFAULT_BARITONE_CONFIG.rate.toString());
+      localStorage.setItem('kiosk_tts_volume', DEFAULT_BARITONE_CONFIG.volume.toString());
+      localStorage.removeItem('kiosk_tts_voice');
+      setPitchState(DEFAULT_BARITONE_CONFIG.pitch);
+      setRateState(DEFAULT_BARITONE_CONFIG.rate);
+      setVolumeState(DEFAULT_BARITONE_CONFIG.volume);
+      setSelectedVoice('');
+    }
+  }, []);
 
   useEffect(() => {
     // Connect viseme stream to local state for mouth animation
@@ -31,6 +86,15 @@ export function useSpeechSynthesis({
     const updateVoices = () => {
       const list = textToSpeech.getVoices();
       setAvailableVoices(list);
+
+      // Automatically assign the best baritone voice matching the reference audio if not explicitly pinned
+      if (list.length > 0) {
+        const bestVoice = textToSpeech.findBestVoice('en-IN', selectedVoice || undefined);
+        if (bestVoice && !selectedVoice) {
+          setSelectedVoice(bestVoice.voiceURI);
+          localStorage.setItem('kiosk_tts_voice', bestVoice.voiceURI);
+        }
+      }
     };
 
     updateVoices();
@@ -43,7 +107,7 @@ export function useSpeechSynthesis({
       textToSpeech.stop();
       textToSpeech.setVisemeCallback(null);
     };
-  }, []);
+  }, [selectedVoice]);
 
   const setRate = useCallback((val: number) => {
     setRateState(val);

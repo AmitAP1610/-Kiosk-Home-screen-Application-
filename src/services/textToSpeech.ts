@@ -104,81 +104,109 @@ class TextToSpeechService {
 
   /**
    * Finds the best voice matching language preference.
-   * Strictly prioritizes deep resonant natural male voices (like George, Google UK/US Male, Brian, David, Guy)
+   * Strictly prioritizes deep resonant natural male voices (like George, Google UK/US Male, Brian, David, Guy, Daniel)
    * matching the uploaded baritone reference audio sample ("I fear darkness hunts us...").
    */
   public findBestVoice(lang = 'en-IN', voiceURI?: string): SpeechSynthesisVoice | null {
     const list = this.getVoices();
     if (list.length === 0) return null;
 
-    if (voiceURI) {
-      const match = list.find(v => v.voiceURI === voiceURI);
-      if (match) return match;
-    }
-
-    // Explicit female names to filter out
+    // Female keywords to strictly reject
     const femaleKeywords = [
       'female', 'zira', 'jenny', 'aria', 'hazel', 'susan', 'linda',
       'heera', 'kalpana', 'samantha', 'victoria', 'karen', 'catherine',
-      'helena', 'stephanie', 'nicole', 'ananya', 'priya', 'pooja', 'neerja'
+      'helena', 'stephanie', 'nicole', 'ananya', 'priya', 'pooja', 'neerja',
+      'swara', 'veena', 'aditi', 'raveena', 'alva', 'fiona', 'moira', 'tessa', 'siri'
     ];
-    const isFemale = (name: string) => femaleKeywords.some(k => name.toLowerCase().includes(k));
+    const isFemale = (v: SpeechSynthesisVoice) => {
+      const combined = (v.name + ' ' + v.voiceURI).toLowerCase();
+      return femaleKeywords.some(k => combined.includes(k));
+    };
 
-    // Deep resonant male voice keywords (mirrors the uploaded baritone audio sample)
-    const priorityBaritoneKeywords = [
-      'george', 'uk english male', 'brian', 'ryan', 'guy', 'david', 'mark', 'richard', 'en-gb-male'
+    // If explicit voiceURI was requested, verify it is valid and not female
+    if (voiceURI) {
+      const match = list.find(v => v.voiceURI === voiceURI);
+      if (match && !isFemale(match)) return match;
+    }
+
+    // Tier 1: British Baritone Male (Closest match to the reference sample)
+    const tier1Keywords = [
+      'george', 'uk english male', 'en-gb-male', 'brian', 'ryan', 'daniel', 'richard', 'oliver'
     ];
-    const generalMaleKeywords = [
-      'male', 'ravi', 'prabhat', 'james', 'andrew', 'daniel', 'madhav', 'rohit'
-    ];
-
-    const isPriorityBaritone = (name: string) =>
-      priorityBaritoneKeywords.some(k => name.toLowerCase().includes(k)) && !isFemale(name);
-
-    const isGeneralMale = (name: string) =>
-      (priorityBaritoneKeywords.some(k => name.toLowerCase().includes(k)) ||
-       generalMaleKeywords.some(k => name.toLowerCase().includes(k))) && !isFemale(name);
-
-    // 1. Top priority: British/deep baritone male matching reference tone
-    const baritoneMatch = list.find(v => isPriorityBaritone(v.name));
-    if (baritoneMatch) return baritoneMatch;
-
-    // 2. Prioritize target language male voice
-    const targetMale = list.find(v => {
-      const langLower = v.lang.replace('_', '-').toLowerCase();
-      return (langLower.startsWith(lang.toLowerCase()) || langLower.startsWith(lang.split('-')[0].toLowerCase())) && isGeneralMale(v.name);
+    const tier1Match = list.find(v => {
+      const combined = (v.name + ' ' + v.voiceURI).toLowerCase();
+      return tier1Keywords.some(k => combined.includes(k)) && !isFemale(v);
     });
-    if (targetMale) return targetMale;
+    if (tier1Match) return tier1Match;
 
-    // 3. Try any English male voice
+    // Tier 2: Android / Google UK English Male (e.g. en-gb-x-rjs#male, Google UK English Male)
+    const ukMaleMatch = list.find(v => {
+      const langLower = v.lang.replace('_', '-').toLowerCase();
+      const combined = (v.name + ' ' + v.voiceURI).toLowerCase();
+      return (
+        langLower.startsWith('en-gb') &&
+        (combined.includes('male') || combined.includes('#male') || combined.includes('natural')) &&
+        !isFemale(v)
+      );
+    });
+    if (ukMaleMatch) return ukMaleMatch;
+
+    // Tier 3: US English Male (e.g. Guy, David, Mark, Google US English Male)
+    const tier3Keywords = ['guy', 'david', 'mark', 'us english male', 'en-us-male', 'andrew', 'christopher'];
+    const usMaleMatch = list.find(v => {
+      const combined = (v.name + ' ' + v.voiceURI).toLowerCase();
+      return tier3Keywords.some(k => combined.includes(k)) && !isFemale(v);
+    });
+    if (usMaleMatch) return usMaleMatch;
+
+    // Tier 4: Android Google US Male (e.g. en-us-x-sfg#male, en-us male)
+    const androidUsMale = list.find(v => {
+      const langLower = v.lang.replace('_', '-').toLowerCase();
+      const combined = (v.name + ' ' + v.voiceURI).toLowerCase();
+      return (
+        langLower.startsWith('en-us') &&
+        (combined.includes('male') || combined.includes('#male') || combined.includes('natural')) &&
+        !isFemale(v)
+      );
+    });
+    if (androidUsMale) return androidUsMale;
+
+    // Tier 5: Indian English Male (e.g. Prabhat, Ravi, Madhav, en-in male)
+    const indianMale = list.find(v => {
+      const langLower = v.lang.replace('_', '-').toLowerCase();
+      const combined = (v.name + ' ' + v.voiceURI).toLowerCase();
+      return (
+        langLower.startsWith('en-in') &&
+        (combined.includes('male') || combined.includes('prabhat') || combined.includes('ravi') || combined.includes('madhav')) &&
+        !isFemale(v)
+      );
+    });
+    if (indianMale) return indianMale;
+
+    // Tier 6: Any English male voice
     const anyEnglishMale = list.find(v => {
       const langLower = v.lang.replace('_', '-').toLowerCase();
-      return langLower.startsWith('en') && isGeneralMale(v.name);
+      const combined = (v.name + ' ' + v.voiceURI).toLowerCase();
+      return langLower.startsWith('en') && combined.includes('male') && !isFemale(v);
     });
     if (anyEnglishMale) return anyEnglishMale;
 
-    // 4. Try any male voice in the system
-    const anyMale = list.find(v => isGeneralMale(v.name));
-    if (anyMale) return anyMale;
-
-    // 5. Prefer non-female voice matching language
-    const nonFemaleLang = list.find(v => {
+    // Tier 7: Any general English voice that is not female
+    const anyNonFemaleEnglish = list.find(v => {
       const langLower = v.lang.replace('_', '-').toLowerCase();
-      return (langLower.startsWith(lang.toLowerCase()) || langLower.startsWith(lang.split('-')[0].toLowerCase())) && !isFemale(v.name);
+      return langLower.startsWith('en') && !isFemale(v);
     });
-    if (nonFemaleLang) return nonFemaleLang;
+    if (anyNonFemaleEnglish) return anyNonFemaleEnglish;
 
-    // 6. Match exact language code (e.g. 'en-IN' or 'hi-IN')
-    const langMatch = list.find(v => v.lang.replace('_', '-').toLowerCase() === lang.toLowerCase());
+    // Tier 8: Fallback to target language match
+    const langMatch = list.find(v => {
+      const langLower = v.lang.replace('_', '-').toLowerCase();
+      return (langLower.startsWith(lang.toLowerCase()) || langLower.startsWith(lang.split('-')[0].toLowerCase())) && !isFemale(v);
+    });
     if (langMatch) return langMatch;
 
-    // 7. Match prefix (e.g. 'hi' for Hindi, 'en' for English)
-    const prefix = lang.split('-')[0].toLowerCase();
-    const prefixMatch = list.find(v => v.lang.toLowerCase().startsWith(prefix));
-    if (prefixMatch) return prefixMatch;
-
-    // 8. Fallback to default or first available
-    return list.find(v => v.default) || list[0] || null;
+    // Tier 9: Fallback default
+    return list.find(v => v.default && !isFemale(v)) || list[0] || null;
   }
 
   /**
@@ -257,9 +285,9 @@ class TextToSpeechService {
           utterance.voice = voice;
         }
 
-        // Calibrate pitch and rate to mirror the deep baritone sample (0.82 pitch, 0.90 rate)
-        utterance.rate = Math.max(0.5, Math.min(2.0, options.rate ?? 0.90));
-        utterance.pitch = Math.max(0.5, Math.min(2.0, options.pitch ?? 0.82));
+        // Calibrate pitch and rate to mirror the deep baritone sample (0.80 pitch, 0.88 rate)
+        utterance.rate = Math.max(0.5, Math.min(2.0, options.rate ?? 0.88));
+        utterance.pitch = Math.max(0.5, Math.min(2.0, options.pitch ?? 0.80));
         utterance.volume = Math.max(0.0, Math.min(1.0, options.volume ?? 1.0));
 
         utterance.onstart = () => {
