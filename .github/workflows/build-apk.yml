@@ -36,11 +36,11 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: Sync Capacitor Android Project
-        run: npx cap sync android
-
       - name: Make Gradlew Executable
         run: chmod +x android/gradlew
+
+      - name: Sync Capacitor Android Project
+        run: npx cap sync android
 
       - name: Compile Android Debug APK
         run: |
