@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">KIOSK AMR</string>
+    <string name="title_activity_main">KIOSK AMR</string>
+    <string name="package_name">com.srisriuniversity.kioskamr</string>
+    <string name="custom_url_scheme">com.srisriuniversity.kioskamr</string>
+</resources>

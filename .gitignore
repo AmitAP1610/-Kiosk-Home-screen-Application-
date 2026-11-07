@@ -3,3 +3,13 @@ dist/
 .env
 .env.*
 !.env.example
+
+# Android Build Artifacts & Gradle Cache
+android/.gradle/
+android/build/
+android/app/build/
+android/.idea/
+android/*.iml
+android/app/*.iml
+android/local.properties
+android/captures/
