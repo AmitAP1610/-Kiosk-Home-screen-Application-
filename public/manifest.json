@@ -1,0 +1,33 @@
+{
+  "name": "KIOSK AMR — Sri Sri University",
+  "short_name": "KIOSK AMR",
+  "description": "Autonomous Mobile Campus Assistance Robot by Sri Sri University Robotics Club",
+  "start_url": "/",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone", "window-controls-overlay"],
+  "orientation": "landscape",
+  "background_color": "#202124",
+  "theme_color": "#263746",
+  "scope": "/",
+  "lang": "en-US",
+  "categories": ["education", "utilities", "productivity"],
+  "icons": [
+    {
+      "src": "/robotics-club-logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/robotics-club-logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/robot-face-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

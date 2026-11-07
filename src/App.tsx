@@ -134,10 +134,16 @@ export const App: React.FC = () => {
     motorEStop: false
   };
 
-  // Fullscreen toggle
+  // Fullscreen toggle with Android landscape orientation lock
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(() => {});
+      document.documentElement.requestFullscreen().then(() => {
+        try {
+          if ('orientation' in screen && 'lock' in (screen.orientation as any)) {
+            (screen.orientation as any).lock('landscape').catch(() => {});
+          }
+        } catch {}
+      }).catch(() => {});
       setIsFullscreen(true);
     } else {
       if (document.exitFullscreen) {
@@ -153,6 +159,41 @@ export const App: React.FC = () => {
     };
     document.addEventListener('fullscreenchange', handleFsChange);
     return () => document.removeEventListener('fullscreenchange', handleFsChange);
+  }, []);
+
+  // Screen Wake Lock API for Android Tablet Kiosk mode (keeps tablet screen awake)
+  useEffect(() => {
+    let wakeLock: any = null;
+    const requestWakeLock = async () => {
+      try {
+        if ('wakeLock' in navigator) {
+          wakeLock = await (navigator as any).wakeLock.request('screen');
+        }
+      } catch {}
+    };
+    requestWakeLock();
+
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        requestWakeLock();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibility);
+      if (wakeLock) {
+        try { wakeLock.release(); } catch {}
+      }
+    };
+  }, []);
+
+  // Prevent default context menu on Android tablet long-press
+  useEffect(() => {
+    const handleContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+    };
+    window.addEventListener('contextmenu', handleContextMenu);
+    return () => window.removeEventListener('contextmenu', handleContextMenu);
   }, []);
 
   // Wakeup completion handler
@@ -207,6 +248,8 @@ export const App: React.FC = () => {
             onOpenMenu={() => setIsMenuOpen(true)}
             onSpeakGreeting={(text) => speakDirect(text)}
             isSpeaking={isSpeaking}
+            isFullscreen={isFullscreen}
+            onToggleFullscreen={toggleFullscreen}
           />
         )}
 

@@ -1,18 +1,29 @@
 <!doctype html>
-<html lang="en" class="h-full w-full bg-black">
+<html lang="en" class="h-full w-full bg-[#202124]">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/robot-face-icon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Futuristic Robot Face UI</title>
-    <!-- Preload clean futuristic sans fonts -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    
+    <!-- Android Tablet & PWA Kiosk Meta Tags -->
+    <title>KIOSK AMR — Sri Sri University</title>
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="KIOSK AMR" />
+    <meta name="application-name" content="KIOSK AMR" />
+    <meta name="theme-color" content="#263746" />
+    <meta name="screen-orientation" content="landscape" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   </head>
-  <body class="h-full w-full bg-black text-slate-100 overflow-hidden select-none m-0 p-0">
+  <body class="h-full w-full bg-[#202124] text-[#30343B] overflow-hidden select-none m-0 p-0 touch-manipulation">
     <div id="root" class="h-full w-full"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-
