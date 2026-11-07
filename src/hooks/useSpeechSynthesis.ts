@@ -142,8 +142,10 @@ export function useSpeechSynthesis({
       };
 
       try {
+        let hasActuallyStarted = false;
         await textToSpeech.speak(text, mergedOptions, {
           onStart: () => {
+            hasActuallyStarted = true;
             setIsSpeaking(true);
             if (onStart) onStart();
           },
@@ -158,9 +160,13 @@ export function useSpeechSynthesis({
             if (onError) onError(err);
           }
         });
-      } catch {
+        if (!hasActuallyStarted) {
+          throw new Error('Speech synthesis did not start');
+        }
+      } catch (err) {
         setIsSpeaking(false);
         setVisemeLevel(0);
+        throw err;
       }
     },
     [isSupported, rate, pitch, volume, selectedVoice, onStart, onEnd, onError]

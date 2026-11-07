@@ -377,7 +377,7 @@ class TextToSpeechService {
             console.warn('SpeechSynthesis error:', e.error);
             if (callbacks?.onError) callbacks.onError(e);
           }
-          resolve();
+          reject(new Error(`SpeechSynthesis error: ${e.error}`));
         };
 
         try {

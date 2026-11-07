@@ -203,9 +203,11 @@ export function useVoiceAssistant({
       if (isSpeaking) ttsStop();
       try {
         await ttsSpeak(text);
+        // Only run onEndCallback when the speech genuinely finishes
         if (onEndCallback) onEndCallback();
-      } catch {
-        if (onEndCallback) onEndCallback();
+      } catch (err) {
+        console.warn('Speech playback did not complete or was blocked:', err);
+        // Crucial: Do NOT call onEndCallback on error or abort
       }
     },
     [isSpeaking, ttsStop, ttsSpeak]
