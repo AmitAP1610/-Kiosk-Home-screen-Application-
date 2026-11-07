@@ -49,16 +49,16 @@ export const HubScreen: React.FC<HubScreenProps> = ({
   return (
     <div className="w-full h-full text-white flex flex-col justify-between p-3 sm:p-4 lg:p-5 font-sans select-none overflow-hidden relative">
       {/* ======================================================== */}
-      {/* 1. SRI SRI UNIVERSITY SHRUTI BUILDING BACKGROUND         */}
+      {/* 1. SRI SRI UNIVERSITY MAIN BUILDING BACKGROUND           */}
       {/* ======================================================== */}
       <img
-        src="/images/gallery/academic-shruti-complex.jpg"
-        alt="Sri Sri University Shruti Building"
-        className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+        src="/images/gallery/ssu-shruti-main-building.jpg"
+        alt="Sri Sri University Main Building"
+        className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
       />
 
-      {/* Android Dark Scrim Overlay: showcases Shruti architecture with crisp UI contrast */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#111827]/80 via-[#1E293B]/60 to-[#0F172A]/85 backdrop-blur-[1px] pointer-events-none" />
+      {/* Android Dark Scrim Overlay: showcases SSU architecture & sky with crisp UI contrast */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#111827]/75 via-[#1E293B]/40 to-[#0F172A]/85 pointer-events-none" />
 
       {/* ======================================================== */}
       {/* 2. ANDROID TOP APP BAR: Navy Blue (#263746)               */}

@@ -100,8 +100,8 @@ export const SSUWelcomeScreen: React.FC<SSUWelcomeScreenProps> = ({
       {/* Top University Branding Banner: Authentic Campus Photo + Dark Overlay */}
       <div className="relative rounded-xl overflow-hidden text-white border border-white/10 p-6 shadow-sm mb-6">
         <img
-          src="/images/gallery/academic-shruti-complex.jpg"
-          alt="Sri Sri University Campus"
+          src="/images/gallery/ssu-shruti-main-building.jpg"
+          alt="Sri Sri University Main Building"
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[#17191C]/95 via-[#263746]/90 to-[#17191C]/92" />

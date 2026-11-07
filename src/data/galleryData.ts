@@ -38,6 +38,13 @@ export const SSU_GALLERY_PHOTOS: GalleryPhoto[] = [
   },
   {
     id: 'academic-1',
+    title: 'SSU Main Building & Courtyard',
+    category: 'academic',
+    src: '/images/gallery/ssu-shruti-main-building.jpg',
+    alt: 'Sri Sri University iconic SSU main building, central archway and courtyard lawn'
+  },
+  {
+    id: 'academic-1b',
     title: 'Shruti Academic Complex',
     category: 'academic',
     src: '/images/gallery/academic-shruti-complex.jpg',
