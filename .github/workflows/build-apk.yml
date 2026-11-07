@@ -83,3 +83,4 @@ jobs:
             android/app/build/outputs/apk/debug/KIOSK-AMR-v1.0.0.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
