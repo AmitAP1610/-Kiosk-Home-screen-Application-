@@ -27,11 +27,57 @@ class TextToSpeechService {
   private onVisemeUpdate: VisemeCallback | null = null;
   private isVoicesLoaded: boolean = false;
   private voiceLoadPromise: Promise<SpeechSynthesisVoice[]> | null = null;
+  private keepAliveTimer: any = null;
 
   constructor() {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       this.synth = window.speechSynthesis;
       this.initVoiceLoader();
+
+      // Auto-unlock speech synthesis on first user interaction anywhere on screen
+      const unlock = () => {
+        this.unlockAudioEngine();
+        window.removeEventListener('click', unlock);
+        window.removeEventListener('touchstart', unlock);
+        window.removeEventListener('pointerdown', unlock);
+      };
+      window.addEventListener('click', unlock, { once: true, passive: true });
+      window.addEventListener('touchstart', unlock, { once: true, passive: true });
+      window.addEventListener('pointerdown', unlock, { once: true, passive: true });
+    }
+  }
+
+  /**
+   * Unlocks speech synthesis and audio pipeline after user interaction
+   */
+  public unlockAudioEngine() {
+    if (!this.synth) return;
+    try {
+      if (this.synth.paused) {
+        this.synth.resume();
+      }
+      const silent = new SpeechSynthesisUtterance(' ');
+      silent.volume = 0.01;
+      silent.rate = 2.0;
+      this.synth.speak(silent);
+    } catch {}
+  }
+
+  private startKeepAlive() {
+    this.stopKeepAlive();
+    this.keepAliveTimer = setInterval(() => {
+      if (this.synth && this.isSpeakingState) {
+        if (this.synth.paused) {
+          this.synth.resume();
+        }
+      }
+    }, 4000);
+  }
+
+  private stopKeepAlive() {
+    if (this.keepAliveTimer) {
+      clearInterval(this.keepAliveTimer);
+      this.keepAliveTimer = null;
     }
   }
 
@@ -247,8 +293,17 @@ class TextToSpeechService {
       throw err;
     }
 
-    // Stop existing playback first
-    this.stop();
+    // Stop existing playback safely if active
+    if (this.synth.speaking || this.synth.pending) {
+      this.stop();
+      await new Promise(r => setTimeout(r, 50));
+    }
+
+    if (this.synth.paused) {
+      try {
+        this.synth.resume();
+      } catch {}
+    }
 
     await this.waitForVoices();
     const voice = this.findBestVoice(options.lang || 'en-IN', options.voiceURI);
@@ -267,6 +322,7 @@ class TextToSpeechService {
       const speakNextChunk = () => {
         if (chunkIndex >= chunks.length) {
           this.isSpeakingState = false;
+          this.stopKeepAlive();
           this.stopVisemeSimulation();
           this.currentUtterance = null;
           if (callbacks?.onEnd) callbacks.onEnd();
@@ -294,6 +350,7 @@ class TextToSpeechService {
           if (!hasStarted) {
             hasStarted = true;
             this.isSpeakingState = true;
+            this.startKeepAlive();
             this.startVisemeSimulation();
             if (callbacks?.onStart) callbacks.onStart();
           }
@@ -312,6 +369,7 @@ class TextToSpeechService {
           if (idx !== -1) activeUtterances.splice(idx, 1);
 
           this.isSpeakingState = false;
+          this.stopKeepAlive();
           this.stopVisemeSimulation();
           this.currentUtterance = null;
 
@@ -323,9 +381,13 @@ class TextToSpeechService {
         };
 
         try {
+          if (this.synth!.paused) {
+            this.synth!.resume();
+          }
           this.synth!.speak(utterance);
         } catch (err) {
           this.isSpeakingState = false;
+          this.stopKeepAlive();
           this.stopVisemeSimulation();
           this.currentUtterance = null;
           if (callbacks?.onError) callbacks.onError(err);
@@ -341,6 +403,7 @@ class TextToSpeechService {
    * Stops current speech playback immediately and clears animation.
    */
   public stop() {
+    this.stopKeepAlive();
     this.stopVisemeSimulation();
     if (this.synth) {
       try {

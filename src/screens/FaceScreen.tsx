@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { FaceConfig, FaceExpression, GazeTarget, StereoGaze } from '../types/robot';
 import { RobotFace } from '../components/face/RobotFace';
+import { textToSpeech } from '../services/textToSpeech';
+import { speechToText } from '../services/speechToText';
 import {
   Wifi,
   Volume2,
@@ -35,13 +37,17 @@ export const FaceScreen: React.FC<FaceScreenProps> = ({
   isSpeaking = false,
   onInterruptSpeech
 }) => {
-  const [hasStartedIntro, setHasStartedIntro] = useState(false);
   const hasTriggeredShiftRef = useRef(false);
 
-  // Trigger Intro Speech
-  const startIntro = () => {
-    setHasStartedIntro(true);
+  // Trigger Intro Speech with audio pipeline unlock & microphone authorization
+  const startIntro = async () => {
+    // 1. Immediately unlock speech synthesis engine
+    textToSpeech.unlockAudioEngine();
 
+    // 2. Request microphone permission upfront for the session
+    speechToText.requestMicrophonePermission().catch(() => {});
+
+    // 3. Play the introductory speech
     if (onSpeakIntro) {
       onSpeakIntro(INTRO_SPEECH, () => {
         if (!hasTriggeredShiftRef.current) {
@@ -51,21 +57,14 @@ export const FaceScreen: React.FC<FaceScreenProps> = ({
           }, 800);
         }
       });
-    } else {
-      setTimeout(() => {
-        if (!hasTriggeredShiftRef.current && onIntroComplete) {
-          hasTriggeredShiftRef.current = true;
-          onIntroComplete();
-        }
-      }, 6000);
     }
   };
 
-  // Auto-attempt voice intro on mount
+  // Attempt auto-intro on mount
   useEffect(() => {
     const timer = setTimeout(() => {
       startIntro();
-    }, 1000);
+    }, 800);
     return () => clearTimeout(timer);
   }, []);
 
@@ -120,10 +119,16 @@ export const FaceScreen: React.FC<FaceScreenProps> = ({
       {/* TOP RIGHT: Voice prompt notice if not speaking */}
       {!isSpeaking && (
         <div className="absolute top-0 right-0 z-30 p-4 sm:p-6 pointer-events-auto">
-          <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#30343B] border border-[#E9EDF2]/20 text-white font-mono text-xs shadow-sm">
-            <Volume2 className="w-3.5 h-3.5 text-[#C49A45]" />
-            <span className="text-[#E9EDF2]">Tap screen for voice guide</span>
-          </div>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              startIntro();
+            }}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#263746] border border-[#C49A45] text-white font-mono text-xs shadow-lg animate-pulse hover:bg-[#30343B] transition-all cursor-pointer"
+          >
+            <Volume2 className="w-4 h-4 text-[#C49A45]" />
+            <span className="text-[#E9EDF2] font-semibold">Tap to Activate Voice</span>
+          </button>
         </div>
       )}
 
@@ -138,13 +143,16 @@ export const FaceScreen: React.FC<FaceScreenProps> = ({
             <ArrowRight className="w-4 h-4 text-[#C49A45]" />
           </button>
 
-          {!isSpeaking && !hasStartedIntro && (
+          {!isSpeaking && (
             <button
-              onClick={startIntro}
-              className="min-h-[48px] px-6 py-3 rounded-xl bg-[#30343B] hover:bg-[#202124] border border-[#E9EDF2]/30 text-white font-bold text-sm sm:text-base flex items-center gap-2 transition-all shadow-sm active:scale-98"
+              onClick={(e) => {
+                e.stopPropagation();
+                startIntro();
+              }}
+              className="min-h-[48px] px-6 py-3 rounded-xl bg-[#C49A45] hover:bg-[#B38734] text-white font-bold text-sm sm:text-base flex items-center gap-2 transition-all shadow-md active:scale-98 cursor-pointer"
             >
-              <Volume2 className="w-4 h-4 text-[#E9EDF2]" />
-              <span>Hear Intro Speech</span>
+              <Volume2 className="w-4 h-4 text-white" />
+              <span>Hear Robot Voice</span>
             </button>
           )}
         </div>
