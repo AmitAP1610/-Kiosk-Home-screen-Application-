@@ -20,7 +20,6 @@ import android.webkit.JavascriptInterface;
 import android.webkit.PermissionRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import com.getcapacitor.BridgeActivity;
@@ -125,10 +124,10 @@ public class MainActivity extends BridgeActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_REQ_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 WebView webView = getBridgeWebView();
                 if (webView != null) {
                     webView.evaluateJavascript("window.onMicrophonePermissionGranted && window.onMicrophonePermissionGranted();", null);
@@ -234,11 +233,10 @@ public class MainActivity extends BridgeActivity {
                     intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
                     intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
                     intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, activity.getPackageName());
-                    intent.putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true);
+                    intent.putExtra("android.speech.extra.PREFER_OFFLINE", true);
 
                     if (language != null && !language.isEmpty()) {
                         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, language);
-                        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, language);
                     } else {
                         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault().toString());
                     }
@@ -268,9 +266,8 @@ public class MainActivity extends BridgeActivity {
                         public void onError(int error) {
                             isListening = false;
 
-                            // If error is timeout or no match but we already captured an interim phrase, deliver it
-                            if ((error == SpeechRecognizer.ERROR_NO_MATCH || error == SpeechRecognizer.ERROR_SPEECH_TIMEOUT)
-                                && lastPartialResult != null && !lastPartialResult.trim().isEmpty()) {
+                            // If error is no-match but we already captured an interim phrase, deliver it
+                            if (error == SpeechRecognizer.ERROR_NO_MATCH && lastPartialResult != null && !lastPartialResult.trim().isEmpty()) {
                                 evalJs("window.onAndroidSpeechResult && window.onAndroidSpeechResult('" + escapeJs(lastPartialResult.trim()) + "', true);");
                                 lastPartialResult = "";
                                 evalJs("window.onAndroidSpeechEnd && window.onAndroidSpeechEnd();");
@@ -281,7 +278,6 @@ public class MainActivity extends BridgeActivity {
                             String msg = "Speech recognition error (" + error + ")";
                             switch (error) {
                                 case SpeechRecognizer.ERROR_NO_MATCH:
-                                case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
                                     type = "no-speech";
                                     msg = "No speech detected.";
                                     break;
@@ -301,6 +297,14 @@ public class MainActivity extends BridgeActivity {
                                 case SpeechRecognizer.ERROR_AUDIO:
                                     type = "audio";
                                     msg = "Audio capture error.";
+                                    break;
+                                case SpeechRecognizer.ERROR_CLIENT:
+                                    type = "client";
+                                    msg = "Speech recognition client error (" + error + ")";
+                                    break;
+                                case SpeechRecognizer.ERROR_SERVER:
+                                    type = "network";
+                                    msg = "Speech recognition server error.";
                                     break;
                             }
                             evalJs("window.onAndroidSpeechError && window.onAndroidSpeechError('" + escapeJs(msg) + "', '" + type + "');");
