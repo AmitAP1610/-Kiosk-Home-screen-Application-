@@ -256,8 +256,8 @@ public class MainActivity extends BridgeActivity {
                         public void onError(int error) {
                             isListening = false;
 
-                            // If error is no-match but we already captured an interim phrase, deliver it
-                            if (error == SpeechRecognizer.ERROR_NO_MATCH && lastPartialResult != null && !lastPartialResult.trim().isEmpty()) {
+                            // If error is no-match (7) but we already captured an interim phrase, deliver it
+                            if (error == 7 && lastPartialResult != null && !lastPartialResult.trim().isEmpty()) {
                                 evalJs("window.onAndroidSpeechResult && window.onAndroidSpeechResult('" + escapeJs(lastPartialResult.trim()) + "', true);");
                                 lastPartialResult = "";
                                 evalJs("window.onAndroidSpeechEnd && window.onAndroidSpeechEnd();");
@@ -267,34 +267,38 @@ public class MainActivity extends BridgeActivity {
                             String type = "unknown";
                             String msg = "Speech recognition error (" + error + ")";
                             switch (error) {
-                                case SpeechRecognizer.ERROR_NO_MATCH:
+                                case 7: // ERROR_NO_MATCH
                                     type = "no-speech";
                                     msg = "No speech detected.";
                                     break;
-                                case SpeechRecognizer.ERROR_NETWORK:
-                                case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
+                                case 1: // ERROR_NETWORK_TIMEOUT
+                                case 2: // ERROR_NETWORK
                                     type = "network";
                                     msg = "Network connection required for speech recognition.";
                                     break;
-                                case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
+                                case 9: // ERROR_INSUFFICIENT_PERMISSIONS
                                     type = "not-allowed";
                                     msg = "Microphone permission denied.";
                                     break;
-                                case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
+                                case 8: // ERROR_RECOGNIZER_BUSY
                                     type = "busy";
                                     msg = "Speech recognizer is busy.";
                                     break;
-                                case SpeechRecognizer.ERROR_AUDIO:
+                                case 3: // ERROR_AUDIO
                                     type = "audio";
                                     msg = "Audio capture error.";
                                     break;
-                                case SpeechRecognizer.ERROR_CLIENT:
+                                case 5: // ERROR_CLIENT
                                     type = "client";
                                     msg = "Speech recognition client error (" + error + ")";
                                     break;
-                                case SpeechRecognizer.ERROR_SERVER:
+                                case 4: // ERROR_SERVER
                                     type = "network";
                                     msg = "Speech recognition server error.";
+                                    break;
+                                default:
+                                    type = "unknown";
+                                    msg = "Speech recognition error (" + error + ")";
                                     break;
                             }
                             evalJs("window.onAndroidSpeechError && window.onAndroidSpeechError('" + escapeJs(msg) + "', '" + type + "');");
@@ -408,15 +412,12 @@ public class MainActivity extends BridgeActivity {
                 if (status == TextToSpeech.SUCCESS) {
                     isInitialized = true;
 
-                    // Fallback hierarchy: en-IN -> en-GB -> en-US -> Locale.getDefault()
+                    // Fallback hierarchy: en-IN -> en-US -> Locale.getDefault()
                     int res = tts.setLanguage(new Locale("en", "IN"));
                     if (res == TextToSpeech.LANG_MISSING_DATA || res == TextToSpeech.LANG_NOT_SUPPORTED) {
-                        res = tts.setLanguage(Locale.UK);
+                        res = tts.setLanguage(Locale.US);
                         if (res == TextToSpeech.LANG_MISSING_DATA || res == TextToSpeech.LANG_NOT_SUPPORTED) {
-                            res = tts.setLanguage(Locale.US);
-                            if (res == TextToSpeech.LANG_MISSING_DATA || res == TextToSpeech.LANG_NOT_SUPPORTED) {
-                                tts.setLanguage(Locale.getDefault());
-                            }
+                            tts.setLanguage(Locale.getDefault());
                         }
                     }
 
@@ -477,11 +478,8 @@ public class MainActivity extends BridgeActivity {
                     tts.setPitch(pitch > 0 ? pitch : 0.8f);
                     tts.setSpeechRate(rate > 0 ? rate : 0.88f);
 
-                    Bundle params = new Bundle();
-                    params.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, 1.0f);
                     String utteranceId = "kiosk_tts_" + System.currentTimeMillis();
-
-                    int res = tts.speak(text, TextToSpeech.QUEUE_FLUSH, params, utteranceId);
+                    int res = tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
                     if (res != TextToSpeech.SUCCESS) {
                         evalJs("window.onAndroidTTSError && window.onAndroidTTSError('TTS speak returned code " + res + "');");
                     }

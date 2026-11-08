@@ -63,7 +63,14 @@ jobs:
       - name: Compile Android Debug APK
         run: |
           cd android
-          ./gradlew assembleDebug --no-daemon --stacktrace
+          if ! ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee ../build.log; then
+            echo "::error title=Gradle Build Failure::Check log for compilation error"
+            echo "========== COMPILER ERROR MATCHES =========="
+            grep -i -C 2 "error:" ../build.log || true
+            echo "========== LAST 70 LINES OF BUILD LOG =========="
+            tail -n 70 ../build.log
+            exit 1
+          fi
 
       - name: Locate & Prepare APK
         run: |
