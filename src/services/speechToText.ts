@@ -1,6 +1,6 @@
 /**
  * Speech-to-Text (STT) Service with Provider Abstraction
- * Supports browser Web Speech API (Chrome / Android) and Native Android Capacitor Bridge.
+ * Supports browser Web Speech API (Chrome / Android) and Native Android SpeechRecognizer Bridge.
  * Features robust session handling, permission validation, and diagnostic error reporting.
  */
 
@@ -13,6 +13,8 @@ export type STTErrorType =
   | 'insecure-context'
   | 'unsupported'
   | 'busy'
+  | 'audio'
+  | 'client'
   | 'unknown';
 
 export interface STTCallbacks {
@@ -137,7 +139,7 @@ class WebSpeechAPIProvider implements ISTTProvider {
 
         switch (errorType) {
           case 'not-allowed':
-            friendlyMessage = 'Microphone permission denied. Please allow microphone access in your tablet browser settings.';
+            friendlyMessage = 'Microphone permission denied. Please allow microphone access in your tablet settings.';
             break;
           case 'no-speech':
             friendlyMessage = 'No speech was detected. Please tap Speak and try again.';
@@ -199,20 +201,20 @@ class WebSpeechAPIProvider implements ISTTProvider {
 }
 
 /**
- * Native Android / Capacitor Bridge Provider (for future packaged APK)
+ * Native Android SpeechRecognizer Bridge Provider (Tablet APK)
  */
 class NativeAndroidSpeechProvider implements ISTTProvider {
   public readonly id = 'native-android';
-  public readonly name = 'Native Android SpeechRecognizer (Capacitor/Bridge)';
+  public readonly name = 'Native Android SpeechRecognizer (Tablet Bridge)';
 
   public isSupported(): boolean {
     if (typeof window === 'undefined') return false;
-    const win = window as unknown as IWindow;
-    return !!(win.Capacitor?.isPluginAvailable?.('SpeechRecognition') || win.AndroidSpeechRecognizer);
+    const win = window as any;
+    return !!(win.AndroidSpeechRecognizer && typeof win.AndroidSpeechRecognizer.startListening === 'function');
   }
 
   public start(
-    _lang: string,
+    lang: string,
     callbacks: {
       onStart: () => void;
       onResult: (text: string, isFinal: boolean) => void;
@@ -220,12 +222,47 @@ class NativeAndroidSpeechProvider implements ISTTProvider {
       onEnd: () => void;
     }
   ): void {
-    // If native APK is loaded, invoke the native bridge
-    callbacks.onError('Native Android bridge provider is prepared for APK packaging. Use Web Speech in Chrome browser.', 'unsupported');
+    const win = window as any;
+    if (!this.isSupported()) {
+      callbacks.onError('Native Android speech recognizer not available.', 'unsupported');
+      return;
+    }
+
+    win.onAndroidSpeechStart = () => {
+      callbacks.onStart();
+    };
+
+    win.onAndroidSpeechResult = (text: string, isFinal: boolean) => {
+      callbacks.onResult(text, isFinal);
+    };
+
+    win.onAndroidSpeechError = (errMsg: string, errType: string) => {
+      callbacks.onError(errMsg, (errType as STTErrorType) || 'unknown');
+    };
+
+    win.onAndroidSpeechEnd = () => {
+      callbacks.onEnd();
+    };
+
+    try {
+      win.AndroidSpeechRecognizer.startListening(lang || 'en-IN');
+    } catch (err: any) {
+      callbacks.onError(err?.message || 'Failed to start Android speech recognizer', 'unknown');
+    }
   }
 
-  public stop(): void {}
-  public abort(): void {}
+  public stop(): void {
+    const win = window as any;
+    if (win && win.AndroidSpeechRecognizer && typeof win.AndroidSpeechRecognizer.stopListening === 'function') {
+      try {
+        win.AndroidSpeechRecognizer.stopListening();
+      } catch {}
+    }
+  }
+
+  public abort(): void {
+    this.stop();
+  }
 }
 
 /**
@@ -260,6 +297,13 @@ class SpeechToTextService {
    * Performs explicit microphone permission pre-flight check
    */
   public async checkMicrophonePermission(): Promise<'granted' | 'denied' | 'prompt' | 'unsupported'> {
+    const win = typeof window !== 'undefined' ? (window as any) : null;
+    if (win?.AndroidSpeechRecognizer && typeof win.AndroidSpeechRecognizer.hasMicrophonePermission === 'function') {
+      try {
+        return win.AndroidSpeechRecognizer.hasMicrophonePermission() ? 'granted' : 'prompt';
+      } catch {}
+    }
+
     if (typeof navigator === 'undefined' || !navigator.mediaDevices?.getUserMedia) {
       return 'unsupported';
     }
@@ -277,9 +321,17 @@ class SpeechToTextService {
   }
 
   /**
-   * Prompts user for microphone access via getUserMedia
+   * Prompts user for microphone access via native bridge or getUserMedia
    */
   public async requestMicrophonePermission(): Promise<boolean> {
+    const win = typeof window !== 'undefined' ? (window as any) : null;
+    if (win?.AndroidSpeechRecognizer && typeof win.AndroidSpeechRecognizer.requestMicrophonePermission === 'function') {
+      try {
+        win.AndroidSpeechRecognizer.requestMicrophonePermission();
+        return true;
+      } catch {}
+    }
+
     if (typeof navigator === 'undefined' || !navigator.mediaDevices?.getUserMedia) {
       return false;
     }
@@ -307,6 +359,13 @@ class SpeechToTextService {
   }
 
   public start(lang?: string): boolean {
+    // Dynamically select native provider if Android bridge is registered
+    if (this.nativeProvider.isSupported()) {
+      this.activeProvider = this.nativeProvider;
+    } else {
+      this.activeProvider = this.webProvider;
+    }
+
     if (!this.isSupported()) {
       if (this.callbacks.onError) {
         this.callbacks.onError('Speech Recognition is not supported on this browser engine.', 'unsupported');

@@ -1,16 +1,17 @@
 /**
  * Text-to-Speech (TTS) Service
- * Utilizes the browser SpeechSynthesis API running locally on the Realme Android tablet.
- * Fixes Chrome Android garbage-collection bugs, handles sentence chunking,
- * and synchronizes viseme mouth animation with zero square artifacts.
+ * Utilizes the Native Android TTS Bridge (on Android tablet APK) or the
+ * browser SpeechSynthesis API (Chrome / Web).
+ * Features deep resonant baritone vocal tuning, Android Chrome garbage-collection fixes,
+ * sentence chunking, and multi-rhythm viseme mouth animation with zero square artifacts.
  */
 
 export interface TTSOptions {
   voiceURI?: string;
-  rate?: number;    // 0.5 to 2.0 (default 1.0)
-  pitch?: number;   // 0.5 to 2.0 (default 1.05)
+  rate?: number;    // 0.5 to 2.0 (default 0.88 for deep measured tempo)
+  pitch?: number;   // 0.5 to 2.0 (default 0.80 for resonant baritone tone)
   volume?: number;  // 0.0 to 1.0 (default 1.0)
-  lang?: string;    // 'en-IN', 'hi-IN', 'en-US'
+  lang?: string;    // 'en-IN', 'en-GB', 'en-US'
 }
 
 export type VisemeCallback = (level: number) => void;
@@ -30,11 +31,13 @@ class TextToSpeechService {
   private keepAliveTimer: any = null;
 
   constructor() {
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      this.synth = window.speechSynthesis;
-      this.initVoiceLoader();
+    if (typeof window !== 'undefined') {
+      if ('speechSynthesis' in window) {
+        this.synth = window.speechSynthesis;
+        this.initVoiceLoader();
+      }
 
-      // Auto-unlock speech synthesis on first user interaction anywhere on screen
+      // Auto-unlock speech synthesis and audio engine on first touch/interaction
       const unlock = () => {
         this.unlockAudioEngine();
         window.removeEventListener('click', unlock);
@@ -47,20 +50,27 @@ class TextToSpeechService {
     }
   }
 
+  public hasNativeTTS(): boolean {
+    if (typeof window === 'undefined') return false;
+    const win = window as any;
+    return !!(win.AndroidTTS && typeof win.AndroidTTS.speak === 'function');
+  }
+
   /**
    * Unlocks speech synthesis and audio pipeline after user interaction
    */
   public unlockAudioEngine() {
-    if (!this.synth) return;
-    try {
-      if (this.synth.paused) {
-        this.synth.resume();
-      }
-      const silent = new SpeechSynthesisUtterance(' ');
-      silent.volume = 0.01;
-      silent.rate = 2.0;
-      this.synth.speak(silent);
-    } catch {}
+    if (this.synth) {
+      try {
+        if (this.synth.paused) {
+          this.synth.resume();
+        }
+        const silent = new SpeechSynthesisUtterance(' ');
+        silent.volume = 0.01;
+        silent.rate = 2.0;
+        this.synth.speak(silent);
+      } catch {}
+    }
   }
 
   private startKeepAlive() {
@@ -82,7 +92,9 @@ class TextToSpeechService {
   }
 
   public isSupported(): boolean {
-    return typeof window !== 'undefined' && 'speechSynthesis' in window;
+    if (typeof window === 'undefined') return false;
+    if (this.hasNativeTTS()) return true;
+    return 'speechSynthesis' in window;
   }
 
   public getCurrentUtterance(): SpeechSynthesisUtterance | null {
@@ -125,12 +137,23 @@ class TextToSpeechService {
       this.voices = this.synth.getVoices();
       return this.voices;
     }
-    return [];
+    return this.getVoices();
   }
 
   public getVoices(): SpeechSynthesisVoice[] {
     if (this.voices.length === 0 && this.synth) {
       this.voices = this.synth.getVoices();
+    }
+    if (this.voices.length === 0 && this.hasNativeTTS()) {
+      return [
+        {
+          default: true,
+          lang: 'en-IN',
+          localService: true,
+          name: 'Android System Voice (Baritone Engine)',
+          voiceURI: 'android-system-baritone'
+        } as SpeechSynthesisVoice
+      ];
     }
     return this.voices;
   }
@@ -143,6 +166,7 @@ class TextToSpeechService {
    * Checks if an installed voice exists for the specified language
    */
   public hasVoiceForLanguage(lang: string): boolean {
+    if (this.hasNativeTTS()) return true;
     const list = this.getVoices();
     const prefix = lang.split('-')[0].toLowerCase();
     return list.some(v => v.lang.toLowerCase().startsWith(prefix));
@@ -280,23 +304,75 @@ class TextToSpeechService {
 
   /**
    * Speaks text with given options.
-   * Cancels any active speech immediately to prevent overlapping.
+   * Uses Native Android TTS Bridge if available in APK, or Web Speech Synthesis API.
    */
   public async speak(
     text: string,
     options: TTSOptions = {},
     callbacks?: { onStart?: () => void; onEnd?: () => void; onError?: (err: any) => void }
   ): Promise<void> {
-    if (!this.synth || !this.isSupported()) {
+    if (!this.isSupported()) {
       const err = new Error('SpeechSynthesis is not supported on this device/browser.');
       if (callbacks?.onError) callbacks.onError(err);
       throw err;
     }
 
     // Stop existing playback safely if active
-    if (this.synth.speaking || this.synth.pending) {
-      this.stop();
-      await new Promise(r => setTimeout(r, 50));
+    this.stop();
+    await new Promise(r => setTimeout(r, 40));
+
+    // ROUTE 1: Native Android Tablet APK Bridge
+    if (this.hasNativeTTS()) {
+      const win = window as any;
+      this.isSpeakingState = true;
+      this.startVisemeSimulation();
+
+      return new Promise<void>((resolve, reject) => {
+        let isDone = false;
+
+        win.onAndroidTTSStart = () => {
+          this.isSpeakingState = true;
+          if (callbacks?.onStart) callbacks.onStart();
+        };
+
+        win.onAndroidTTSEnd = () => {
+          if (isDone) return;
+          isDone = true;
+          this.isSpeakingState = false;
+          this.stopVisemeSimulation();
+          if (callbacks?.onEnd) callbacks.onEnd();
+          resolve();
+        };
+
+        win.onAndroidTTSError = (errMsg: string) => {
+          if (isDone) return;
+          isDone = true;
+          this.isSpeakingState = false;
+          this.stopVisemeSimulation();
+          if (callbacks?.onError) callbacks.onError(new Error(errMsg));
+          reject(new Error(errMsg || 'Android TTS playback failed'));
+        };
+
+        const targetPitch = options.pitch ?? 0.80;
+        const targetRate = options.rate ?? 0.88;
+
+        try {
+          if (callbacks?.onStart) callbacks.onStart();
+          win.AndroidTTS.speak(text, targetPitch, targetRate);
+        } catch (err) {
+          if (isDone) return;
+          isDone = true;
+          this.isSpeakingState = false;
+          this.stopVisemeSimulation();
+          if (callbacks?.onError) callbacks.onError(err);
+          reject(err);
+        }
+      });
+    }
+
+    // ROUTE 2: Browser Web SpeechSynthesis API
+    if (!this.synth) {
+      throw new Error('Web speech synthesis not available.');
     }
 
     if (this.synth.paused) {
@@ -307,11 +383,6 @@ class TextToSpeechService {
 
     await this.waitForVoices();
     const voice = this.findBestVoice(options.lang || 'en-IN', options.voiceURI);
-
-    // If requesting Hindi but no Hindi voice exists, surface a warning callback
-    if (options.lang?.toLowerCase().startsWith('hi') && !this.hasVoiceForLanguage('hi')) {
-      console.warn('Hindi voice not installed in Android Speech engine. Falling back to default voice.');
-    }
 
     const chunks = this.splitIntoChunks(text);
 
@@ -357,10 +428,8 @@ class TextToSpeechService {
         };
 
         utterance.onend = () => {
-          // Remove from active utterances
           const idx = activeUtterances.indexOf(utterance);
           if (idx !== -1) activeUtterances.splice(idx, 1);
-
           speakNextChunk();
         };
 
@@ -405,11 +474,19 @@ class TextToSpeechService {
   public stop() {
     this.stopKeepAlive();
     this.stopVisemeSimulation();
+
+    if (this.hasNativeTTS()) {
+      try {
+        (window as any).AndroidTTS.stop();
+      } catch {}
+    }
+
     if (this.synth) {
       try {
         this.synth.cancel();
       } catch {}
     }
+
     activeUtterances.length = 0;
     this.isSpeakingState = false;
     this.currentUtterance = null;
