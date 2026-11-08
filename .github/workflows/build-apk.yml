@@ -34,7 +34,9 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-          cache: 'gradle'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v4
@@ -62,8 +64,8 @@ jobs:
           set -o pipefail
           cd android
           ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee ../gradle.log || {
-            ERR_MSG=$(grep -C 3 "Caused by" ../gradle.log | head -n 20 | tr '\n' ' ' | sed 's/[^a-zA-Z0-9 :.,_\/-]//g')
-            echo "::error title=Gradle Root Cause::$ERR_MSG"
+            ERR_MSG=$(tail -n 35 ../gradle.log | tr '\n' ' ' | sed 's/[^a-zA-Z0-9 :.,_\/-]//g')
+            echo "::error title=Gradle Error::$ERR_MSG"
             exit 1
           }
 
