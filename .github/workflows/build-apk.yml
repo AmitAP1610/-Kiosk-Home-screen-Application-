@@ -36,6 +36,16 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v4
+        with:
+          packages: 'platform-tools platforms;android-34 platforms;android-35 platforms;android-36 build-tools;34.0.0'
+
+      - name: Accept Android SDK Licenses & Configure Environment
+        run: |
+          yes | sdkmanager --licenses || true
+          echo "sdk.dir=$ANDROID_HOME" > android/local.properties
+
       - name: Make Gradlew Executable
         run: chmod +x android/gradlew
 
@@ -44,6 +54,8 @@ jobs:
           mkdir -p android/app/src/main/assets/public
           cp -r dist/* android/app/src/main/assets/public/
           cp capacitor.config.json android/app/src/main/assets/capacitor.config.json
+          mkdir -p android/app/libs
+          mkdir -p android/capacitor-cordova-android-plugins/src/main/libs
 
       - name: Compile Android Debug APK
         run: |
@@ -73,15 +85,16 @@ jobs:
             Directly installable APK for Android tablets (optimized for 10-inch Realme Android tablet in landscape orientation).
 
             ### Features:
-            - **Fullscreen Kiosk Mode:** Automatic sticky immersive mode hides system bars.
+            - **Fullscreen Kiosk Mode:** Automatic sticky immersive mode hides system navigation bars and status bar.
             - **Screen Keep-Alive:** Prevents the tablet display from sleeping while running.
             - **Native Voice & Audio:** Authorizes Speech Synthesis and Speech-to-Text.
-            - **Offline Capable:** All photographs, campus data, and robot controls run locally.
+            - **Offline Capable:** All photographs, campus data, and robot controls run locally without requiring internet.
 
-            ### How to Install:
+            ### How to Install on your Tablet:
             1. Download `KIOSK-AMR-v1.0.0.apk` below directly onto your Android tablet.
-            2. Tap the downloaded file to install (allow "Install unknown apps" if prompted).
-            3. Open **KIOSK AMR** — it opens in fullscreen landscape!
+            2. Tap the downloaded file in your browser's Downloads or Files app.
+            3. Tap **Install** (if prompted, enable "Allow installation from this source").
+            4. Tap **Open** — KIOSK AMR will launch in fullscreen landscape mode!
           files: |
             android/app/build/outputs/apk/debug/KIOSK-AMR-v1.0.0.apk
         env:
