@@ -1,0 +1,5 @@
+ext {
+  cdvMinSdkVersion = 24
+  cdvPluginPostBuildExtras = []
+  cordovaConfig = [:]
+}
