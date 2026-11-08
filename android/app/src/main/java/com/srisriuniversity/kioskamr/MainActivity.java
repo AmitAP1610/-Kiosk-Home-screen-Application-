@@ -17,13 +17,11 @@ import android.speech.tts.UtteranceProgressListener;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
-import android.webkit.PermissionRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import com.getcapacitor.BridgeActivity;
-import com.getcapacitor.BridgeWebChromeClient;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -106,14 +104,6 @@ public class MainActivity extends BridgeActivity {
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
         settings.setDatabaseEnabled(true);
-
-        // Grant web permission requests (e.g. WebRTC / microphone access inside WebView)
-        webView.setWebChromeClient(new BridgeWebChromeClient(bridge) {
-            @Override
-            public void onPermissionRequest(final PermissionRequest request) {
-                runOnUiThread(() -> request.grant(request.getResources()));
-            }
-        });
 
         // Register native Speech Recognizer and Text-to-Speech bridges
         speechBridge = new AndroidSpeechBridge(this, webView);
