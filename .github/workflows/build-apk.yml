@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js 20
         uses: actions/setup-node@v4
@@ -57,7 +59,6 @@ jobs:
           cp -r dist/* android/app/src/main/assets/public/
           cp capacitor.config.json android/app/src/main/assets/capacitor.config.json
           mkdir -p android/app/libs
-          mkdir -p android/capacitor-cordova-android-plugins/src/main/libs
 
       - name: Compile Android Debug APK
         run: |
@@ -75,7 +76,26 @@ jobs:
           APK_PATH=$(find android -type f -name "*.apk" | head -n 1)
           echo "Found APK at: $APK_PATH"
           cp "$APK_PATH" release-apk/KIOSK-AMR-v1.0.0.apk
-          ls -la release-apk/
+          mkdir -p dist-apk
+          cp "$APK_PATH" dist-apk/KIOSK-AMR.apk
+          mkdir -p public
+          cp "$APK_PATH" public/KIOSK-AMR.apk
+          ls -la release-apk/ dist-apk/ public/
+
+      - name: Commit APK Directly into Repository (Bypasses Releases 504 CDN Timeout)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add dist-apk/KIOSK-AMR.apk public/KIOSK-AMR.apk
+          git commit -m "chore(apk): publish pre-compiled APK binary directly to repo" || true
+          git push origin main || true
+
+      - name: Upload APK to Direct Fast Mirror
+        run: |
+          MIRROR_URL=$(curl -s -F "file=@release-apk/KIOSK-AMR-v1.0.0.apk" https://temp.sh/upload)
+          echo "DIRECT_MIRROR_URL=$MIRROR_URL" >> $GITHUB_ENV
+          echo "### 🚀 Direct Mirror Download Link" >> $GITHUB_STEP_SUMMARY
+          echo "$MIRROR_URL" >> $GITHUB_STEP_SUMMARY
 
       - name: Upload APK as Workflow Artifact
         uses: actions/upload-artifact@v4
@@ -95,14 +115,13 @@ jobs:
 
             Directly installable APK for Android tablets (optimized for 10-inch Realme Android tablet in landscape orientation).
 
-            ### Features:
-            - **Fullscreen Kiosk Mode:** Automatic sticky immersive mode hides system navigation bars and status bar.
-            - **Screen Keep-Alive:** Prevents the tablet display from sleeping while running.
-            - **Native Voice & Audio:** Authorizes Speech Synthesis and Speech-to-Text.
-            - **Offline Capable:** All photographs, campus data, and robot controls run locally without requiring internet.
+            ### Fast Direct Mirrors (If GitHub Releases gives 504 Timeout):
+            - Direct Git Raw: https://raw.githubusercontent.com/AmitAP1610/-Kiosk-Home-screen-Application-/main/dist-apk/KIOSK-AMR.apk
+            - High-Speed jsDelivr CDN: https://cdn.jsdelivr.net/gh/AmitAP1610/-Kiosk-Home-screen-Application-@main/dist-apk/KIOSK-AMR.apk
+            - Temporary Fast Mirror: ${{ env.DIRECT_MIRROR_URL }}
 
             ### How to Install on your Tablet:
-            1. Download `KIOSK-AMR-v1.0.0.apk` below directly onto your Android tablet.
+            1. Download the APK using any link above directly onto your Android tablet.
             2. Tap the downloaded file in your browser's Downloads or Files app.
             3. Tap **Install** (if prompted, enable "Allow installation from this source").
             4. Tap **Open** — KIOSK AMR will launch in fullscreen landscape mode!
