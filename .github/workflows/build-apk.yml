@@ -59,8 +59,13 @@ jobs:
 
       - name: Compile Android Debug APK
         run: |
+          set -o pipefail
           cd android
-          ./gradlew assembleDebug --no-daemon --stacktrace
+          ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee ../gradle.log || {
+            ERR_MSG=$(tail -n 25 ../gradle.log | tr '\n' ' ' | sed 's/[^a-zA-Z0-9 :.,_\/-]//g')
+            echo "::error title=Gradle Error::$ERR_MSG"
+            exit 1
+          }
 
       - name: Locate & Prepare APK
         run: |
