@@ -29,6 +29,7 @@ import { SettingsScreen } from './screens/SettingsScreen';
 import { useVoiceAssistant } from './hooks/useVoiceAssistant';
 import { useAudioReactive } from './hooks/useAudioReactive';
 import { useHardwareBridge } from './hooks/useHardwareBridge';
+import { jetsonBridge } from './services/jetsonBridge';
 
 export const App: React.FC = () => {
   // Navigation Screen State
@@ -97,8 +98,12 @@ export const App: React.FC = () => {
   } = useVoiceAssistant({
     language: selectedLanguage,
     onExpressionChange: (exp) => setExpression(exp),
-    onMovementCommand: (_cmd) => {
-      // Forward to Jetson safety layer via hardware bridge if connected
+    onMovementCommand: (cmd) => {
+      // Forward real movement velocity command to Jetson safety layer & Arduino motors
+      jetsonBridge.startTeleop(cmd.linear, cmd.angular);
+      setTimeout(() => {
+        jetsonBridge.stopTeleop();
+      }, 1500);
     }
   });
 
