@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { FaceConfig, FaceExpression, GazeTarget, StereoGaze } from '../types/robot';
 import { RobotFace } from '../components/face/RobotFace';
 import { textToSpeech } from '../services/textToSpeech';
@@ -37,8 +37,6 @@ export const FaceScreen: React.FC<FaceScreenProps> = ({
   isSpeaking = false,
   onInterruptSpeech
 }) => {
-  const hasTriggeredShiftRef = useRef(false);
-
   // Trigger Intro Speech with audio pipeline unlock & microphone authorization
   const startIntro = async () => {
     // 1. Immediately unlock speech synthesis engine
@@ -47,16 +45,9 @@ export const FaceScreen: React.FC<FaceScreenProps> = ({
     // 2. Request microphone permission upfront for the session
     speechToText.requestMicrophonePermission().catch(() => {});
 
-    // 3. Play the introductory speech
+    // 3. Play the introductory speech (stays on face screen after completion until tapped)
     if (onSpeakIntro) {
-      onSpeakIntro(INTRO_SPEECH, () => {
-        if (!hasTriggeredShiftRef.current) {
-          hasTriggeredShiftRef.current = true;
-          setTimeout(() => {
-            if (onIntroComplete) onIntroComplete();
-          }, 800);
-        }
-      });
+      onSpeakIntro(INTRO_SPEECH);
     }
   };
 
@@ -70,8 +61,7 @@ export const FaceScreen: React.FC<FaceScreenProps> = ({
 
   const handleFaceTap = () => {
     if (onInterruptSpeech) onInterruptSpeech();
-    if (!hasTriggeredShiftRef.current && onIntroComplete) {
-      hasTriggeredShiftRef.current = true;
+    if (onIntroComplete) {
       onIntroComplete();
     }
   };

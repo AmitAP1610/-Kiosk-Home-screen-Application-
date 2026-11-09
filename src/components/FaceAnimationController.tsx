@@ -13,8 +13,6 @@ import {
   Zap,
   Sunrise,
   Sliders,
-  Maximize,
-  Minimize,
   Radio,
   Eye
 } from 'lucide-react';
@@ -41,7 +39,7 @@ export const FaceAnimationController: React.FC<FaceAnimationControllerProps> = (
   onSelectExpression,
   onOpenSettings,
   onOpenHardware,
-  isFullscreen,
+  isFullscreen: _isFullscreen = false,
   onToggleFullscreen,
   audioReactiveActive,
   onToggleAudioReactive,
@@ -231,15 +229,6 @@ export const FaceAnimationController: React.FC<FaceAnimationControllerProps> = (
             className="p-2 rounded-lg text-xs bg-[#202124] text-[#E9EDF2]/70 hover:text-white hover:bg-[#17191C] transition-all font-mono"
           >
             <Sliders className="w-3.5 h-3.5 text-[#C49A45]" />
-          </button>
-
-          {/* Fullscreen / Kiosk Mode */}
-          <button
-            onClick={onToggleFullscreen}
-            title="Toggle Kiosk Fullscreen (F)"
-            className="p-2 rounded-lg text-xs bg-[#202124] text-[#B0B4B8] hover:text-white hover:bg-[#17191C] transition-all font-mono"
-          >
-            {isFullscreen ? <Minimize className="w-3.5 h-3.5" /> : <Maximize className="w-3.5 h-3.5" />}
           </button>
         </div>
       </div>

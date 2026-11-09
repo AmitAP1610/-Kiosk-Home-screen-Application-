@@ -8,14 +8,13 @@ import {
   Compass,
   Calendar,
   Mic,
-  Volume2,
   ArrowRight,
-  Images,
   Menu,
   Building2,
   Navigation,
   Activity,
-  Sliders
+  Sliders,
+  Volume2
 } from 'lucide-react';
 
 interface HubScreenProps {
@@ -24,8 +23,6 @@ interface HubScreenProps {
   onOpenMenu?: () => void;
   onSpeakGreeting?: (text: string) => void;
   isSpeaking?: boolean;
-  isFullscreen?: boolean;
-  onToggleFullscreen?: () => void;
 }
 
 export const HubScreen: React.FC<HubScreenProps> = ({
@@ -126,41 +123,11 @@ export const HubScreen: React.FC<HubScreenProps> = ({
       {/* ======================================================== */}
       <main className="relative z-10 flex-1 w-full flex flex-col justify-between items-center py-2 min-h-0">
         {/* Minimal Title */}
-        <div className="text-center shrink-0 my-0.5">
-          <h1 className="text-lg sm:text-2xl font-bold text-white tracking-wide drop-shadow-md">
+        <div className="text-center shrink-0 my-1">
+          <h1 className="text-xl sm:text-3xl font-bold text-white tracking-wide drop-shadow-md">
             How May I Assist You?
           </h1>
         </div>
-
-        {/* ======================================================== */}
-        {/* CAMPUS PHOTO GALLERY BAR (MINIMAL)                       */}
-        {/* ======================================================== */}
-        <button
-          onClick={() => {
-            if (onSpeakGreeting) onSpeakGreeting("Opening Sri Sri University photo gallery.");
-            onNavigate('gallery');
-          }}
-          className="group relative w-full max-w-2xl rounded-2xl overflow-hidden border border-white/25 hover:border-[#C49A45] transition-all shadow-md active:scale-98 flex items-center justify-between px-4 sm:px-6 py-2 bg-black/40 backdrop-blur-md shrink-0 my-1 cursor-pointer"
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-white/15 border border-white/25 flex items-center justify-center shrink-0 group-hover:border-[#C49A45] transition-colors">
-              <Images className="w-5 h-5 text-[#C49A45]" />
-            </div>
-            <div className="text-left">
-              <span className="text-sm sm:text-base font-bold text-white block leading-tight">
-                Explore Campus Gallery
-              </span>
-              <span className="text-[11px] text-[#E9EDF2]/80">
-                21 Authentic Campus Photos
-              </span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-1.5 text-xs font-semibold text-white bg-white/15 group-hover:bg-[#C49A45] px-3.5 py-1.5 rounded-full border border-white/20 transition-all">
-            <span>View</span>
-            <ArrowRight className="w-3.5 h-3.5 text-[#C49A45] group-hover:text-white transition-colors" />
-          </div>
-        </button>
 
         {/* ======================================================== */}
         {/* THE 3 ROUND (CIRCULAR) TOUCH BUTTONS — MINIMAL TEXT      */}

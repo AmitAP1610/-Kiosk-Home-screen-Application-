@@ -253,8 +253,6 @@ export const App: React.FC = () => {
             onOpenMenu={() => setIsMenuOpen(true)}
             onSpeakGreeting={(text) => speakDirect(text)}
             isSpeaking={isSpeaking}
-            isFullscreen={isFullscreen}
-            onToggleFullscreen={toggleFullscreen}
           />
         )}
 

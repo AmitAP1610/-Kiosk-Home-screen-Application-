@@ -16,7 +16,6 @@ import {
   LayoutGrid,
   Bot,
   Calendar,
-  Images,
   GraduationCap,
   Sliders,
   ChevronRight
@@ -59,14 +58,6 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
       icon: LayoutGrid,
       group: 'HOME',
       badge: 'Main'
-    },
-    {
-      id: 'gallery',
-      title: 'University Photo Gallery',
-      description: '21 authentic campus photographs & slideshow',
-      icon: Images,
-      group: 'HOME',
-      badge: 'Photos'
     },
     {
       id: 'welcome',
