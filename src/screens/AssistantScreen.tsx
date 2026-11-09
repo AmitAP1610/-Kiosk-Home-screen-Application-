@@ -11,7 +11,8 @@ import {
   RotateCcw,
   Languages,
   CheckCircle2,
-  GraduationCap
+  GraduationCap,
+  Volume2
 } from 'lucide-react';
 
 interface AssistantScreenProps {
@@ -184,14 +185,15 @@ export const AssistantScreen: React.FC<AssistantScreenProps> = ({
             <p className="text-[14px] max-w-sm text-[#606B76] mb-3">
               Ask any question about courses, admissions, library, hospital, or facilities. Supports {getLanguageLabel(selectedLanguage)}.
             </p>
-            <div className="flex flex-wrap justify-center gap-1.5 max-w-md">
+            <div className="flex flex-wrap justify-center gap-2 max-w-lg">
               {quickSuggestions.map((q, idx) => (
                 <button
                   key={idx}
                   onClick={() => onSendMessage(q)}
-                  className="px-3 py-1.5 min-h-[38px] rounded-lg bg-white hover:bg-[#E9EDF2] border border-[#E9EDF2] text-xs text-[#30343B] font-medium transition-all text-left shadow-sm hover:border-[#263746]"
+                  className="px-3.5 py-2 min-h-[42px] rounded-xl bg-white hover:bg-[#F3F4F6] border border-[#263746]/15 text-xs sm:text-sm text-[#30343B] font-medium transition-all text-left shadow-xs hover:border-[#C49A45] active:scale-98 flex items-center gap-2 cursor-pointer"
                 >
-                  {q}
+                  <Volume2 className="w-3.5 h-3.5 text-[#C49A45] flex-shrink-0" />
+                  <span>{q}</span>
                 </button>
               ))}
             </div>
@@ -261,33 +263,33 @@ export const AssistantScreen: React.FC<AssistantScreenProps> = ({
 
       {/* Bottom Control & Input Bar */}
       <div className="pt-2.5 border-t border-[#E9EDF2] flex items-center gap-2">
-        {/* Microphone Action Button: Navy Blue #263746 */}
+        {/* Microphone Action Button */}
         {isSpeaking ? (
           <button
             onClick={onInterrupt}
             title="Interrupt and stop speaking"
-            className="h-11 px-4 rounded-lg bg-[#30343B] hover:bg-[#202124] text-white font-mono text-xs font-semibold flex items-center justify-center gap-1.5 shadow-sm transition-all active:scale-98 border border-white/10"
+            className="h-12 px-5 rounded-xl bg-[#30343B] hover:bg-[#202124] text-white font-mono text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all active:scale-98 border border-white/10"
           >
-            <Square className="w-3.5 h-3.5 fill-current text-[#C49A45]" />
+            <Square className="w-4 h-4 fill-current text-[#C49A45]" />
             <span className="hidden sm:inline">STOP</span>
           </button>
         ) : isListening ? (
           <button
             onClick={onStopListening}
             title="Stop listening"
-            className="h-11 px-4 rounded-lg bg-[#B42318] hover:bg-red-800 text-white font-mono text-xs font-semibold flex items-center justify-center gap-1.5 shadow-sm transition-all active:scale-98 border border-red-600 animate-pulse"
+            className="h-12 px-5 rounded-xl bg-[#B42318] hover:bg-red-800 text-white font-mono text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all active:scale-98 border border-red-600 animate-pulse"
           >
             <MicOff className="w-4 h-4" />
-            <span className="hidden sm:inline">STOP MIC</span>
+            <span>LISTENING... (TAP TO FINISH)</span>
           </button>
         ) : (
           <button
             onClick={onStartListening}
             title="Start speech recognition"
-            className="h-11 px-4 rounded-lg bg-[#263746] hover:bg-[#1D2B37] text-white font-mono text-xs font-semibold flex items-center justify-center gap-1.5 shadow-sm transition-all active:scale-98 border border-[#263746]"
+            className="h-12 px-6 rounded-xl bg-[#C49A45] hover:bg-[#B38734] text-white font-mono text-xs font-bold flex items-center justify-center gap-2 shadow-md transition-all active:scale-98 border border-[#C49A45] cursor-pointer"
           >
-            <Mic className="w-4 h-4 text-white" strokeWidth={1.75} />
-            <span className="hidden sm:inline">SPEAK</span>
+            <Mic className="w-4 h-4 text-white" strokeWidth={2} />
+            <span>SPEAK TO ROBOT</span>
           </button>
         )}
 

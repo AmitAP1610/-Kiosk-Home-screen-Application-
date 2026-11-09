@@ -122,6 +122,9 @@ public class MainActivity extends BridgeActivity {
                 if (webView != null) {
                     webView.evaluateJavascript("window.onMicrophonePermissionGranted && window.onMicrophonePermissionGranted();", null);
                 }
+                if (speechBridge != null && speechBridge.hasPendingListen()) {
+                    speechBridge.startPendingListen();
+                }
             }
         }
     }
@@ -167,15 +170,28 @@ public class MainActivity extends BridgeActivity {
         private final Handler mainHandler = new Handler(Looper.getMainLooper());
         private boolean isListening = false;
         private String lastPartialResult = "";
+        private String pendingListenLanguage = null;
 
         public AndroidSpeechBridge(Activity activity, WebView webView) {
             this.activity = activity;
             this.webView = webView;
         }
 
+        public boolean hasPendingListen() {
+            return pendingListenLanguage != null;
+        }
+
+        public void startPendingListen() {
+            if (pendingListenLanguage != null) {
+                String lang = pendingListenLanguage;
+                pendingListenLanguage = null;
+                startListening(lang);
+            }
+        }
+
         @JavascriptInterface
         public boolean isSupported() {
-            return SpeechRecognizer.isRecognitionAvailable(activity);
+            return SpeechRecognizer.isRecognitionAvailable(activity) || speechRecognizer != null;
         }
 
         @JavascriptInterface
@@ -198,10 +214,16 @@ public class MainActivity extends BridgeActivity {
         public void startListening(final String language) {
             mainHandler.post(() -> {
                 if (ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSION_REQ_CODE);
-                    evalJs("window.onAndroidSpeechError && window.onAndroidSpeechError('Microphone permission not granted. Please allow microphone in tablet settings.', 'not-allowed');");
+                    pendingListenLanguage = language;
+                    ActivityCompat.requestPermissions(
+                        activity,
+                        new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS},
+                        PERMISSION_REQ_CODE
+                    );
+                    evalJs("window.onAndroidSpeechError && window.onAndroidSpeechError('Please allow microphone permission in the prompt to speak.', 'not-allowed');");
                     return;
                 }
+                pendingListenLanguage = null;
 
                 try {
                     if (speechRecognizer != null) {
@@ -269,24 +291,24 @@ public class MainActivity extends BridgeActivity {
                             switch (error) {
                                 case 7: // ERROR_NO_MATCH
                                     type = "no-speech";
-                                    msg = "No speech detected.";
+                                    msg = "No speech detected. Please tap Speak and try again.";
                                     break;
                                 case 1: // ERROR_NETWORK_TIMEOUT
                                 case 2: // ERROR_NETWORK
                                     type = "network";
-                                    msg = "Network connection required for speech recognition.";
+                                    msg = "Network connection required for speech recognition. Please connect tablet to Wi-Fi.";
                                     break;
                                 case 9: // ERROR_INSUFFICIENT_PERMISSIONS
                                     type = "not-allowed";
-                                    msg = "Microphone permission denied.";
+                                    msg = "Microphone permission denied. Please allow microphone in tablet settings.";
                                     break;
                                 case 8: // ERROR_RECOGNIZER_BUSY
                                     type = "busy";
-                                    msg = "Speech recognizer is busy.";
+                                    msg = "Speech recognizer is busy. Please wait a second.";
                                     break;
                                 case 3: // ERROR_AUDIO
                                     type = "audio";
-                                    msg = "Audio capture error.";
+                                    msg = "Audio recording error. Please check tablet microphone.";
                                     break;
                                 case 5: // ERROR_CLIENT
                                     type = "client";

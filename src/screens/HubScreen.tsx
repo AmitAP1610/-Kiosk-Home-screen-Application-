@@ -1,22 +1,21 @@
 import React from 'react';
 import { AppScreen } from '../types/robot';
+import iconicBuildingBg from '../assets/ssu-iconic-building.jpg';
 import {
   ArrowLeft,
+  Home,
   Bot,
   Compass,
   Calendar,
   Mic,
   Volume2,
-  Settings,
   ArrowRight,
   Images,
   Menu,
   Building2,
   Navigation,
   Activity,
-  Sliders,
-  Maximize,
-  Minimize
+  Sliders
 } from 'lucide-react';
 
 interface HubScreenProps {
@@ -34,9 +33,7 @@ export const HubScreen: React.FC<HubScreenProps> = ({
   onOpenVoiceAssistant,
   onOpenMenu,
   onSpeakGreeting,
-  isSpeaking = false,
-  isFullscreen = false,
-  onToggleFullscreen
+  isSpeaking = false
 }) => {
   const handleHearOverview = () => {
     if (onSpeakGreeting) {
@@ -49,34 +46,34 @@ export const HubScreen: React.FC<HubScreenProps> = ({
   return (
     <div className="w-full h-full text-white flex flex-col justify-between p-3 sm:p-4 lg:p-5 font-sans select-none overflow-hidden relative">
       {/* ======================================================== */}
-      {/* 1. SRI SRI UNIVERSITY MAIN BUILDING BACKGROUND           */}
+      {/* 1. SRI SRI UNIVERSITY ICONIC BUILDING BACKGROUND         */}
       {/* ======================================================== */}
       <img
-        src="/images/gallery/ssu-shruti-main-building.jpg"
-        alt="Sri Sri University Main Building"
+        src={iconicBuildingBg}
+        alt="Sri Sri University Iconic Main Building"
         className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
       />
 
-      {/* Android Dark Scrim Overlay: showcases SSU architecture & sky with crisp UI contrast */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#111827]/75 via-[#1E293B]/40 to-[#0F172A]/85 pointer-events-none" />
+      {/* Subtle Scrim: showcases iconic SSU architecture & sky with clear UI readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#111827]/60 via-[#1E293B]/25 to-[#0F172A]/70 pointer-events-none" />
 
       {/* ======================================================== */}
       {/* 2. ANDROID TOP APP BAR: Navy Blue (#263746)               */}
       {/* ======================================================== */}
       <header className="relative z-10 flex items-center justify-between bg-[#263746]/95 backdrop-blur-md text-white px-3 sm:px-5 py-2 rounded-2xl border border-white/15 shadow-lg shrink-0">
-        {/* Left: Back to Face & Menu */}
+        {/* Left: Back to Home & Menu */}
         <div className="flex items-center gap-2">
           <button
             onClick={() => {
-              if (onSpeakGreeting) onSpeakGreeting("Returning to robot face.");
+              if (onSpeakGreeting) onSpeakGreeting("Returning to Home.");
               onNavigate('face');
             }}
             className="flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 border border-white/10 text-white transition-all shadow-xs"
-            title="Return to Robot Face"
+            title="Return to Home"
           >
             <ArrowLeft className="w-4 h-4 text-[#C49A45]" />
-            <Bot className="w-4 h-4 text-[#E9EDF2]" />
-            <span className="text-xs font-semibold hidden sm:inline">Face</span>
+            <Home className="w-4 h-4 text-[#E9EDF2]" />
+            <span className="text-xs font-semibold hidden sm:inline">Home</span>
           </button>
 
           {onOpenMenu && (
@@ -91,7 +88,7 @@ export const HubScreen: React.FC<HubScreenProps> = ({
           )}
         </div>
 
-        {/* Center: University Branding (Minimal) */}
+        {/* Center: University Branding */}
         <div className="flex items-center gap-2.5">
           <img
             src="/robotics-club-logo.jpg"
@@ -108,43 +105,18 @@ export const HubScreen: React.FC<HubScreenProps> = ({
           </div>
         </div>
 
-        {/* Right: Quick Action Controls */}
+        {/* Right: Quick Audio Overview Control (Fullscreen & Settings removed as requested) */}
         <div className="flex items-center gap-1.5 sm:gap-2">
-          {/* Audio Overview */}
           <button
             onClick={handleHearOverview}
             className={`p-2.5 min-h-[44px] min-w-[44px] rounded-xl border flex items-center justify-center transition-all active:scale-95 ${
               isSpeaking
-                ? 'bg-[#C49A45] border-[#C49A45] text-white'
-                : 'bg-white/10 hover:bg-white/20 border-white/10 text-white'
+                ? 'bg-[#C49A45] border-[#C49A45] text-white shadow-md'
+                : 'bg-white/10 hover:bg-white/20 border-white/10 text-white shadow-xs'
             }`}
             title="Audio Overview"
           >
             <Volume2 className="w-4 h-4 text-[#E9EDF2]" />
-          </button>
-
-          {/* Fullscreen Kiosk Mode */}
-          {onToggleFullscreen && (
-            <button
-              onClick={onToggleFullscreen}
-              className="p-2.5 min-h-[44px] min-w-[44px] rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 border border-white/10 text-white flex items-center justify-center transition-all"
-              title={isFullscreen ? 'Exit Full Screen' : 'Full Screen Kiosk'}
-            >
-              {isFullscreen ? (
-                <Minimize className="w-4 h-4 text-[#C49A45]" />
-              ) : (
-                <Maximize className="w-4 h-4 text-[#C49A45]" />
-              )}
-            </button>
-          )}
-
-          {/* Settings */}
-          <button
-            onClick={() => onNavigate('settings')}
-            className="p-2.5 min-h-[44px] min-w-[44px] rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 border border-white/10 text-white flex items-center justify-center transition-all"
-            title="Settings"
-          >
-            <Settings className="w-4 h-4 text-[#E9EDF2]" />
           </button>
         </div>
       </header>
@@ -338,15 +310,15 @@ export const HubScreen: React.FC<HubScreenProps> = ({
       <footer className="relative z-10 bg-[#263746]/95 backdrop-blur-md text-white px-3 sm:px-5 py-2 rounded-2xl border border-white/15 shadow-lg flex items-center justify-between shrink-0">
         <button
           onClick={() => {
-            if (onSpeakGreeting) onSpeakGreeting("Opening voice assistant.");
+            if (onSpeakGreeting) onSpeakGreeting("Opening voice talk assistant.");
             onOpenVoiceAssistant();
           }}
-          className="flex items-center gap-2 px-3.5 py-1.5 min-h-[44px] rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-white transition-all shadow-xs active:scale-95"
+          className="flex items-center gap-2.5 px-4 py-2 min-h-[46px] rounded-xl bg-[#C49A45] hover:bg-[#B38734] border border-[#C49A45] text-white transition-all shadow-md active:scale-95 cursor-pointer"
         >
-          <div className="p-1 rounded-full bg-[#C49A45] text-white">
-            <Mic className="w-3.5 h-3.5" />
+          <div className="p-1 rounded-full bg-white text-[#263746]">
+            <Mic className="w-4 h-4 text-[#263746]" />
           </div>
-          <span className="font-semibold text-xs sm:text-sm">Voice Assistant</span>
+          <span className="font-bold text-xs sm:text-sm tracking-wide">Voice Talk & Assistant</span>
         </button>
 
         <div className="flex items-center gap-2 text-xs text-[#E9EDF2]/90">

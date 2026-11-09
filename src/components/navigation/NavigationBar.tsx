@@ -131,11 +131,11 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
     // ================= 4. ROBOT =================
     {
       id: 'face',
-      title: 'Robot Face (Digital Eyes)',
+      title: 'Robot Face (Home)',
       description: 'Interactive procedural eyes & expressions',
       icon: Smile,
       group: 'ROBOT',
-      badge: 'Face'
+      badge: 'Home'
     },
     {
       id: 'camera',

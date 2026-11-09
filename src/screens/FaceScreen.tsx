@@ -69,17 +69,16 @@ export const FaceScreen: React.FC<FaceScreenProps> = ({
   }, []);
 
   const handleFaceTap = () => {
-    if (!isSpeaking) {
-      startIntro();
-    }
-  };
-
-  const handleSkipOrExplore = () => {
     if (onInterruptSpeech) onInterruptSpeech();
     if (!hasTriggeredShiftRef.current && onIntroComplete) {
       hasTriggeredShiftRef.current = true;
       onIntroComplete();
     }
+  };
+
+  const handleSkipOrExplore = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    handleFaceTap();
   };
 
   return (

@@ -1,14 +1,14 @@
 import React from 'react';
 import { AppScreen, SystemStatus } from '../../types/robot';
-import { Menu, Home, Cpu, Wifi, BatteryCharging, Battery, Maximize, Minimize, Sparkles } from 'lucide-react';
+import { Menu, Home, Cpu, Wifi, BatteryCharging, Battery, Sparkles } from 'lucide-react';
 
 interface TopBarProps {
   currentScreen: AppScreen;
   onSelectScreen: (screen: AppScreen) => void;
   onOpenMenu: () => void;
   systemStatus: SystemStatus;
-  isFullscreen: boolean;
-  onToggleFullscreen: () => void;
+  isFullscreen?: boolean;
+  onToggleFullscreen?: () => void;
   visible?: boolean;
 }
 
@@ -17,8 +17,6 @@ export const TopBar: React.FC<TopBarProps> = ({
   onSelectScreen,
   onOpenMenu,
   systemStatus,
-  isFullscreen,
-  onToggleFullscreen,
   visible = true
 }) => {
   if (!visible) return null;
@@ -91,11 +89,11 @@ export const TopBar: React.FC<TopBarProps> = ({
         {currentScreen !== 'face' && (
           <button
             onClick={() => onSelectScreen('face')}
-            title="Return to Robot Face (Home)"
+            title="Return to Home"
             className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#30343B] hover:bg-[#202124] border border-white/10 text-white transition-colors font-medium text-[11px]"
           >
             <Home className="w-3.5 h-3.5 text-[#E9EDF2]" />
-            <span className="hidden md:inline">FACE</span>
+            <span className="hidden md:inline">HOME</span>
           </button>
         )}
 
@@ -153,15 +151,6 @@ export const TopBar: React.FC<TopBarProps> = ({
           )}
           <span>{systemStatus.tabletBattery}%</span>
         </div>
-
-        {/* Tablet Fullscreen Kiosk Mode Toggle */}
-        <button
-          onClick={onToggleFullscreen}
-          title={isFullscreen ? 'Exit Fullscreen' : 'Enter Kiosk Fullscreen'}
-          className="p-1 rounded bg-[#30343B] hover:bg-[#202124] border border-white/10 text-white transition-colors"
-        >
-          {isFullscreen ? <Minimize className="w-3.5 h-3.5" /> : <Maximize className="w-3.5 h-3.5 text-[#E9EDF2]" />}
-        </button>
       </div>
     </header>
   );

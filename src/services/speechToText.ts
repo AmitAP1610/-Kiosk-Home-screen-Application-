@@ -244,6 +244,12 @@ class NativeAndroidSpeechProvider implements ISTTProvider {
       callbacks.onEnd();
     };
 
+    win.onMicrophonePermissionGranted = () => {
+      try {
+        win.AndroidSpeechRecognizer.startListening(lang || 'en-IN');
+      } catch {}
+    };
+
     try {
       win.AndroidSpeechRecognizer.startListening(lang || 'en-IN');
     } catch (err: any) {
