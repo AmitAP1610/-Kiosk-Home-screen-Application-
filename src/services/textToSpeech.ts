@@ -327,8 +327,26 @@ class TextToSpeechService {
       this.isSpeakingState = true;
       this.startVisemeSimulation();
 
-      return new Promise<void>((resolve, reject) => {
+      return new Promise<void>((resolve) => {
         let isDone = false;
+
+        // Safety watchdog: ensure state resets even if native TTS drops the utterance callback
+        const maxDurationMs = Math.max(4000, Math.min(25000, text.length * 100 + 3000));
+        const watchdogTimer = setTimeout(() => {
+          if (!isDone) {
+            isDone = true;
+            this.isSpeakingState = false;
+            this.stopVisemeSimulation();
+            if (callbacks?.onEnd) callbacks.onEnd();
+            resolve();
+          }
+        }, maxDurationMs);
+
+        const cleanup = () => {
+          if (watchdogTimer) clearTimeout(watchdogTimer);
+          this.isSpeakingState = false;
+          this.stopVisemeSimulation();
+        };
 
         win.onAndroidTTSStart = () => {
           this.isSpeakingState = true;
@@ -338,8 +356,7 @@ class TextToSpeechService {
         win.onAndroidTTSEnd = () => {
           if (isDone) return;
           isDone = true;
-          this.isSpeakingState = false;
-          this.stopVisemeSimulation();
+          cleanup();
           if (callbacks?.onEnd) callbacks.onEnd();
           resolve();
         };
@@ -347,14 +364,14 @@ class TextToSpeechService {
         win.onAndroidTTSError = (errMsg: string) => {
           if (isDone) return;
           isDone = true;
-          this.isSpeakingState = false;
-          this.stopVisemeSimulation();
+          cleanup();
+          console.warn('Android TTS notification:', errMsg);
           if (callbacks?.onError) callbacks.onError(new Error(errMsg));
-          reject(new Error(errMsg || 'Android TTS playback failed'));
+          resolve(); // Resolve gracefully to avoid blocking UI state
         };
 
-        const targetPitch = options.pitch ?? 0.80;
-        const targetRate = options.rate ?? 0.88;
+        const targetPitch = options.pitch ?? 0.85;
+        const targetRate = options.rate ?? 0.90;
 
         try {
           if (callbacks?.onStart) callbacks.onStart();
@@ -362,10 +379,9 @@ class TextToSpeechService {
         } catch (err) {
           if (isDone) return;
           isDone = true;
-          this.isSpeakingState = false;
-          this.stopVisemeSimulation();
+          cleanup();
           if (callbacks?.onError) callbacks.onError(err);
-          reject(err);
+          resolve();
         }
       });
     }

@@ -310,7 +310,6 @@ export const HubScreen: React.FC<HubScreenProps> = ({
       <footer className="relative z-10 bg-[#263746]/95 backdrop-blur-md text-white px-3 sm:px-5 py-2 rounded-2xl border border-white/15 shadow-lg flex items-center justify-between shrink-0">
         <button
           onClick={() => {
-            if (onSpeakGreeting) onSpeakGreeting("Opening voice talk assistant.");
             onOpenVoiceAssistant();
           }}
           className="flex items-center gap-2.5 px-4 py-2 min-h-[46px] rounded-xl bg-[#C49A45] hover:bg-[#B38734] border border-[#C49A45] text-white transition-all shadow-md active:scale-95 cursor-pointer"

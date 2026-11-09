@@ -244,10 +244,10 @@ class NativeAndroidSpeechProvider implements ISTTProvider {
       callbacks.onEnd();
     };
 
+    // Note: Java's onRequestPermissionsResult automatically calls startPendingListen()
+    // so we avoid double-triggering here to prevent ERROR_RECOGNIZER_BUSY (error 8).
     win.onMicrophonePermissionGranted = () => {
-      try {
-        win.AndroidSpeechRecognizer.startListening(lang || 'en-IN');
-      } catch {}
+      // Handled natively by MainActivity.java startPendingListen
     };
 
     try {

@@ -118,12 +118,13 @@ public class MainActivity extends BridgeActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_REQ_CODE) {
             if (grantResults != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                WebView webView = getBridgeWebView();
-                if (webView != null) {
-                    webView.evaluateJavascript("window.onMicrophonePermissionGranted && window.onMicrophonePermissionGranted();", null);
-                }
                 if (speechBridge != null && speechBridge.hasPendingListen()) {
                     speechBridge.startPendingListen();
+                }
+            } else {
+                WebView webView = getBridgeWebView();
+                if (webView != null) {
+                    webView.evaluateJavascript("window.onAndroidSpeechError && window.onAndroidSpeechError('Microphone permission was denied. Please allow it in Tablet Settings.', 'not-allowed');", null);
                 }
             }
         }
@@ -220,7 +221,6 @@ public class MainActivity extends BridgeActivity {
                         new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS},
                         PERMISSION_REQ_CODE
                     );
-                    evalJs("window.onAndroidSpeechError && window.onAndroidSpeechError('Please allow microphone permission in the prompt to speak.', 'not-allowed');");
                     return;
                 }
                 pendingListenLanguage = null;
@@ -228,6 +228,7 @@ public class MainActivity extends BridgeActivity {
                 try {
                     if (speechRecognizer != null) {
                         try {
+                            speechRecognizer.cancel();
                             speechRecognizer.destroy();
                         } catch (Exception ignored) {}
                     }
@@ -245,7 +246,9 @@ public class MainActivity extends BridgeActivity {
                     intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
                     intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
                     intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, activity.getPackageName());
-                    intent.putExtra("android.speech.extra.PREFER_OFFLINE", true);
+                    intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 3000L);
+                    intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 2500L);
+                    intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 2500L);
 
                     if (language != null && !language.isEmpty()) {
                         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, language);

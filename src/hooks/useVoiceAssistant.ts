@@ -111,8 +111,14 @@ export function useVoiceAssistant({
           robotAudio.playHappy();
         }
 
-        // Convert response into speech
-        await ttsSpeak(response.text, { lang: language });
+        // Convert response into speech with defensive fallback
+        try {
+          await ttsSpeak(response.text, { lang: language });
+        } catch (speechErr) {
+          console.warn('Speech playback non-critical failure:', speechErr);
+          setState('IDLE');
+          updateExpression('idle');
+        }
       } catch (err: any) {
         console.error('Error in AI Assistant processing:', err);
         setState('ERROR');
