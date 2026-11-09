@@ -23,7 +23,7 @@ interface FaceScreenProps {
 }
 
 const INTRO_SPEECH =
-  "Namaste! Welcome to Sri Sri University. I am Kiosk, created by the Sri Sri University Robotics Club. I am here to guide you across our campus, show you today's academic sessions and agenda, and share our robotics story. Let's explore together!";
+  "Namaste! Welcome to Sri Sri University. I am Kiosk, created by the Sri Sri University Robotics Club. I am here to guide you across our campus, show you today's academic sessions and agenda, and share our robotics story. Touch the screen anytime to begin exploring!";
 
 export const FaceScreen: React.FC<FaceScreenProps> = ({
   config,
@@ -66,7 +66,7 @@ export const FaceScreen: React.FC<FaceScreenProps> = ({
     }
   };
 
-  const handleSkipOrExplore = (e?: React.MouseEvent) => {
+  const handleSkipOrExplore = (e?: React.MouseEvent | React.TouchEvent) => {
     if (e) e.stopPropagation();
     handleFaceTap();
   };
@@ -74,6 +74,7 @@ export const FaceScreen: React.FC<FaceScreenProps> = ({
   return (
     <div
       onClick={handleFaceTap}
+      onTouchEnd={handleFaceTap}
       className="w-full h-full bg-[#202124] select-none overflow-hidden relative cursor-pointer"
     >
       {/* Robot Face Display Viewport (Near Black #202124) */}
@@ -122,11 +123,19 @@ export const FaceScreen: React.FC<FaceScreenProps> = ({
       )}
 
       {/* BOTTOM OVERLAY: Clean Engineering Navigation Control */}
-      <div className="absolute bottom-6 left-0 right-0 z-30 px-4 sm:px-8 flex flex-col items-center justify-center space-y-3 pointer-events-auto">
+      <div className="absolute bottom-6 left-0 right-0 z-30 px-4 sm:px-8 flex flex-col items-center justify-center space-y-2.5 pointer-events-auto">
+        {!isSpeaking && (
+          <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[#E9EDF2] text-xs font-medium animate-pulse shadow-md pointer-events-none">
+            <span className="w-2 h-2 rounded-full bg-[#C49A45]" />
+            <span>Touch screen anywhere to enter campus hub</span>
+          </div>
+        )}
+
         <div className="flex items-center gap-3">
           <button
             onClick={handleSkipOrExplore}
-            className="min-h-[48px] px-8 py-3 rounded-xl bg-[#263746] hover:bg-[#1D2B37] text-white font-bold text-sm sm:text-base flex items-center gap-2.5 shadow-sm transition-all active:scale-98 border border-[#263746]"
+            onTouchEnd={handleSkipOrExplore}
+            className="min-h-[48px] px-8 py-3 rounded-xl bg-[#263746] hover:bg-[#1D2B37] text-white font-bold text-sm sm:text-base flex items-center gap-2.5 shadow-sm transition-all active:scale-98 border border-[#263746] cursor-pointer"
           >
             <span>{isSpeaking ? 'Skip Intro & Enter Hub' : 'Enter Campus Hub'}</span>
             <ArrowRight className="w-4 h-4 text-[#C49A45]" />
@@ -135,6 +144,10 @@ export const FaceScreen: React.FC<FaceScreenProps> = ({
           {!isSpeaking && (
             <button
               onClick={(e) => {
+                e.stopPropagation();
+                startIntro();
+              }}
+              onTouchEnd={(e) => {
                 e.stopPropagation();
                 startIntro();
               }}
