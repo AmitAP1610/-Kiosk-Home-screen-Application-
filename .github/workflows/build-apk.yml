@@ -70,8 +70,12 @@ jobs:
           GRADLE_EXIT=${PIPESTATUS[0]}
           if [ $GRADLE_EXIT -ne 0 ]; then
             echo "::error title=Gradle Build Failure::Gradle exited with code $GRADLE_EXIT"
-            echo "========== LAST 200 LINES OF GRADLE LOG =========="
-            tail -n 200 ../gradle_build.log
+            cd ..
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add gradle_build.log
+            git commit -m "build-log: failure details" || true
+            git push origin main || true
             exit $GRADLE_EXIT
           fi
 
