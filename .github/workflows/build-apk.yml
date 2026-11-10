@@ -66,31 +66,38 @@ jobs:
         run: |
           cd android
           chmod +x gradlew
-          if ! ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee ../gradle_build.log; then
-            echo "::error title=Gradle Build Failure::Check log for compilation error"
-            echo "========== GRADLE BUILD LOG (LAST 150 LINES) =========="
-            tail -n 150 ../gradle_build.log
-            echo "### ❌ Gradle Build Error Log" >> $GITHUB_STEP_SUMMARY
-            echo '```text' >> $GITHUB_STEP_SUMMARY
-            tail -n 150 ../gradle_build.log >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-            exit 1
+          ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee ../gradle_build.log
+          GRADLE_EXIT=${PIPESTATUS[0]}
+          if [ $GRADLE_EXIT -ne 0 ]; then
+            echo "::error title=Gradle Build Failure::Gradle exited with code $GRADLE_EXIT"
+            echo "========== LAST 200 LINES OF GRADLE LOG =========="
+            tail -n 200 ../gradle_build.log
+            exit $GRADLE_EXIT
           fi
+
+      - name: Upload Gradle Build Log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gradle-build-log
+          path: gradle_build.log
+          if-no-files-found: ignore
 
       - name: Locate & Prepare APK
         run: |
           mkdir -p release-apk
-          echo "Listing all outputs from Gradle build:"
-          find android/app/build -type f || true
+          echo "=== ALL APKS CREATED ==="
+          find android -name "*.apk" || true
+          echo "=== ALL BUILD OUTPUTS ==="
+          find android/app/build/outputs -type f || true
 
-          APK_PATH="android/app/build/outputs/apk/debug/app-debug.apk"
-          if [ ! -f "$APK_PATH" ]; then
-            APK_PATH=$(find android/app/build -type f -name "*.apk" | head -n 1)
+          APK_PATH=$(find android/app/build/outputs -name "*.apk" | head -n 1)
+          if [ -z "$APK_PATH" ]; then
+            APK_PATH=$(find android -name "*.apk" -not -path "*/assets/*" | head -n 1)
           fi
 
           if [ -z "$APK_PATH" ] || [ ! -f "$APK_PATH" ]; then
             echo "::error title=Gradle Build Error::No APK was compiled!"
-            find android -name "*.apk" || true
             exit 1
           fi
           echo "Real newly compiled APK found at: $APK_PATH"
