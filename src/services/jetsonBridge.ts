@@ -227,7 +227,6 @@ class JetsonBridgeService {
     this.sendRaw({
       op: 'subscribe',
       topic: '/map',
-      type: 'nav_msgs/msg/OccupancyGrid',
       throttle_rate: 1000,
       queue_length: 1
     });
@@ -236,22 +235,19 @@ class JetsonBridgeService {
     this.sendRaw({
       op: 'subscribe',
       topic: '/amcl_pose',
-      type: 'geometry_msgs/msg/PoseWithCovarianceStamped',
       throttle_rate: 100
     });
 
     this.sendRaw({
       op: 'subscribe',
       topic: '/odom',
-      type: 'nav_msgs/msg/Odometry',
       throttle_rate: 100
     });
 
-    // 3. Subscribe to Nav2 trajectory /plan
+    // 3. Subscribe to Nav trajectory /plan
     this.sendRaw({
       op: 'subscribe',
       topic: '/plan',
-      type: 'nav_msgs/msg/Path',
       throttle_rate: 200
     });
 
@@ -259,7 +255,6 @@ class JetsonBridgeService {
     this.sendRaw({
       op: 'subscribe',
       topic: '/scan',
-      type: 'sensor_msgs/msg/LaserScan',
       throttle_rate: 200
     });
   }
@@ -460,14 +455,12 @@ class JetsonBridgeService {
     this.sendRaw({
       op: 'publish',
       topic: '/e_stop',
-      type: 'std_msgs/msg/Bool',
       msg: { data: true }
     });
 
     this.sendRaw({
       op: 'publish',
       topic: '/cmd_vel',
-      type: 'geometry_msgs/msg/Twist',
       msg: {
         linear: { x: 0.0, y: 0.0, z: 0.0 },
         angular: { x: 0.0, y: 0.0, z: 0.0 }
@@ -488,11 +481,10 @@ class JetsonBridgeService {
    * Also transmits custom payload for Python/Arduino daemons
    */
   private publishTwist(linear: number, angular: number) {
-    // 1. ROSBridge v2.0 Standard Publish packet
+    // 1. ROSBridge v2.0 Standard Publish packet (omitting type allows ROS 1 & ROS 2 auto-resolution)
     const rosPacket = {
       op: 'publish',
       topic: '/cmd_vel',
-      type: 'geometry_msgs/msg/Twist',
       msg: {
         linear: { x: Number(linear.toFixed(3)), y: 0.0, z: 0.0 },
         angular: { x: 0.0, y: 0.0, z: Number(angular.toFixed(3)) }
