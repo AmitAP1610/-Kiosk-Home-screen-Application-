@@ -43,7 +43,7 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v4
         with:
-          packages: 'platform-tools platforms;android-34 platforms;android-35 platforms;android-36 build-tools;34.0.0 build-tools;36.0.0'
+          packages: 'platform-tools platforms;android-34 build-tools;34.0.0'
 
       - name: Accept Android SDK Licenses & Configure Environment
         run: |
@@ -66,7 +66,16 @@ jobs:
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon --stacktrace
+          if ! ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee ../gradle_build.log; then
+            echo "::error title=Gradle Build Failure::Check log for compilation error"
+            echo "========== GRADLE BUILD LOG (LAST 150 LINES) =========="
+            tail -n 150 ../gradle_build.log
+            echo "### ❌ Gradle Build Error Log" >> $GITHUB_STEP_SUMMARY
+            echo '```text' >> $GITHUB_STEP_SUMMARY
+            tail -n 150 ../gradle_build.log >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
 
       - name: Locate & Prepare APK
         run: |
