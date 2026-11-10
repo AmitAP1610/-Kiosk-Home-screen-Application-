@@ -55,14 +55,17 @@ jobs:
 
       - name: Copy Web Assets to Android Project
         run: |
+          rm -rf android/app/src/main/assets/public
           mkdir -p android/app/src/main/assets/public
           cp -r dist/* android/app/src/main/assets/public/
+          rm -f android/app/src/main/assets/public/*.apk
           cp capacitor.config.json android/app/src/main/assets/capacitor.config.json
           mkdir -p android/app/libs
 
       - name: Compile Android Debug APK
         run: |
           cd android
+          ./gradlew clean --no-daemon
           if ! ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee ../build.log; then
             echo "::error title=Gradle Build Failure::Check log for compilation error"
             echo "========== COMPILER ERROR MATCHES =========="
@@ -75,15 +78,21 @@ jobs:
       - name: Locate & Prepare APK
         run: |
           mkdir -p release-apk
-          APK_PATH=$(find android -type f -name "*.apk" | head -n 1)
-          echo "Found APK at: $APK_PATH"
-          cp "$APK_PATH" release-apk/KIOSK-AMR-v1.0.2.apk
+          APK_PATH=$(find android/app/build/outputs/apk -type f -name "*.apk" | head -n 1)
+          if [ -z "$APK_PATH" ] || [ ! -f "$APK_PATH" ]; then
+            echo "::error title=Gradle Build Error::No APK was compiled in android/app/build/outputs/apk/"
+            find android -name "*.apk" || true
+            exit 1
+          fi
+          echo "Real newly compiled APK found at: $APK_PATH"
+          ls -lh "$APK_PATH"
+          cp "$APK_PATH" release-apk/KIOSK-AMR-v1.0.3.apk
           mkdir -p dist-apk
           cp "$APK_PATH" dist-apk/KIOSK-AMR.apk
-          cp "$APK_PATH" dist-apk/KIOSK-AMR-v1.0.2.apk
+          cp "$APK_PATH" dist-apk/KIOSK-AMR-v1.0.3.apk
           mkdir -p public
           cp "$APK_PATH" public/KIOSK-AMR.apk
-          cp "$APK_PATH" public/KIOSK-AMR-v1.0.2.apk
+          cp "$APK_PATH" public/KIOSK-AMR-v1.0.3.apk
           ls -la release-apk/ dist-apk/ public/
 
       - name: Commit APK Directly into Repository (Bypasses Releases 504 CDN Timeout)
@@ -91,12 +100,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add dist-apk/ public/
-          git commit -m "chore(apk): publish pre-compiled APK v1.0.2 directly to repo" || true
+          git commit -m "chore(apk): publish pre-compiled APK v1.0.3 directly to repo" || true
           git push origin main || true
 
       - name: Upload APK to Direct Fast Mirror
         run: |
-          MIRROR_URL=$(curl -s -F "file=@release-apk/KIOSK-AMR-v1.0.2.apk" https://temp.sh/upload)
+          MIRROR_URL=$(curl -s -F "file=@release-apk/KIOSK-AMR-v1.0.3.apk" https://temp.sh/upload)
           echo "DIRECT_MIRROR_URL=$MIRROR_URL" >> $GITHUB_ENV
           echo "### 🚀 Direct Mirror Download Link" >> $GITHUB_STEP_SUMMARY
           echo "$MIRROR_URL" >> $GITHUB_STEP_SUMMARY
@@ -104,26 +113,27 @@ jobs:
       - name: Upload APK as Workflow Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: KIOSK-AMR-Android-Tablet-App-v1.0.2
-          path: release-apk/KIOSK-AMR-v1.0.2.apk
+          name: KIOSK-AMR-Android-Tablet-App-v1.0.3
+          path: release-apk/KIOSK-AMR-v1.0.3.apk
           if-no-files-found: error
 
       - name: Publish GitHub Release with Downloadable APK
         uses: softprops/action-gh-release@v2
         if: github.ref == 'refs/heads/main'
         with:
-          tag_name: v1.0.2-apk
-          name: KIOSK AMR — Android APK Release (v1.0.2)
+          tag_name: v1.0.3-apk
+          name: KIOSK AMR — Android APK Release (v1.0.3)
           body: |
-            ## KIOSK AMR — Android Tablet Application (Release v1.0.2)
+            ## KIOSK AMR — Android Tablet Application (Release v1.0.3)
 
-            Updated build with:
-            - versionCode 2 (forces Android upgrade and clears stale cache)
+            Fresh verified compilation from source:
+            - Guaranteed Gradle debug build output
+            - versionCode 3 (forces Android upgrade and clears stale cache)
             - WebView cache-busting enabled
             - Robot face stays until explicitly touched
             - Gallery and minimize/maximize removed
             - Full Jetson teleoperation & 2D SLAM mapping
           files: |
-            release-apk/KIOSK-AMR-v1.0.2.apk
+            release-apk/KIOSK-AMR-v1.0.3.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
