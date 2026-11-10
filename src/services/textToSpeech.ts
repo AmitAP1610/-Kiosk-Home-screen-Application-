@@ -29,6 +29,7 @@ class TextToSpeechService {
   private isVoicesLoaded: boolean = false;
   private voiceLoadPromise: Promise<SpeechSynthesisVoice[]> | null = null;
   private keepAliveTimer: any = null;
+  private currentAudio: HTMLAudioElement | null = null;
 
   constructor() {
     if (typeof window !== 'undefined') {
@@ -485,11 +486,63 @@ class TextToSpeechService {
   }
 
   /**
+   * Plays the official recorded voice sample audio directly (/voice-sample.mp3)
+   * with full synchronized viseme mouth animation.
+   */
+  public async playSampleAudio(onEnd?: () => void): Promise<void> {
+    this.stop();
+    this.isSpeakingState = true;
+    this.startVisemeSimulation();
+
+    return new Promise<void>((resolve) => {
+      let isDone = false;
+      const audio = new Audio('/voice-sample.mp3');
+      this.currentAudio = audio;
+
+      const finish = () => {
+        if (isDone) return;
+        isDone = true;
+        this.isSpeakingState = false;
+        this.stopVisemeSimulation();
+        this.currentAudio = null;
+        if (onEnd) onEnd();
+        resolve();
+      };
+
+      audio.onended = finish;
+      audio.onerror = () => {
+        // Fallback relative path for Android WebView
+        try {
+          const fallbackAudio = new Audio('./voice-sample.mp3');
+          this.currentAudio = fallbackAudio;
+          fallbackAudio.onended = finish;
+          fallbackAudio.onerror = () => finish();
+          fallbackAudio.play().catch(() => finish());
+        } catch {
+          finish();
+        }
+      };
+
+      audio.play().catch(() => {
+        finish();
+      });
+    });
+  }
+
+  /**
    * Stops current speech playback immediately and clears animation.
    */
   public stop() {
     this.stopKeepAlive();
     this.stopVisemeSimulation();
+
+    if (this.currentAudio) {
+      try {
+        this.currentAudio.pause();
+        this.currentAudio.currentTime = 0;
+      } catch {}
+      this.currentAudio = null;
+    }
 
     if (this.hasNativeTTS()) {
       try {

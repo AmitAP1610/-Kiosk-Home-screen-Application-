@@ -39,15 +39,20 @@ export const FaceScreen: React.FC<FaceScreenProps> = ({
 }) => {
   // Trigger Intro Speech with audio pipeline unlock & microphone authorization
   const startIntro = async () => {
-    // 1. Immediately unlock speech synthesis engine
+    // 1. Immediately unlock speech synthesis and audio engine
     textToSpeech.unlockAudioEngine();
 
     // 2. Request microphone permission upfront for the session
     speechToText.requestMicrophonePermission().catch(() => {});
 
-    // 3. Play the introductory speech (stays on face screen after completion until tapped)
-    if (onSpeakIntro) {
-      onSpeakIntro(INTRO_SPEECH);
+    // 3. Play the official recorded voice sample audio directly (/voice-sample.mp3)
+    try {
+      await textToSpeech.playSampleAudio();
+    } catch {
+      // Fallback to TTS if audio sample playback fails
+      if (onSpeakIntro) {
+        onSpeakIntro(INTRO_SPEECH);
+      }
     }
   };
 
