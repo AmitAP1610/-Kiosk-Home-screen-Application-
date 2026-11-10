@@ -65,22 +65,15 @@ jobs:
       - name: Compile Android Debug APK
         run: |
           cd android
-          ./gradlew clean --no-daemon
-          if ! ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee ../build.log; then
-            echo "::error title=Gradle Build Failure::Check log for compilation error"
-            echo "========== COMPILER ERROR MATCHES =========="
-            grep -i -C 2 "error:" ../build.log || true
-            echo "========== LAST 70 LINES OF BUILD LOG =========="
-            tail -n 70 ../build.log
-            exit 1
-          fi
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon --stacktrace
 
       - name: Locate & Prepare APK
         run: |
           mkdir -p release-apk
-          APK_PATH=$(find android/app/build/outputs/apk -type f -name "*.apk" | head -n 1)
+          APK_PATH=$(find android -type f -name "*.apk" -not -path "*/assets/*" | head -n 1)
           if [ -z "$APK_PATH" ] || [ ! -f "$APK_PATH" ]; then
-            echo "::error title=Gradle Build Error::No APK was compiled in android/app/build/outputs/apk/"
+            echo "::error title=Gradle Build Error::No APK was compiled!"
             find android -name "*.apk" || true
             exit 1
           fi
