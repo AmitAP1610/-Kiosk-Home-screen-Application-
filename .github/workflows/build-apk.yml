@@ -80,7 +80,14 @@ jobs:
       - name: Locate & Prepare APK
         run: |
           mkdir -p release-apk
-          APK_PATH=$(find android -type f -name "*.apk" -not -path "*/assets/*" | head -n 1)
+          echo "Listing all outputs from Gradle build:"
+          find android/app/build -type f || true
+
+          APK_PATH="android/app/build/outputs/apk/debug/app-debug.apk"
+          if [ ! -f "$APK_PATH" ]; then
+            APK_PATH=$(find android/app/build -type f -name "*.apk" | head -n 1)
+          fi
+
           if [ -z "$APK_PATH" ] || [ ! -f "$APK_PATH" ]; then
             echo "::error title=Gradle Build Error::No APK was compiled!"
             find android -name "*.apk" || true
