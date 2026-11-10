@@ -45,7 +45,7 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v4
         with:
-          packages: 'platform-tools platforms;android-34 build-tools;34.0.0'
+          packages: 'platform-tools platforms;android-36 build-tools;36.0.0'
 
       - name: Accept Android SDK Licenses & Configure Environment
         run: |
@@ -72,6 +72,16 @@ jobs:
           GRADLE_EXIT=${PIPESTATUS[0]}
           if [ $GRADLE_EXIT -ne 0 ]; then
             echo "::error title=Gradle Build Failure::Gradle exited with code $GRADLE_EXIT"
+            echo "### ❌ Gradle Build Failure Details" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            tail -n 60 ../gradle_build.log >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cd ..
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add gradle_build.log
+            git commit -m "build-log: failure details" || true
+            git push origin main || true
             exit $GRADLE_EXIT
           fi
 
