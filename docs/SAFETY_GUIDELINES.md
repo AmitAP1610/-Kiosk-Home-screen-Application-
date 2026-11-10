@@ -24,6 +24,8 @@
    * A prominent software E-Stop trigger on the tablet UI transmits an immediate `$STP,1*1A\n` serial interrupt packet, cutting PWM output within $\le 5\text{ ms}$.
 3. **Communication Loss Watchdog (Tier 3):**
    * If serial communication from the Jetson drops or freezes for more than **$300\text{ ms}$**, the Arduino firmware automatically brings motor PWM output to zero.
+4. **Teleoperation Deadman Heartbeat (Tier 1 -> Tier 2):**
+   * The tablet teleoperation joystick streams continuous 10 Hz `/cmd_vel` velocity pulses. If the user releases their finger or the WebSocket connection hiccups for $> 500\text{ ms}$, the Jetson teleop bridge clamps velocity to zero immediately.
 
 ---
 

@@ -65,17 +65,20 @@ The KIOSK robot employs a strict 3-tier distributed processing architecture to g
 1. **Screen ① — Face Screen (`FaceScreen.tsx`):**
    * Network IP `172.17.0.1` badge at top-left.
    * Procedural cyan glowing eyes with natural blink cycles and viseme lip-sync.
-   * Spoken welcome introduction; automatically transitions to Hub Screen.
+   * Spoken welcome introduction with calibrated deep male baritone tone.
+   * **Stays on the Face screen** after speech completes until explicitly tapped or touched.
 2. **Screen ② — Campus Hub (`HubScreen.tsx`):**
    * Central touch menu with 3 large circular modules:
      * `1. Robo Info`
      * `2. Map & SSU Info`
      * `3. Sessions / Agenda`
    * Back button at top-left returns to Face Screen.
-3. **Screen ③ — Map & Directory (`MapInfoScreen.tsx`):**
+   * Bottom gallery strip and minimize/maximize buttons removed for kiosk touch reliability.
+3. **Screen ③ — Map, SLAM & Teleoperation (`MapInfoScreen.tsx`):**
+   * Live HTML5 Canvas subscriber rendering real-time ROS 2D SLAM Occupancy Grid (`/map`).
+   * Touch joystick sending continuous 10 Hz `/cmd_vel` velocity pulses to Jetson Nav2.
    * Leaflet GIS with Esri Satellite, CartoDB Dark, and OpenStreetMap views.
-   * Verified GPS coordinates for Sri Sri University buildings.
-   * Click-to-speak voice guidance and Basic Info tab.
+   * Verified GPS coordinates for Sri Sri University buildings with click-to-speak audio tours.
 4. **Screen ④ — Sessions & Agenda (`SessionsAgendaScreen.tsx`):**
    * 12 verified and dummy university sessions across Today, Tomorrow, and Upcoming.
    * Filterable by track and date with speech summary and venue locator.
@@ -86,14 +89,19 @@ The KIOSK robot employs a strict 3-tier distributed processing architecture to g
 
 ---
 
-## 5. Development & Build Verification
+## 5. Development & CI/CD Compilation Pipeline
 
-```powershell
-# Run Development Server
-npm.cmd run dev
+* **TypeScript / Web Application:**
+  ```powershell
+  # Start local Vite development server
+  npm.cmd run dev
 
-# Run Production Typecheck and Bundle
-npm.cmd run build
-```
-
-Build outputs are compiled into `dist/` with zero TypeScript errors.
+  # Run Production Typecheck and Bundle
+  npm.cmd run build
+  ```
+* **Android Native Compilation Toolchain:**
+  * **Android Gradle Plugin (AGP):** `8.13.0`
+  * **Gradle Version:** `8.13` (configured in `gradle-wrapper.properties` & GitHub Actions)
+  * **Android SDK:** Compile SDK 36, Target SDK 36, Build Tools 36.0.0
+  * **Java Environment:** OpenJDK 21 (Temurin)
+  * **Release Automation:** Tagged GitHub Release (`v1.0.4-apk`) + instant raw repository mirror (`dist-apk/KIOSK-AMR-v1.0.4.apk`).
