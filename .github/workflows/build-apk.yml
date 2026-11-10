@@ -77,24 +77,26 @@ jobs:
           mkdir -p release-apk
           APK_PATH=$(find android -type f -name "*.apk" | head -n 1)
           echo "Found APK at: $APK_PATH"
-          cp "$APK_PATH" release-apk/KIOSK-AMR-v1.0.0.apk
+          cp "$APK_PATH" release-apk/KIOSK-AMR-v1.0.2.apk
           mkdir -p dist-apk
           cp "$APK_PATH" dist-apk/KIOSK-AMR.apk
+          cp "$APK_PATH" dist-apk/KIOSK-AMR-v1.0.2.apk
           mkdir -p public
           cp "$APK_PATH" public/KIOSK-AMR.apk
+          cp "$APK_PATH" public/KIOSK-AMR-v1.0.2.apk
           ls -la release-apk/ dist-apk/ public/
 
       - name: Commit APK Directly into Repository (Bypasses Releases 504 CDN Timeout)
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add dist-apk/KIOSK-AMR.apk public/KIOSK-AMR.apk
-          git commit -m "chore(apk): publish pre-compiled APK binary directly to repo" || true
+          git add dist-apk/ public/
+          git commit -m "chore(apk): publish pre-compiled APK v1.0.2 directly to repo" || true
           git push origin main || true
 
       - name: Upload APK to Direct Fast Mirror
         run: |
-          MIRROR_URL=$(curl -s -F "file=@release-apk/KIOSK-AMR-v1.0.0.apk" https://temp.sh/upload)
+          MIRROR_URL=$(curl -s -F "file=@release-apk/KIOSK-AMR-v1.0.2.apk" https://temp.sh/upload)
           echo "DIRECT_MIRROR_URL=$MIRROR_URL" >> $GITHUB_ENV
           echo "### 🚀 Direct Mirror Download Link" >> $GITHUB_STEP_SUMMARY
           echo "$MIRROR_URL" >> $GITHUB_STEP_SUMMARY
@@ -102,32 +104,26 @@ jobs:
       - name: Upload APK as Workflow Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: KIOSK-AMR-Android-Tablet-App
-          path: release-apk/KIOSK-AMR-v1.0.0.apk
+          name: KIOSK-AMR-Android-Tablet-App-v1.0.2
+          path: release-apk/KIOSK-AMR-v1.0.2.apk
           if-no-files-found: error
 
       - name: Publish GitHub Release with Downloadable APK
         uses: softprops/action-gh-release@v2
         if: github.ref == 'refs/heads/main'
         with:
-          tag_name: v1.0.0-apk
-          name: KIOSK AMR — Android APK Release (v1.0.0)
+          tag_name: v1.0.2-apk
+          name: KIOSK AMR — Android APK Release (v1.0.2)
           body: |
-            ## KIOSK AMR — Android Tablet Application (Release v1.0.0)
+            ## KIOSK AMR — Android Tablet Application (Release v1.0.2)
 
-            Directly installable APK for Android tablets (optimized for 10-inch Realme Android tablet in landscape orientation).
-
-            ### Fast Direct Mirrors (If GitHub Releases gives 504 Timeout):
-            - Direct Git Raw: https://raw.githubusercontent.com/AmitAP1610/-Kiosk-Home-screen-Application-/main/dist-apk/KIOSK-AMR.apk
-            - High-Speed jsDelivr CDN: https://cdn.jsdelivr.net/gh/AmitAP1610/-Kiosk-Home-screen-Application-@main/dist-apk/KIOSK-AMR.apk
-            - Temporary Fast Mirror: ${{ env.DIRECT_MIRROR_URL }}
-
-            ### How to Install on your Tablet:
-            1. Download the APK using any link above directly onto your Android tablet.
-            2. Tap the downloaded file in your browser's Downloads or Files app.
-            3. Tap **Install** (if prompted, enable "Allow installation from this source").
-            4. Tap **Open** — KIOSK AMR will launch in fullscreen landscape mode!
+            Updated build with:
+            - versionCode 2 (forces Android upgrade and clears stale cache)
+            - WebView cache-busting enabled
+            - Robot face stays until explicitly touched
+            - Gallery and minimize/maximize removed
+            - Full Jetson teleoperation & 2D SLAM mapping
           files: |
-            release-apk/KIOSK-AMR-v1.0.0.apk
+            release-apk/KIOSK-AMR-v1.0.2.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

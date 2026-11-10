@@ -105,6 +105,10 @@ public class MainActivity extends BridgeActivity {
         settings.setDomStorageEnabled(true);
         settings.setDatabaseEnabled(true);
 
+        // Ensure fresh assets on app updates (prevent stale cached HTML/JS)
+        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        webView.clearCache(true);
+
         // Register native Speech Recognizer and Text-to-Speech bridges
         speechBridge = new AndroidSpeechBridge(this, webView);
         ttsBridge = new AndroidTTSBridge(this, webView);
