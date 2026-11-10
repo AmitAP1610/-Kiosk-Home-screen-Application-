@@ -370,8 +370,8 @@ class TextToSpeechService {
           resolve(); // Resolve gracefully to avoid blocking UI state
         };
 
-        const targetPitch = options.pitch ?? 0.85;
-        const targetRate = options.rate ?? 0.90;
+        const targetPitch = options.pitch ?? 0.75;
+        const targetRate = options.rate ?? 0.85;
 
         try {
           if (callbacks?.onStart) callbacks.onStart();
@@ -428,9 +428,9 @@ class TextToSpeechService {
           utterance.voice = voice;
         }
 
-        // Calibrate pitch and rate to mirror the deep baritone sample (0.80 pitch, 0.88 rate)
-        utterance.rate = Math.max(0.5, Math.min(2.0, options.rate ?? 0.88));
-        utterance.pitch = Math.max(0.5, Math.min(2.0, options.pitch ?? 0.80));
+        // Calibrate pitch and rate to mirror the deep baritone sample (0.75 pitch, 0.85 rate)
+        utterance.rate = Math.max(0.5, Math.min(2.0, options.rate ?? 0.85));
+        utterance.pitch = Math.max(0.5, Math.min(2.0, options.pitch ?? 0.75));
         utterance.volume = Math.max(0.0, Math.min(1.0, options.volume ?? 1.0));
 
         utterance.onstart = () => {

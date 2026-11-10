@@ -14,6 +14,7 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
+import android.speech.tts.Voice;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
@@ -24,6 +25,7 @@ import androidx.core.content.ContextCompat;
 import com.getcapacitor.BridgeActivity;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Set;
 
 public class MainActivity extends BridgeActivity {
     private static final int PERMISSION_REQ_CODE = 101;
@@ -441,11 +443,65 @@ public class MainActivity extends BridgeActivity {
                 if (status == TextToSpeech.SUCCESS) {
                     isInitialized = true;
 
-                    // Fallback hierarchy: en-IN -> en-US -> Locale.getDefault()
-                    int res = tts.setLanguage(new Locale("en", "IN"));
-                    if (res == TextToSpeech.LANG_MISSING_DATA || res == TextToSpeech.LANG_NOT_SUPPORTED) {
-                        res = tts.setLanguage(Locale.US);
-                        if (res == TextToSpeech.LANG_MISSING_DATA || res == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    // Automatically configure the deep resonant male baritone voice matching the sample
+                    try {
+                        Set<Voice> voices = tts.getVoices();
+                        Voice bestVoice = null;
+                        if (voices != null && !voices.isEmpty()) {
+                            // Tier 1: Look for UK English Male (matches "I fear darkness hunts us..." sample)
+                            for (Voice v : voices) {
+                                String name = v.getName().toLowerCase();
+                                Locale loc = v.getLocale();
+                                boolean isUK = loc != null && (loc.getCountry().equalsIgnoreCase("GB") || name.contains("en-gb") || name.contains("en_gb"));
+                                boolean isMale = (name.contains("male") || name.contains("rjs") || name.contains("man")) && !name.contains("female");
+                                if (isUK && isMale) {
+                                    bestVoice = v;
+                                    break;
+                                }
+                            }
+                            // Tier 2: Look for US English Male (e.g. en-us-x-sfg#male, en-us-x-iom)
+                            if (bestVoice == null) {
+                                for (Voice v : voices) {
+                                    String name = v.getName().toLowerCase();
+                                    Locale loc = v.getLocale();
+                                    boolean isUS = loc != null && (loc.getCountry().equalsIgnoreCase("US") || name.contains("en-us") || name.contains("en_us"));
+                                    boolean isMale = (name.contains("male") || name.contains("sfg") || name.contains("iom") || name.contains("guy") || name.contains("david")) && !name.contains("female");
+                                    if (isUS && isMale) {
+                                        bestVoice = v;
+                                        break;
+                                    }
+                                }
+                            }
+                            // Tier 3: Any English Male voice
+                            if (bestVoice == null) {
+                                for (Voice v : voices) {
+                                    String name = v.getName().toLowerCase();
+                                    Locale loc = v.getLocale();
+                                    boolean isEn = loc != null && loc.getLanguage().equalsIgnoreCase("en");
+                                    boolean isMale = (name.contains("male") || name.contains("rjs") || name.contains("sfg") || name.contains("end")) && !name.contains("female");
+                                    if (isEn && isMale) {
+                                        bestVoice = v;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (bestVoice != null) {
+                            tts.setVoice(bestVoice);
+                            if (bestVoice.getLocale() != null) {
+                                tts.setLanguage(bestVoice.getLocale());
+                            }
+                        } else {
+                            int res = tts.setLanguage(Locale.UK);
+                            if (res == TextToSpeech.LANG_MISSING_DATA || res == TextToSpeech.LANG_NOT_SUPPORTED) {
+                                tts.setLanguage(Locale.US);
+                            }
+                        }
+                    } catch (Exception ignored) {
+                        try {
+                            tts.setLanguage(Locale.UK);
+                        } catch (Exception e) {
                             tts.setLanguage(Locale.getDefault());
                         }
                     }
@@ -504,8 +560,11 @@ public class MainActivity extends BridgeActivity {
                 }
 
                 try {
-                    tts.setPitch(pitch > 0 ? pitch : 0.8f);
-                    tts.setSpeechRate(rate > 0 ? rate : 0.88f);
+                    // Deep baritone resonance: pitch 0.75, measured pacing: rate 0.85
+                    float targetPitch = (pitch > 0.4f && pitch < 2.0f) ? pitch : 0.75f;
+                    float targetRate = (rate > 0.4f && rate < 2.0f) ? rate : 0.85f;
+                    tts.setPitch(targetPitch);
+                    tts.setSpeechRate(targetRate);
 
                     String utteranceId = "kiosk_tts_" + System.currentTimeMillis();
                     int res = tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);

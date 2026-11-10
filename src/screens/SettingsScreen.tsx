@@ -168,12 +168,12 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
               <button
                 type="button"
                 onClick={() => {
-                  onUpdateSpeechPitch(0.80);
-                  onUpdateSpeechRate(0.88);
+                  onUpdateSpeechPitch(0.75);
+                  onUpdateSpeechRate(0.85);
                 }}
                 className="px-3 py-1.5 rounded-lg bg-[#263746] hover:bg-[#1D2B37] text-white text-xs font-medium font-mono flex items-center gap-1.5 transition-all shadow-sm"
               >
-                <span>✓ Match Reference Tone (Pitch: 0.80, Rate: 0.88)</span>
+                <span>✓ Match Reference Tone (Pitch: 0.75, Rate: 0.85)</span>
               </button>
             </div>
           </div>

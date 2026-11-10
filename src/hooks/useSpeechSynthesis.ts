@@ -8,10 +8,10 @@ interface UseSpeechSynthesisProps {
 }
 
 export const DEFAULT_BARITONE_CONFIG = {
-  pitch: 0.80, // Deep baritone pitch matching uploaded sample ("I fear darkness hunts us...")
-  rate: 0.88,  // Measured authoritative pace
+  pitch: 0.75, // Deep baritone pitch matching uploaded sample ("I fear darkness hunts us...")
+  rate: 0.85,  // Measured authoritative pace
   volume: 1.0,
-  version: 'baritone_default_v3'
+  version: 'baritone_default_v5'
 };
 
 export function useSpeechSynthesis({
