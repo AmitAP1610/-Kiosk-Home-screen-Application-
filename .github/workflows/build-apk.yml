@@ -39,6 +39,8 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.12'
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v4
@@ -70,12 +72,6 @@ jobs:
           GRADLE_EXIT=${PIPESTATUS[0]}
           if [ $GRADLE_EXIT -ne 0 ]; then
             echo "::error title=Gradle Build Failure::Gradle exited with code $GRADLE_EXIT"
-            cd ..
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add gradle_build.log
-            git commit -m "build-log: failure details" || true
-            git push origin main || true
             exit $GRADLE_EXIT
           fi
 
@@ -95,9 +91,10 @@ jobs:
           echo "=== ALL BUILD OUTPUTS ==="
           find android/app/build/outputs -type f || true
 
-          APK_PATH=$(find android/app/build/outputs -name "*.apk" | head -n 1)
-          if [ -z "$APK_PATH" ]; then
-            APK_PATH=$(find android -name "*.apk" -not -path "*/assets/*" | head -n 1)
+          if [ -f "android/app/build/outputs/apk/debug/app-debug.apk" ]; then
+            APK_PATH="android/app/build/outputs/apk/debug/app-debug.apk"
+          else
+            APK_PATH=$(find android/app/build/outputs -name "*.apk" | head -n 1)
           fi
 
           if [ -z "$APK_PATH" ] || [ ! -f "$APK_PATH" ]; then
@@ -143,6 +140,8 @@ jobs:
         with:
           tag_name: v1.0.3-apk
           name: KIOSK AMR — Android APK Release (v1.0.3)
+          overwrite: true
+          make_latest: true
           body: |
             ## KIOSK AMR — Android Tablet Application (Release v1.0.3)
 
