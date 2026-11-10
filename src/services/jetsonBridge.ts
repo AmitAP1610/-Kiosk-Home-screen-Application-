@@ -546,8 +546,20 @@ class JetsonBridgeService {
       msg: goalPacket.msg
     };
 
+    // Also publish to /Goal (rblemi unity_to_nav.py action client)
+    const unityGoal = {
+      op: 'publish',
+      topic: '/Goal',
+      type: 'geometry_msgs/Pose',
+      msg: {
+        position: { x, y, z: 0.0 },
+        orientation: { x: 0.0, y: 0.0, z: qz, w: qw }
+      }
+    };
+
     this.sendRaw(goalPacket);
     this.sendRaw(fallbackMoveBase);
+    this.sendRaw(unityGoal);
 
     // Custom payload for Jetson python agent
     this.sendRaw({
