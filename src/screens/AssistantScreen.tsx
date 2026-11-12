@@ -81,12 +81,12 @@ export const AssistantScreen: React.FC<AssistantScreenProps> = ({
   };
 
   const quickSuggestions = [
+    "Hear official voice sample",
     "Tell me about Sri Sri University",
     "Where is the Central Library?",
     "What faculties and courses are available?",
     "Tell me about the Ayurveda Hospital",
-    "How can I contact Admissions?",
-    "What is the meaning of Learn, Lead, Serve?"
+    "How can I contact Admissions?"
   ];
 
   return (

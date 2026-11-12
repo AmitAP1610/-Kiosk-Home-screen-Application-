@@ -4,6 +4,7 @@ import { useSpeechRecognition } from './useSpeechRecognition';
 import { useSpeechSynthesis } from './useSpeechSynthesis';
 import { aiService, ChatMessage, AIResponse } from '../services/aiService';
 import { robotAudio } from '../utils/soundEffects';
+import { textToSpeech } from '../services/textToSpeech';
 
 interface UseVoiceAssistantOptions {
   language?: string;
@@ -85,6 +86,26 @@ export function useVoiceAssistant({
         timestamp: new Date()
       };
       setChatHistory(prev => [...prev, userMsg]);
+
+      // Direct Sample Voice playback intent
+      const lower = spokenText.toLowerCase();
+      if (lower.includes('sample voice') || lower.includes('voice sample')) {
+        const assistantMsg: ChatMessage = {
+          role: 'assistant',
+          text: 'Playing the official Sri Sri University Robotics Club reference voice sample in my signature baritone tone.',
+          timestamp: new Date()
+        };
+        setChatHistory(prev => [...prev, assistantMsg]);
+        setState('SPEAKING');
+        updateExpression('speaking');
+        try {
+          await textToSpeech.playSampleAudio();
+        } finally {
+          setState('IDLE');
+          updateExpression('idle');
+        }
+        return;
+      }
 
       // Transition to THINKING
       setState('THINKING');

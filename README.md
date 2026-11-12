@@ -1,10 +1,10 @@
-# KIOSK — Sri Sri University Autonomous AI Campus Robot (v1.0.4)
+# KIOSK — Sri Sri University Autonomous AI Campus Robot (v1.0.6)
 
 <div align="center">
   <img src="public/robotics-club-logo.jpg" alt="Sri Sri University Robotics Club Emblem" width="160" height="160" style="border-radius: 50%; border: 3px solid #D49A36; box-shadow: 0 2px 12px rgba(48, 52, 59, 0.2);" />
   <h3>Engineered & Built by the <strong>Sri Sri University Robotics Club</strong></h3>
   <p><em>"Learn, Lead, Serve" • Sri Sri University • Cuttack, Odisha</em></p>
-  <p><strong>Static Network IP: <code>172.17.0.1</code> | Release Version: <code>v1.0.4</code></strong></p>
+  <p><strong>Static Network IP: <code>172.17.0.1</code> | Release Version: <code>v1.0.6</code></strong></p>
 </div>
 
 ---

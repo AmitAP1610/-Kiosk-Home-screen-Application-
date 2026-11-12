@@ -158,6 +158,25 @@ export const VoiceDiagnosticsScreen: React.FC<VoiceDiagnosticsScreenProps> = ({
     addLog('TTS Test: Stopped immediately.');
   };
 
+  const handlePlaySample = async () => {
+    setIsSpeakingTest(true);
+    addLog('Playing official voice reference sample (/voice-sample.mp3)...');
+    try {
+      await textToSpeech.playSampleAudio(() => {
+        setIsSpeakingTest(false);
+        addLog('Voice sample playback finished successfully.');
+      });
+    } catch (e: any) {
+      setIsSpeakingTest(false);
+      addLog(`Voice sample error: ${e.message}`);
+    }
+  };
+
+  const handleOpenTTSSettings = () => {
+    addLog('Requesting system Text-To-Speech settings...');
+    textToSpeech.openTTSSettings();
+  };
+
   return (
     <div className="w-full h-full bg-[#E9EDF2] text-[#30343B] flex flex-col p-4 sm:p-5 md:p-6 font-sans select-none overflow-y-auto">
       {/* Header: Navy Blue Structural Bar (#263746) */}
@@ -390,6 +409,29 @@ export const VoiceDiagnosticsScreen: React.FC<VoiceDiagnosticsScreenProps> = ({
                   </option>
                 ))}
               </select>
+            </div>
+
+            {/* Direct Audio Sample & Android TTS Config Shortcuts */}
+            <div className="pt-2 flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={handlePlaySample}
+                className="px-3 py-1.5 rounded-lg bg-[#C49A45] hover:bg-[#B38734] text-white font-semibold text-xs flex items-center gap-1.5 shadow-sm transition-colors"
+                title="Play the official recorded baritone audio sample (/voice-sample.mp3)"
+              >
+                <Volume2 className="w-3.5 h-3.5" />
+                <span>Play Sample Audio</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleOpenTTSSettings}
+                className="px-3 py-1.5 rounded-lg bg-[#30343B] hover:bg-[#202124] text-white font-semibold text-xs flex items-center gap-1.5 shadow-sm transition-colors"
+                title="Open Android Tablet Speech & TTS Settings"
+              >
+                <Wrench className="w-3.5 h-3.5 text-[#C49A45]" />
+                <span>Tablet TTS Settings</span>
+              </button>
             </div>
           </div>
         </div>

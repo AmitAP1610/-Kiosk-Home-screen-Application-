@@ -5,7 +5,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -232,14 +234,14 @@ public class MainActivity extends BridgeActivity {
                 pendingListenLanguage = null;
 
                 try {
-                    if (speechRecognizer != null) {
+                    if (speechRecognizer == null) {
+                        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(activity);
+                    } else {
                         try {
                             speechRecognizer.cancel();
-                            speechRecognizer.destroy();
                         } catch (Exception ignored) {}
                     }
 
-                    speechRecognizer = SpeechRecognizer.createSpeechRecognizer(activity);
                     if (speechRecognizer == null) {
                         evalJs("window.onAndroidSpeechError && window.onAndroidSpeechError('Speech recognizer service not available on device.', 'unsupported');");
                         return;
@@ -332,6 +334,14 @@ public class MainActivity extends BridgeActivity {
                                     msg = "Speech recognition error (" + error + ")";
                                     break;
                             }
+
+                            if (error == 8 || error == 5) {
+                                try {
+                                    speechRecognizer.cancel();
+                                    speechRecognizer.destroy();
+                                } catch (Exception ignored) {}
+                                speechRecognizer = null;
+                            }
                             evalJs("window.onAndroidSpeechError && window.onAndroidSpeechError('" + escapeJs(msg) + "', '" + type + "');");
                             evalJs("window.onAndroidSpeechEnd && window.onAndroidSpeechEnd();");
                         }
@@ -420,10 +430,11 @@ public class MainActivity extends BridgeActivity {
         private TextToSpeech tts;
         private boolean isInitialized = false;
         private final Handler mainHandler = new Handler(Looper.getMainLooper());
+        private MediaPlayer sampleMediaPlayer = null;
 
         private String pendingText = null;
-        private float pendingPitch = 0.8f;
-        private float pendingRate = 0.88f;
+        private float pendingPitch = 0.74f;
+        private float pendingRate = 0.86f;
 
         public AndroidTTSBridge(Activity activity, WebView webView) {
             this.activity = activity;
@@ -447,60 +458,76 @@ public class MainActivity extends BridgeActivity {
                     try {
                         Set<Voice> voices = tts.getVoices();
                         Voice bestVoice = null;
+                        int bestScore = Integer.MIN_VALUE;
+
                         if (voices != null && !voices.isEmpty()) {
-                            // Tier 1: Look for UK English Male (matches "I fear darkness hunts us..." sample)
                             for (Voice v : voices) {
-                                String name = v.getName().toLowerCase();
+                                String name = (v.getName() != null) ? v.getName().toLowerCase() : "";
                                 Locale loc = v.getLocale();
-                                boolean isUK = loc != null && (loc.getCountry().equalsIgnoreCase("GB") || name.contains("en-gb") || name.contains("en_gb"));
-                                boolean isMale = (name.contains("male") || name.contains("rjs") || name.contains("man")) && !name.contains("female");
-                                if (isUK && isMale) {
+                                String lang = (loc != null && loc.getLanguage() != null) ? loc.getLanguage().toLowerCase() : "";
+                                String country = (loc != null && loc.getCountry() != null) ? loc.getCountry().toLowerCase() : "";
+
+                                // Strictly filter out known female voice models
+                                boolean isFemale = name.contains("female") || name.contains("woman") || name.contains("girl")
+                                        || name.contains("zira") || name.contains("jenny") || name.contains("aria")
+                                        || name.contains("hazel") || name.contains("susan") || name.contains("linda")
+                                        || name.contains("heera") || name.contains("kalpana") || name.contains("samantha")
+                                        || name.contains("priya") || name.contains("ananya") || name.contains("pooja")
+                                        || name.contains("neerja") || name.contains("swara") || name.contains("veena");
+
+                                if (isFemale) continue;
+
+                                int score = 0;
+
+                                // English language weighting
+                                if (lang.equals("en")) {
+                                    score += 40;
+                                    if (country.equals("gb")) score += 35; // British baritone closest to reference sample
+                                    else if (country.equals("us")) score += 25;
+                                    else if (country.equals("in")) score += 20;
+                                }
+
+                                // Male baritone signatures
+                                if (name.contains("male") || name.contains("man") || name.contains("baritone")) score += 60;
+                                if (name.contains("rjs") || name.contains("sfg") || name.contains("iom") || name.contains("george")
+                                        || name.contains("brian") || name.contains("david") || name.contains("guy")
+                                        || name.contains("prabhat") || name.contains("ravi") || name.contains("madhav")) {
+                                    score += 50;
+                                }
+
+                                // Prioritize pre-installed offline voices (no network lag or failure)
+                                if (!v.isNetworkConnectionRequired()) {
+                                    score += 30;
+                                }
+
+                                if (score > bestScore) {
+                                    bestScore = score;
                                     bestVoice = v;
-                                    break;
-                                }
-                            }
-                            // Tier 2: Look for US English Male (e.g. en-us-x-sfg#male, en-us-x-iom)
-                            if (bestVoice == null) {
-                                for (Voice v : voices) {
-                                    String name = v.getName().toLowerCase();
-                                    Locale loc = v.getLocale();
-                                    boolean isUS = loc != null && (loc.getCountry().equalsIgnoreCase("US") || name.contains("en-us") || name.contains("en_us"));
-                                    boolean isMale = (name.contains("male") || name.contains("sfg") || name.contains("iom") || name.contains("guy") || name.contains("david")) && !name.contains("female");
-                                    if (isUS && isMale) {
-                                        bestVoice = v;
-                                        break;
-                                    }
-                                }
-                            }
-                            // Tier 3: Any English Male voice
-                            if (bestVoice == null) {
-                                for (Voice v : voices) {
-                                    String name = v.getName().toLowerCase();
-                                    Locale loc = v.getLocale();
-                                    boolean isEn = loc != null && loc.getLanguage().equalsIgnoreCase("en");
-                                    boolean isMale = (name.contains("male") || name.contains("rjs") || name.contains("sfg") || name.contains("end")) && !name.contains("female");
-                                    if (isEn && isMale) {
-                                        bestVoice = v;
-                                        break;
-                                    }
                                 }
                             }
                         }
 
-                        if (bestVoice != null) {
+                        if (bestVoice != null && bestScore > 0) {
                             tts.setVoice(bestVoice);
                             if (bestVoice.getLocale() != null) {
                                 tts.setLanguage(bestVoice.getLocale());
                             }
                         } else {
-                            int res = tts.setLanguage(Locale.UK);
+                            // Safe fallback sequence: US -> UK -> English -> Default
+                            int res = tts.setLanguage(Locale.US);
                             if (res == TextToSpeech.LANG_MISSING_DATA || res == TextToSpeech.LANG_NOT_SUPPORTED) {
-                                tts.setLanguage(Locale.US);
+                                res = tts.setLanguage(Locale.UK);
+                                if (res == TextToSpeech.LANG_MISSING_DATA || res == TextToSpeech.LANG_NOT_SUPPORTED) {
+                                    res = tts.setLanguage(Locale.ENGLISH);
+                                    if (res == TextToSpeech.LANG_MISSING_DATA || res == TextToSpeech.LANG_NOT_SUPPORTED) {
+                                        tts.setLanguage(Locale.getDefault());
+                                    }
+                                }
                             }
                         }
                     } catch (Exception ignored) {
                         try {
-                            tts.setLanguage(Locale.UK);
+                            tts.setLanguage(Locale.US);
                         } catch (Exception e) {
                             tts.setLanguage(Locale.getDefault());
                         }
@@ -543,12 +570,114 @@ public class MainActivity extends BridgeActivity {
             return isInitialized;
         }
 
+        /**
+         * Plays the official voice sample audio file (/voice-sample.mp3) directly using
+         * native Android MediaPlayer with hardware acceleration and zero autoplay restrictions.
+         */
+        @JavascriptInterface
+        public void playSampleVoice() {
+            mainHandler.post(() -> {
+                stop();
+                try {
+                    AssetFileDescriptor afd = null;
+                    try {
+                        afd = activity.getAssets().openFd("public/voice-sample.mp3");
+                    } catch (Exception e1) {
+                        try {
+                            afd = activity.getAssets().openFd("voice-sample.mp3");
+                        } catch (Exception ignored) {}
+                    }
+
+                    if (afd == null) {
+                        evalJs("window.onAndroidAudioError && window.onAndroidAudioError('Audio asset voice-sample.mp3 not found in APK assets');");
+                        return;
+                    }
+
+                    sampleMediaPlayer = new MediaPlayer();
+                    sampleMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    sampleMediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+                    afd.close();
+
+                    sampleMediaPlayer.setOnPreparedListener(mp -> {
+                        mp.start();
+                        evalJs("window.onAndroidAudioStart && window.onAndroidAudioStart();");
+                    });
+
+                    sampleMediaPlayer.setOnCompletionListener(mp -> {
+                        evalJs("window.onAndroidAudioEnd && window.onAndroidAudioEnd();");
+                        try {
+                            mp.release();
+                        } catch (Exception ignored) {}
+                        sampleMediaPlayer = null;
+                    });
+
+                    sampleMediaPlayer.setOnErrorListener((mp, what, extra) -> {
+                        evalJs("window.onAndroidAudioError && window.onAndroidAudioError('MediaPlayer error " + what + "');");
+                        try {
+                            mp.release();
+                        } catch (Exception ignored) {}
+                        sampleMediaPlayer = null;
+                        return true;
+                    });
+
+                    sampleMediaPlayer.prepareAsync();
+                } catch (Exception e) {
+                    evalJs("window.onAndroidAudioError && window.onAndroidAudioError('" + escapeJs(e.getMessage()) + "');");
+                }
+            });
+        }
+
+        @JavascriptInterface
+        public void stopSampleVoice() {
+            mainHandler.post(() -> {
+                if (sampleMediaPlayer != null) {
+                    try {
+                        if (sampleMediaPlayer.isPlaying()) {
+                            sampleMediaPlayer.stop();
+                        }
+                        sampleMediaPlayer.release();
+                    } catch (Exception ignored) {}
+                    sampleMediaPlayer = null;
+                }
+                evalJs("window.onAndroidAudioEnd && window.onAndroidAudioEnd();");
+            });
+        }
+
+        @JavascriptInterface
+        public void openTTSSettings() {
+            mainHandler.post(() -> {
+                try {
+                    Intent intent = new Intent();
+                    intent.setAction("com.android.settings.TTS_SETTINGS");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    activity.startActivity(intent);
+                } catch (Exception e) {
+                    try {
+                        Intent intent = new Intent(android.provider.Settings.ACTION_SETTINGS);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        activity.startActivity(intent);
+                    } catch (Exception ignored) {}
+                }
+            });
+        }
+
         @JavascriptInterface
         public void speak(final String text, final float pitch, final float rate) {
             mainHandler.post(() -> {
                 if (text == null || text.trim().isEmpty()) {
                     evalJs("window.onAndroidTTSEnd && window.onAndroidTTSEnd();");
                     return;
+                }
+
+                // Stop any playing audio sample before speaking new text
+                if (sampleMediaPlayer != null) {
+                    try {
+                        if (sampleMediaPlayer.isPlaying()) {
+                            sampleMediaPlayer.stop();
+                        }
+                        sampleMediaPlayer.release();
+                    } catch (Exception ignored) {}
+                    sampleMediaPlayer = null;
                 }
 
                 if (!isInitialized || tts == null) {
@@ -560,9 +689,9 @@ public class MainActivity extends BridgeActivity {
                 }
 
                 try {
-                    // Deep baritone resonance: pitch 0.75, measured pacing: rate 0.85
-                    float targetPitch = (pitch > 0.4f && pitch < 2.0f) ? pitch : 0.75f;
-                    float targetRate = (rate > 0.4f && rate < 2.0f) ? rate : 0.85f;
+                    // Deep baritone resonance: pitch 0.74, measured pacing: rate 0.86
+                    float targetPitch = (pitch > 0.4f && pitch < 2.0f) ? pitch : 0.74f;
+                    float targetRate = (rate > 0.4f && rate < 2.0f) ? rate : 0.86f;
                     tts.setPitch(targetPitch);
                     tts.setSpeechRate(targetRate);
 
@@ -580,6 +709,15 @@ public class MainActivity extends BridgeActivity {
         @JavascriptInterface
         public void stop() {
             mainHandler.post(() -> {
+                if (sampleMediaPlayer != null) {
+                    try {
+                        if (sampleMediaPlayer.isPlaying()) {
+                            sampleMediaPlayer.stop();
+                        }
+                        sampleMediaPlayer.release();
+                    } catch (Exception ignored) {}
+                    sampleMediaPlayer = null;
+                }
                 if (tts != null) {
                     try {
                         tts.stop();
@@ -590,6 +728,12 @@ public class MainActivity extends BridgeActivity {
         }
 
         public void destroy() {
+            if (sampleMediaPlayer != null) {
+                try {
+                    sampleMediaPlayer.release();
+                } catch (Exception ignored) {}
+                sampleMediaPlayer = null;
+            }
             if (tts != null) {
                 try {
                     tts.stop();

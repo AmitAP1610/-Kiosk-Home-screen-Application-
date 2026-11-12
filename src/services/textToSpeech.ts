@@ -371,8 +371,8 @@ class TextToSpeechService {
           resolve(); // Resolve gracefully to avoid blocking UI state
         };
 
-        const targetPitch = options.pitch ?? 0.75;
-        const targetRate = options.rate ?? 0.85;
+        const targetPitch = options.pitch ?? 0.74;
+        const targetRate = options.rate ?? 0.86;
 
         try {
           if (callbacks?.onStart) callbacks.onStart();
@@ -429,9 +429,9 @@ class TextToSpeechService {
           utterance.voice = voice;
         }
 
-        // Calibrate pitch and rate to mirror the deep baritone sample (0.75 pitch, 0.85 rate)
-        utterance.rate = Math.max(0.5, Math.min(2.0, options.rate ?? 0.85));
-        utterance.pitch = Math.max(0.5, Math.min(2.0, options.pitch ?? 0.75));
+        // Calibrate pitch and rate to mirror the deep baritone sample (0.74 pitch, 0.86 rate)
+        utterance.rate = Math.max(0.5, Math.min(2.0, options.rate ?? 0.86));
+        utterance.pitch = Math.max(0.5, Math.min(2.0, options.pitch ?? 0.74));
         utterance.volume = Math.max(0.0, Math.min(1.0, options.volume ?? 1.0));
 
         utterance.onstart = () => {
@@ -488,12 +488,52 @@ class TextToSpeechService {
   /**
    * Plays the official recorded voice sample audio directly (/voice-sample.mp3)
    * with full synchronized viseme mouth animation.
+   * On Android Tablet APK: Uses Native MediaPlayer via AndroidTTS bridge.
+   * On Web / Chrome: Uses HTML5 Audio with resilient fallback paths.
    */
   public async playSampleAudio(onEnd?: () => void): Promise<void> {
     this.stop();
     this.isSpeakingState = true;
     this.startVisemeSimulation();
 
+    // ROUTE 1: Native Android Tablet APK Bridge
+    if (this.hasNativeTTS()) {
+      const win = window as any;
+      if (typeof win.AndroidTTS.playSampleVoice === 'function') {
+        return new Promise<void>((resolve) => {
+          let isDone = false;
+          const finish = () => {
+            if (isDone) return;
+            isDone = true;
+            this.isSpeakingState = false;
+            this.stopVisemeSimulation();
+            if (onEnd) onEnd();
+            resolve();
+          };
+
+          win.onAndroidAudioStart = () => {
+            this.isSpeakingState = true;
+            this.startVisemeSimulation();
+          };
+
+          win.onAndroidAudioEnd = finish;
+
+          win.onAndroidAudioError = (errMsg: string) => {
+            console.warn('Native Android audio playback error:', errMsg);
+            finish();
+          };
+
+          try {
+            win.AndroidTTS.playSampleVoice();
+          } catch (e) {
+            console.warn('Failed to call playSampleVoice:', e);
+            finish();
+          }
+        });
+      }
+    }
+
+    // ROUTE 2: Web Browser HTML5 Audio
     return new Promise<void>((resolve) => {
       let isDone = false;
       const audio = new Audio('/voice-sample.mp3');
@@ -529,6 +569,14 @@ class TextToSpeechService {
     });
   }
 
+  public openTTSSettings(): void {
+    if (this.hasNativeTTS()) {
+      try {
+        (window as any).AndroidTTS.openTTSSettings?.();
+      } catch {}
+    }
+  }
+
   /**
    * Stops current speech playback immediately and clears animation.
    */
@@ -546,7 +594,11 @@ class TextToSpeechService {
 
     if (this.hasNativeTTS()) {
       try {
-        (window as any).AndroidTTS.stop();
+        const win = window as any;
+        if (typeof win.AndroidTTS.stopSampleVoice === 'function') {
+          win.AndroidTTS.stopSampleVoice();
+        }
+        win.AndroidTTS.stop();
       } catch {}
     }
 
