@@ -113,13 +113,13 @@ jobs:
           fi
           echo "Real newly compiled APK found at: $APK_PATH"
           ls -lh "$APK_PATH"
-          cp "$APK_PATH" release-apk/KIOSK-AMR-v1.0.6.apk
+          cp "$APK_PATH" release-apk/KIOSK-AMR-v1.0.7.apk
           mkdir -p dist-apk
           cp "$APK_PATH" dist-apk/KIOSK-AMR.apk
-          cp "$APK_PATH" dist-apk/KIOSK-AMR-v1.0.6.apk
+          cp "$APK_PATH" dist-apk/KIOSK-AMR-v1.0.7.apk
           mkdir -p public
           cp "$APK_PATH" public/KIOSK-AMR.apk
-          cp "$APK_PATH" public/KIOSK-AMR-v1.0.6.apk
+          cp "$APK_PATH" public/KIOSK-AMR-v1.0.7.apk
           ls -la release-apk/ dist-apk/ public/
 
       - name: Commit APK Directly into Repository (Bypasses Releases 504 CDN Timeout)
@@ -127,12 +127,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add dist-apk/ public/
-          git commit -m "chore(apk): publish pre-compiled APK v1.0.6 directly to repo" || true
+          git commit -m "chore(apk): publish pre-compiled APK v1.0.7 directly to repo" || true
           git push origin main || true
 
       - name: Upload APK to Direct Fast Mirror
         run: |
-          MIRROR_URL=$(curl -s -F "file=@release-apk/KIOSK-AMR-v1.0.6.apk" https://temp.sh/upload)
+          MIRROR_URL=$(curl -s -F "file=@release-apk/KIOSK-AMR-v1.0.7.apk" https://temp.sh/upload)
           echo "DIRECT_MIRROR_URL=$MIRROR_URL" >> $GITHUB_ENV
           echo "### 🚀 Direct Mirror Download Link" >> $GITHUB_STEP_SUMMARY
           echo "$MIRROR_URL" >> $GITHUB_STEP_SUMMARY
@@ -140,32 +140,31 @@ jobs:
       - name: Upload APK as Workflow Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: KIOSK-AMR-Android-Tablet-App-v1.0.6
-          path: release-apk/KIOSK-AMR-v1.0.6.apk
+          name: KIOSK-AMR-Android-Tablet-App-v1.0.7
+          path: release-apk/KIOSK-AMR-v1.0.7.apk
           if-no-files-found: error
 
       - name: Publish GitHub Release with Downloadable APK
         uses: softprops/action-gh-release@v2
         if: github.ref == 'refs/heads/main'
         with:
-          tag_name: v1.0.6-apk
-          name: KIOSK AMR — Android APK Release (v1.0.6)
+          tag_name: v1.0.7-apk
+          name: KIOSK AMR — Android APK Release (v1.0.7)
           overwrite: true
           make_latest: true
           body: |
-            ## KIOSK AMR — Android Tablet Application (Release v1.0.6)
+            ## KIOSK AMR — Android Tablet Application (Release v1.0.7)
 
             Fresh verified compilation from source:
-            - Guaranteed Gradle debug build output
-            - Native Android MediaPlayer Integration: Official voice sample (/voice-sample.mp3) plays directly via Android hardware audio engine without WebView autoplay restrictions
-            - System-wide Baritone Modulation: Pitch 0.74, Rate 0.86 calibrated across all screens and assistant interactions
-            - Intelligent Voice Scoring: Dynamically selects the best available offline male baritone voice and strictly eliminates female models
-            - Speech Assistant Stability Fix: Removed false 'Speech synthesis did not start' exception that interrupted voice playback
-            - SpeechRecognizer Self-Healing: Reuses recognizer instances to eliminate ERROR_RECOGNIZER_BUSY (8) and CLIENT (5)
-            - Direct Tablet TTS Settings intent from diagnostics
-            - Official Sri Sri University Robotics Club Emblem launcher icon
-            - versionCode 6 (forces clean Android upgrade and clears stale cache)
+            - **Sequential Guided Escort System (A→B & Multi-Stop)**:
+              - Stage 1: Robot introduces itself and greets guests verbally before beginning travel.
+              - Stage 2: Autonomous in-transit escort with Jetson Nav2 navigation, radar telemetry, and periodic audio updates.
+              - Stage 3: Immediate destination arrival speech ("We have arrived at Point B...") followed by comprehensive facility briefings.
+              - Stage 4: Multi-stop sequential progression (A → B → C → ...) with persistent mission storage in `localStorage`.
+            - **Native Baritone Speech Engine**: Calibrated pitch 0.74, rate 0.86 across all introductions and briefings.
+            - **SSU Campus Landmarks**: Pre-loaded coordinates and rich briefings for Shruti Library, Hospital, Maker Lab, Dining Hall, and Amphitheatre.
+            - **versionCode 7**: Full clean upgrade for Android tablets.
           files: |
-            release-apk/KIOSK-AMR-v1.0.6.apk
+            release-apk/KIOSK-AMR-v1.0.7.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

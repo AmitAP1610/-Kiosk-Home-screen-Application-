@@ -28,6 +28,7 @@ export type AppScreen =
   | 'control'         // Robot Teleoperation & E-Stop
   | 'mapping'         // LiDAR Scan & 2D Map Visualization
   | 'navigation'      // Autonomous Navigation & Routes
+  | 'guided-tour'     // Autonomous Guest Escort: Point A -> Point B with introduction & arrival briefing
   | 'monitor'         // System Monitor & Telemetry
   | 'diagnostics'     // Dedicated Voice & Audio Diagnostics
   | 'settings';       // System Configuration

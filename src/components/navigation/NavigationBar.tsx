@@ -18,7 +18,8 @@ import {
   Calendar,
   GraduationCap,
   Sliders,
-  ChevronRight
+  ChevronRight,
+  Route
 } from 'lucide-react';
 
 export type NavGroup = 'ALL' | 'HOME' | 'UNIVERSITY' | 'CAMPUS' | 'ROBOT' | 'ASSISTANT' | 'SETTINGS';
@@ -110,6 +111,14 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
     },
 
     // ================= 3. CAMPUS =================
+    {
+      id: 'guided-tour',
+      title: 'Sequential Escort & Tour',
+      description: 'Point A to Point B guest escort with speech introduction & destination briefings',
+      icon: Route,
+      group: 'CAMPUS',
+      badge: 'Escort A→B'
+    },
     {
       id: 'navigation',
       title: 'Autonomous Navigation',

@@ -21,6 +21,7 @@ import { CameraScreen } from './screens/CameraScreen';
 import { ControlScreen } from './screens/ControlScreen';
 import { MappingScreen } from './screens/MappingScreen';
 import { NavScreen } from './screens/NavScreen';
+import { GuidedTourScreen } from './screens/GuidedTourScreen';
 import { MonitorScreen } from './screens/MonitorScreen';
 import { VoiceDiagnosticsScreen } from './screens/VoiceDiagnosticsScreen';
 import { SettingsScreen } from './screens/SettingsScreen';
@@ -367,6 +368,14 @@ export const App: React.FC = () => {
         {currentScreen === 'navigation' && (
           <NavScreen
             onNavigate={(scr) => setCurrentScreen(scr)}
+          />
+        )}
+
+        {currentScreen === 'guided-tour' && (
+          <GuidedTourScreen
+            onNavigate={(scr) => setCurrentScreen(scr)}
+            onSpeakText={(text, onEnd) => speakDirect(text, onEnd)}
+            isSpeaking={isSpeaking}
           />
         )}
 

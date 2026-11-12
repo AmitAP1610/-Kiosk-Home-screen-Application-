@@ -89,7 +89,62 @@ The KIOSK robot employs a strict 3-tier distributed processing architecture to g
 
 ---
 
-## 5. Development & CI/CD Compilation Pipeline
+## 5. Sequential Autonomous Guided Escort Architecture (Point A → Point B)
+
+To fulfill the guest orientation requirement ("Introduce yourself, guide guest from Point A to Point B, announce destination arrival, and provide facility briefings in sequence"), the system includes a dedicated Sequential Guided Escort Engine (`src/services/guidedTourService.ts`) and interactive UI (`src/screens/GuidedTourScreen.tsx`):
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│ STAGE 1: INTRODUCING (Self-Introduction & Route Announcement)         │
+│ • Robot speaks: "Namaste! I am Kiosk, your autonomous campus guide...  │
+│   Please follow me as I escort you from [Point A] to [Point B]."       │
+│ • Speech engine: Native baritone voice (Pitch 0.74, Rate 0.86)         │
+│ • UI displays live speech transcription & route overview               │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │ (Speech Finished / Skip)
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│ STAGE 2: EN_ROUTE (Autonomous In-Transit Escort Navigation)            │
+│ • Dispatches ROS 2 Nav2 Navigation Goal (/goal_pose) to Jetson edge    │
+│ • Displays real-time Escort Radar, remaining distance & transit status │
+│ • Periodic progress announcements: "We are en route to [Destination]..."│
+│ • Jetson LiDAR obstacle avoidance & deadman safety relay active       │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │ (Nav2 Reached Goal / Confirm Arrival)
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│ STAGE 3: ARRIVED (Destination Arrival Announcement & Rich Briefing)    │
+│ • Robot halts motors and announces arrival verbally:                   │
+│   "We have arrived at your destination: [Point B Name]! Here is your   │
+│   facility briefing..."                                                │
+│ • Presents rich on-site briefing sheet:                                │
+│   - Facility overview, operating hours, reception contact              │
+│   - Academic faculties and departments housed inside                   │
+│   - Key amenities (Elevators, Wi-Fi, Water points, Labs)               │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │ (Advance to Next Stop in Sequence)
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│ STAGE 4: SEQUENTIAL ADVANCEMENT & MISSION STORAGE                      │
+│ • Multi-stop tour sequences (e.g. A → B → C → D) automatically advance  │
+│   to the next destination waypoint in sequence                         │
+│ • Completed missions permanently logged in localStorage                │
+│   ('kiosk_mission_history') with timestamps, duration & stop logs      │
+│ • Offline storage preserves all landmark coordinates & custom stops    │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+### Pre-Loaded Verified Campus Landmarks
+- **Point A:** Welcome Plaza & Main Reception (`20.48512° N, 85.83415° E`)
+- **Point B:** Shruti Central Library & Media Resource Centre (`20.48545° N, 85.83460° E`)
+- **Point C:** Sri Sri College of Ayurvedic Science & Research Hospital (`20.48620° N, 85.83510° E`)
+- **Point D:** Robotics Club Maker Space & Advanced Engineering Lab (`20.48480° N, 85.83390° E`)
+- **Point E:** Kaivalya Central Dining Hall (`20.48590° N, 85.83350° E`)
+- **Point F:** Open Air Amphitheatre & Cultural Arena (`20.48650° N, 85.83480° E`)
+
+---
+
+## 6. Development & CI/CD Compilation Pipeline
 
 * **TypeScript / Web Application:**
   ```powershell
@@ -104,4 +159,4 @@ The KIOSK robot employs a strict 3-tier distributed processing architecture to g
   * **Gradle Version:** `8.13` (configured in `gradle-wrapper.properties` & GitHub Actions)
   * **Android SDK:** Compile SDK 36, Target SDK 36, Build Tools 36.0.0
   * **Java Environment:** OpenJDK 21 (Temurin)
-  * **Release Automation:** Tagged GitHub Release (`v1.0.4-apk`) + instant raw repository mirror (`dist-apk/KIOSK-AMR-v1.0.4.apk`).
+  * **Release Automation:** Tagged GitHub Release (`v1.0.7-apk`) + instant raw repository mirror (`dist-apk/KIOSK-AMR-v1.0.7.apk`).

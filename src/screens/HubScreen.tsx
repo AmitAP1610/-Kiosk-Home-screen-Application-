@@ -14,7 +14,8 @@ import {
   Navigation,
   Activity,
   Sliders,
-  Volume2
+  Volume2,
+  Route
 } from 'lucide-react';
 
 interface HubScreenProps {
@@ -237,6 +238,18 @@ export const HubScreen: React.FC<HubScreenProps> = ({
         {/* QUICK SECONDARY NAVIGATION CHIPS (MINIMAL)               */}
         {/* ======================================================== */}
         <div className="flex items-center justify-center gap-2 shrink-0 flex-wrap px-3 py-1 rounded-full bg-black/35 backdrop-blur-md border border-white/15 shadow-sm">
+          <button
+            onClick={() => {
+              if (onSpeakGreeting) onSpeakGreeting("Opening Sequential Guided Escort system.");
+              onNavigate('guided-tour');
+            }}
+            className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#C49A45]/30 hover:bg-[#C49A45]/50 text-white text-xs font-semibold border border-[#C49A45]/50 transition-all active:scale-95 shadow-xs"
+            title="Sequential A to B Escort"
+          >
+            <Route className="w-3.5 h-3.5 text-[#E6C687]" />
+            <span className="text-[#E6C687] font-bold">A→B Escort</span>
+          </button>
+
           <button
             onClick={() => onNavigate('facilities')}
             className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-semibold border border-white/10 transition-all active:scale-95"
